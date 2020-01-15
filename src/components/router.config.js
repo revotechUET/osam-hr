@@ -15,6 +15,7 @@ import ContractNewPage from './../container/ContractNew';
 import NotificationPage from './../container/Notification';
 import NotificationNewPage from './../container/NotificationNew';
 import DayOffSettingPage from './../container/DayOffSetting';
+import PayrollPage from './../container/Payroll';
 
 export default [
     {
@@ -106,5 +107,11 @@ export default [
         path: "/setting/day-off",
         exact: true,
         component: DayOffSettingPage
+    },
+    {
+        type: "normal",
+        path: "/payroll",
+        exact: true,
+        component: PayrollPage
     }
 ];
