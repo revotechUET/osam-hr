@@ -1,6 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 
+import StyledPaginationTable from '../../components/StyledPaginationTable';
+
 import './style.less';
 
 class PayrollPage extends React.Component {
@@ -11,7 +13,10 @@ class PayrollPage extends React.Component {
     render() {
         return (
         <div className = "Payroll">
-            <h1>This is pay roll page</h1>
+            <h1 style={{marginBottom: "10px"}}>Tính công</h1>
+            <button>Xuất file</button>
+            
+            <StyledPaginationTable />
         </div>
         )
     }
