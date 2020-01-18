@@ -15,7 +15,29 @@ class PayrollPage extends React.Component {
         <div className = "Payroll">
             <h1 style={{marginBottom: "10px"}}>Tính công</h1>
             <button>Xuất file</button>
-            
+            <div className="count-setting">
+                <div style={{display: "flex", alignContent: "center", justifyContent: "center"}}>
+                    <div className = "field-member">
+                        <div>
+                            Chọn thời gian tính công
+                        </div>
+                        <input type="date" /> đến <input type="date" />
+                    </div>
+                    <div className = "field-member">
+                        <div>
+                            Chọn bộ phận
+                        </div>
+                        <div>
+                            <select style={{width: "250px"}}>
+                                <option>hello</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div style={{marginTop: "50px", textAlign: "center"}}>
+                    <button>Tính công</button>
+                </div>
+            </div>
             <StyledPaginationTable />
         </div>
         )
