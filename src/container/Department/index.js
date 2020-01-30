@@ -14,7 +14,7 @@ class DepartmentPage extends React.Component {
             <h1 style={{marginBottom: "10px"}}>Bộ phận</h1>
             <button onClick={()=>this.props.history.push("/departments/new")}>Tạo mới</button>
             <div>
-               <StyledPaginationTable />
+               {/* <StyledPaginationTable /> */}
             </div>
         </div>)
     }

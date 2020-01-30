@@ -14,7 +14,7 @@ class StaffChecking extends React.Component {
             <h1 style={{marginBottom: "10px"}}>Chấm công</h1>
             <button onClick={()=>this.props.history.push("/checking/new")}>Tạo mới</button>
             <div>
-               <StyledPaginationTable />
+               {/* <StyledPaginationTable /> */}
             </div>
         </div>)
     }

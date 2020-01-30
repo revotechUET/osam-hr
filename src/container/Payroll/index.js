@@ -38,7 +38,7 @@ class PayrollPage extends React.Component {
                     <button>Tính công</button>
                 </div>
             </div>
-            <StyledPaginationTable />
+            {/* <StyledPaginationTable /> */}
         </div>
         )
     }

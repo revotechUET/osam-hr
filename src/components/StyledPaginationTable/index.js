@@ -33,7 +33,6 @@ function ResizerRender(props) {
     </div>
 }
 
-
 var exs = [
     {
         username: 'Pham thi nguyen',

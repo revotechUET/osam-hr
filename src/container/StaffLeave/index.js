@@ -14,7 +14,7 @@ class StaffLeavePage extends React.Component {
             <h1 style={{marginBottom: "10px"}}>Yêu cầu nghỉ</h1>
             <button onClick={()=>this.props.history.push("/leaves/new")}>Tạo mới</button>
             <div>
-               <StyledPaginationTable />
+               {/* <StyledPaginationTable /> */}
             </div>
         </div>)
     }

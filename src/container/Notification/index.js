@@ -14,7 +14,7 @@ class NotifyPage extends React.Component {
             <h1 style={{marginBottom: "10px"}}>Thông báo</h1>
             <button onClick={()=>this.props.history.push("/notifies/new")}>Tạo mới</button>
             <div>
-               <StyledPaginationTable />
+               {/* <StyledPaginationTable /> */}
             </div>
         </div>)
     }
