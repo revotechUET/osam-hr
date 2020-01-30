@@ -36,7 +36,7 @@ class StaffPage extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
   }
 
