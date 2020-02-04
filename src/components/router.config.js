@@ -16,6 +16,8 @@ import NotificationPage from './../container/Notification';
 import NotificationNewPage from './../container/NotificationNew';
 import DayOffSettingPage from './../container/DayOffSetting';
 import PayrollPage from './../container/Payroll';
+import MyNotifyPage from './../container/MyNotify';
+import MyNotifyDetailPage from './../container/MyNotifyDetail';
 
 export default [
     {
@@ -113,5 +115,17 @@ export default [
         path: "/payroll",
         exact: true,
         component: PayrollPage
+    },
+    {
+        type: "normal",
+        path: "/my-notifies",
+        exact: true,
+        component: MyNotifyPage
+    },
+    {
+        type: "normal",
+        path: "/my-notifies/:id",
+        exact: true,
+        component: MyNotifyDetailPage
     }
 ];

@@ -1,11 +1,12 @@
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 //const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 webpackConfigure = {
 	entry: "./src/index.js",
 	output: {
-		path: path.join(__dirname, "dist"),
+		path: path.join(__dirname, "gas", "src", "dist"),
 		filename: "main.bundle.js"
 	},
 	module: {
@@ -39,11 +40,13 @@ webpackConfigure = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: "./src/index.html"
+			template: './src/index.html',
+			inlineSource: '.(js|css)$'
 		}),
 		// new CopyWebpackPlugin([
 		// 	{from: 'src/assets', to:'assets'}
 		// ])
+		new HtmlWebpackInlineSourcePlugin()
 	]
 };
 

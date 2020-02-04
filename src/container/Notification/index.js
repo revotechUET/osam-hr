@@ -10,11 +10,12 @@ class NotifyPage extends React.Component {
     }
 
     render() {
-        return (<div className = "NotiPage">
+        return (
+        <div className = "NotiPage">
             <h1 style={{marginBottom: "10px"}}>Thông báo</h1>
             <button onClick={()=>this.props.history.push("/notifies/new")}>Tạo mới</button>
             <div>
-               {/* <StyledPaginationTable /> */}
+               
             </div>
         </div>)
     }

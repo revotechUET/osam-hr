@@ -12,21 +12,22 @@
         background-color: white;
         width: 600px;
         height: 400px;
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
 
         .field-container {
             display: flex;
-	        flex-direction: column;
-	        flex-wrap: wrap;
-	        justify-content: flex-start;
-	        align-items: stretch;
-            align-content: stretch;
+            overflow: auto;
+            flex: 1;
+            border-bottom: 1px solid;
+            &>div {
+                flex: 1;
+            }
         }
 
         .modal-field {
             display: flex;
-            width: 300px;
-            margin-bottom: 30px;
-            margin-top: 20px;
         }
     
     }

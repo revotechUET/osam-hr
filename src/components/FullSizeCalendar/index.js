@@ -12,6 +12,15 @@ export default class FullSizeCalendar extends React.Component {
         }
     }
 
+    componentDidMount() {
+        //get current month
+        let today = new Date();
+        this.setState({
+            currentMonth: today.getMonth(),
+            currentYear: today.getFullYear()
+        })
+    }
+
     getArrayOfDaysInMonth() {
         let date = 1;
         let numDayOfMonth = getNumberOfDayInMonth(this.state.currentYear, this.state.currentMonth);
@@ -97,7 +106,7 @@ export default class FullSizeCalendar extends React.Component {
 
     loadDayOffList() {
         //this function help load day off
-        console.log('Loading day off list');
+        //console.log('Loading day off list');
         console.log(this.state);
     }
 
@@ -146,7 +155,7 @@ export default class FullSizeCalendar extends React.Component {
 
 
 function getNumberOfDayInMonth(year, month) {
-    return new Date(year, month+1, 0).getDate();
+    return new Date(year, month + 1, 0).getDate();
 }
 
 const monthSymbols = [
