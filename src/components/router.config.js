@@ -28,7 +28,7 @@ export default [
     },
     {
         type: "normal",
-        path: "/staffs/:editUser",
+        path: "/staffs/edit/:editUser",
         exact: true,
         component: StaffEditPage,
     },

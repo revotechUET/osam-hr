@@ -166,9 +166,9 @@ class SettingPage extends React.Component {
                 </div>
               </div>
             </div>
-            <div style={{ flexBasis: "60px", display: "flex" }}>
-              <div>Ok</div>
-              <div>Cancel</div>
+            <div style={{ flexBasis: "60px", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+              <div className="my-button">Hủy</div>
+              <div className="my-button active-btn">Lưu</div>
             </div>
           </div>
         </CenteredModal>

@@ -7,7 +7,7 @@ import TopBar from './../container/TopBar';
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.min.css';
 
-import './App.css';
+import './App.less';
 
 
 //import AsyncPrivateRoute from './AsyncPrivateRoute';

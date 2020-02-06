@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57ae5d1f-6e63-4a8d-a71d-b6c1ed3c9dd2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/images/17004.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/container/MyNotify/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/container/MyNotify/style.less" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/container/MyNotifyDetail/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/container/MyNotifyDetail/style.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FullSizeCalendar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FullSizeCalendar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/router.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/router.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/Notification/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/Notification/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/TopBar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/TopBar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/container/TopBar/style.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/TopBar/style.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/Setting/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/Setting/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/Setting/style.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/Setting/style.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/container/StaffNew/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/container/StaffNew/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,7 +23,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/container/Notification/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
+            <state relative-caret-position="336">
               <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
@@ -63,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/FullSizeCalendar/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
-              <caret line="133" column="41" lean-forward="true" selection-start-line="133" selection-start-column="41" selection-end-line="133" selection-end-column="41" />
+            <state relative-caret-position="126">
+              <caret line="116" column="99" lean-forward="true" selection-start-line="116" selection-start-column="99" selection-end-line="116" selection-end-column="99" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -87,7 +83,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/router.config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1932">
+            <state relative-caret-position="1869">
               <caret line="108" column="16" selection-start-line="108" selection-start-column="16" selection-end-line="108" selection-end-column="16" />
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
@@ -166,7 +162,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -230,6 +225,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -267,11 +263,12 @@
       <workItem from="1578213485908" duration="12187000" />
       <workItem from="1578278862591" duration="7870000" />
       <workItem from="1580736782773" duration="500000" />
+      <workItem from="1580955477576" duration="14000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20559000" />
+    <option name="totallyTimeSpent" value="20573000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -336,7 +333,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/container/Notification/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
+        <state relative-caret-position="336">
           <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
@@ -376,7 +373,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/router.config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1932">
+        <state relative-caret-position="1869">
           <caret line="108" column="16" selection-start-line="108" selection-start-column="16" selection-end-line="108" selection-end-column="16" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
@@ -416,8 +413,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/FullSizeCalendar/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="133" column="41" lean-forward="true" selection-start-line="133" selection-start-column="41" selection-end-line="133" selection-end-column="41" />
+        <state relative-caret-position="126">
+          <caret line="116" column="99" lean-forward="true" selection-start-line="116" selection-start-column="99" selection-end-line="116" selection-end-column="99" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
