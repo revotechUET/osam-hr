@@ -29,7 +29,7 @@ class StaffNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className = "label">Hợp đồng</div>
-            <input className = "input" type = "select"/>
+            <select className = "input"/>
           </div>
           <div className="input-field">
             <div className = "label">Bộ phận</div>
@@ -37,11 +37,11 @@ class StaffNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className = "label">Hoạt động</div>
-            <input className = "input"/>
+            <input className = "input checkbox" type="checkbox"/>
           </div>
           <div className="input-field">
             <div className = "label">Vai trò</div>
-            <input className = "input"/>
+            <select className = "input"/>
           </div>
         </BorderedContainer>
       </div>
