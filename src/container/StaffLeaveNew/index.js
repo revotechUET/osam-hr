@@ -14,7 +14,7 @@ class StaffLeaveNewPage extends React.Component {
 
   render() {
     return (
-      <div className = "StaffNew">
+      <div className = "StaffLeaveNew">
         <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / Mới</h1>
         <div style={{ display: "flex" }}>
           <div className="my-button active-btn">Lưu</div>

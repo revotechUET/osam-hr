@@ -14,7 +14,7 @@ class DepartmentNewPage extends React.Component {
 
   render() {
     return (
-      <div className = "StaffNew">
+      <div className = "DepartmentNew">
         <h1 style={{ marginBottom: "10px" }}>Bộ Phận / Mới</h1>
         <div style={{ display: "flex" }}>
           <div className="my-button active-btn">Lưu</div>

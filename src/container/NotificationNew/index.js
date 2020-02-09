@@ -7,7 +7,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import './style.less'
 
-class StaffCheckingNewPage extends React.Component {
+class NotificationNewPage extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
@@ -15,7 +15,7 @@ class StaffCheckingNewPage extends React.Component {
 
   render() {
     return (
-      <div className = "StaffNew">
+      <div className = "NotificationNew">
         <h1 style={{ marginBottom: "10px" }}>Thông báo / Mới</h1>
         <div style={{ display: "flex" }}>
           <div className="my-button active-btn">Lưu</div>
@@ -78,4 +78,4 @@ class StaffCheckingNewPage extends React.Component {
   }
 }
 
-export default withRouter(StaffCheckingNewPage);
+export default withRouter(NotificationNewPage);
