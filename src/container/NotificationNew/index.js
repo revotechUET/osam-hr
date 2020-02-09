@@ -55,7 +55,7 @@ class NotificationNewPage extends React.Component {
             <div className = "label"> Nội dung</div>
             <CKEditor
                     editor={ ClassicEditor }
-                    data="<p>Hello from CKEditor 5!</p>"
+                    data="<p>Please input notification content</p>"
                     onInit={ editor => {
                         // You can store the "editor" and use when it is needed.
                         console.log( 'Editor is ready to use!', editor );
