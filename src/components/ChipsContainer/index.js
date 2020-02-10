@@ -10,6 +10,7 @@ export default function ChipsContainer() {
             <Chip content={"Hello"}/>
             <Chip content={"Hello"}/>
             <Chip content={"Hello"}/>
+            
         </div>
     );
 }
