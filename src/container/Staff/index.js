@@ -44,7 +44,7 @@ class StaffPage extends React.Component {
     const { data } = this.state;
     return (<div>
       <h1 style={{ marginBottom: "10px" }}>Nhân viên</h1>
-      <button onClick={() => { this.props.history.push("/staffs/new") }}>Tạo mới</button>
+      <button className="my-button active-btn" onClick={() => { this.props.history.push("/staffs/new") }}>Tạo mới</button>
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'

@@ -53,7 +53,7 @@ class SettingPage extends React.Component {
           <div className="fieldrow">
             <div className="fieldname">Cài đặt ngày nghỉ trong năm</div>
             <div className="fieldinput">
-              <button
+              <button className="my-button active-btn"
                 onClick={() => {
                   this.props.history.push("/setting/day-off");
                 }}
@@ -84,7 +84,7 @@ class SettingPage extends React.Component {
           <div className="fieldrow">
             <div className="fieldname">Cài đặt ngày làm việc</div>
             <div className="fieldinput">
-              <button
+              <button className="my-button active-btn"
                 onClick={() => {
                   this.setState({ workDayModal: true });
                 }}

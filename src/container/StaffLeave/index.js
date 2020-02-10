@@ -12,7 +12,7 @@ class StaffLeavePage extends React.Component {
     render() {
         return (<div >
             <h1 style={{marginBottom: "10px"}}>Yêu cầu nghỉ</h1>
-            <button onClick={()=>this.props.history.push("/leaves/new")}>Tạo mới</button>
+            <button className="my-button active-btn" onClick={()=>this.props.history.push("/leaves/new")}>Tạo mới</button>
             <div>
                {/* <StyledPaginationTable /> */}
             </div>
