@@ -2,11 +2,12 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
-import FroalaEditorComponent from 'react-froala-wysiwyg';
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import './style.less'
 
-class StaffCheckingNewPage extends React.Component {
+class NotificationNewPage extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
@@ -14,7 +15,7 @@ class StaffCheckingNewPage extends React.Component {
 
   render() {
     return (
-      <div className = "StaffNew">
+      <div className = "NotificationNew">
         <h1 style={{ marginBottom: "10px" }}>Thông báo / Mới</h1>
         <div style={{ display: "flex" }}>
           <div className="my-button active-btn">Lưu</div>
@@ -52,7 +53,24 @@ class StaffCheckingNewPage extends React.Component {
 
         <div className = "input-field">
             <div className = "label"> Nội dung</div>
-            <input type="richtext"></input>
+            <CKEditor
+                    editor={ ClassicEditor }
+                    data="<p>Please input notification content</p>"
+                    onInit={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        console.log( { event, editor, data } );
+                    } }
+                    onBlur={ ( event, editor ) => {
+                        console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ ( event, editor ) => {
+                        console.log( 'Focus.', editor );
+                    } }
+                />
         </div>
         </BorderedContainer>
       </div>
@@ -60,4 +78,4 @@ class StaffCheckingNewPage extends React.Component {
   }
 }
 
-export default withRouter(StaffCheckingNewPage);
+export default withRouter(NotificationNewPage);
