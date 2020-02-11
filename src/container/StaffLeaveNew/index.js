@@ -1,8 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
-import BorderBottomInput from "./../../components/BorderBottomInput";
-
+import ChipsContainer from './../../components/ChipsContainer';
 
 import './style.less'
 
@@ -41,7 +40,9 @@ class StaffLeaveNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className = "label">Thông báo cho</div>
-            <input className = "input"/>
+            <div className = "input">
+              <ChipsContainer/>
+            </div>
           </div>
           <div className="input-field">
             <div className = "label">Mô tả</div>
