@@ -10,3 +10,4 @@ function approveLeaveRequest({id, status}) {
   }
   return ok;
 }
+global.approveLeaveRequest = approveLeaveRequest;
