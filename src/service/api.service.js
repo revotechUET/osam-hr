@@ -1,6 +1,10 @@
 module.exports.getUserInfo = function(callback, errcallback) {
   getGGscriptRunChain(callback, errcallback)
-  .getUserInfo()
+  .getUserInfo();
+}
+
+module.exports.getAllUsersInGG = function(params, callback, errcallback) {
+  getGGscriptRunChain(callback, errcallback).listAllUsers(params);
 }
 
 
@@ -13,6 +17,7 @@ function getGGscriptRunChain(callback, errcallback) {
     console.log(err);
   });
 }
+
 
 
 

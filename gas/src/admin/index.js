@@ -5,3 +5,12 @@ function doGet() {
 function getUserInfo() {
     return AdminDirectory.Users.get(Session.getActiveUser().getEmail())
 }
+
+function listAllUsers(params) {
+    let page = AdminDirectory.Users.list(params);
+    let users = page.users;
+    if (users) return {
+        users: users,
+        pageToken: pageToken
+    }
+}
