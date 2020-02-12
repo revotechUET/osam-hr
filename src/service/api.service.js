@@ -1,3 +1,21 @@
+module.exports.getUserInfo = function(callback, errcallback) {
+  getGGscriptRunChain(callback, errcallback)
+  .getUserInfo()
+}
+
+
+function getGGscriptRunChain(callback, errcallback) {
+  return google.script.run
+  .withSuccessHandler(callback ? callback : (value) => {
+    console.log(value);
+  })
+  .withFailureHandler(errcallback ? errcallback : (err)=>{
+    console.log(err);
+  });
+}
+
+
+
 /*
 
 let config = require('./../config/config');

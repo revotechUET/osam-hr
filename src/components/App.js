@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
 import routerConfig from './router.config.js';
 import SideBar from './../container/RouteSideBar';
 import TopBar from './../container/TopBar';
+import api from './../service/fakeapi.service'
 
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.min.css';
@@ -30,11 +31,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        google.script.run
-        .withSuccessHandler((info)=>{
-            console.log(info);
-        })
-        .getUserInfo()
+        
     }
 
     render() {
