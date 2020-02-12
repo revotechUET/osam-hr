@@ -6,8 +6,8 @@ const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin
 webpackConfigure = {
 	entry: "./src/index.js",
 	output: {
-		path: path.join(__dirname, "gas", "src", "dist"),
-		filename: "main.bundle.js"
+		path: path.join(__dirname, "gas", "dist"),
+		filename: "app.bundle.js"
 	},
 	module: {
 		rules: [
