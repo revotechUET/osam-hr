@@ -23,9 +23,18 @@ import PrivateRoute from './PrivateRoute';
 // });
 
 
+
 class App extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        google.script.run
+        .withSuccessHandler((info)=>{
+            console.log(info);
+        })
+        .getUserInfo()
     }
 
     render() {
