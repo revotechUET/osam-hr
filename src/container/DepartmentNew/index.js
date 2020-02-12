@@ -12,13 +12,21 @@ class DepartmentNewPage extends React.Component {
     console.log(props);
   }
 
+  save(){
+    console.log("Saved !");
+  }
+
+  cancel(){
+    console.log("Cancel !")
+  }
+
   render() {
     return (
       <div className = "DepartmentNew">
         <h1 style={{ marginBottom: "10px" }}>Bộ Phận / Mới</h1>
         <div style={{ display: "flex" }}>
-          <div className="my-button active-btn">Lưu</div>
-          <div className="my-button">Hủy</div>
+          <button className="my-button active-btn" onClick={this.save}>Lưu</button>
+          <button className="my-button" onClick={this.cancel}>Hủy</button>
         </div>
         <BorderedContainer>
           <h3>Tên Bộ Phận</h3>
