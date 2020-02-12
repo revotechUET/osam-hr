@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 //const CopyWebpackPlugin = require('copy-webpack-plugin');
+const RemovePlugin = require('remove-files-webpack-plugin');
 
 webpackConfigure = {
 	entry: "./src/index.js",
@@ -46,7 +47,12 @@ webpackConfigure = {
 		// new CopyWebpackPlugin([
 		// 	{from: 'src/assets', to:'assets'}
 		// ])
-		new HtmlWebpackInlineSourcePlugin()
+    new HtmlWebpackInlineSourcePlugin(),
+    new RemovePlugin({
+      after: {
+        include: ['./gas/dist/app.bundle.js']
+      }
+  })
 	]
 };
 
