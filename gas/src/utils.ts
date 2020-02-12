@@ -26,7 +26,7 @@ export function googleUser(): GoogleUser {
 
 export function userInfo(): User {
   const googleUserInfo = googleUser();
-  return db.from<User>('user').query.where('idGoogle', googleUserInfo.id).getResultsJson()[0];
+  return db.from<User>('user').query.where('id', googleUserInfo.id).getResultsJson()[0];
 }
 
 export function dateString(date: Date = new Date()) {
