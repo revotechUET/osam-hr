@@ -21,7 +21,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "push": "clasp push",
-    "start": "run-p \"build -- -w\" \"push -- -w\"",
+    "start": "node script.js",
     "deploy": "npm run build && clash push",
     "deploy:prod": "npx cross-env NODE_ENV=production npm run deploy"
   },
