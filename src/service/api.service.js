@@ -1,20 +1,22 @@
-module.exports.getUserInfo = function(callback, errcallback) {
-  getGGscriptRunChain(callback, errcallback)
-  .getUserInfo()
-}
-
-
-function getGGscriptRunChain(callback, errcallback) {
-  return google.script.run
-  .withSuccessHandler(callback ? callback : (value) => {
-    console.log(value);
+function gscriptrun(fnName, ...args) {
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+    [fnName](...args);
   })
-  .withFailureHandler(errcallback ? errcallback : (err)=>{
-    console.log(err);
-  });
 }
 
+class ApiService {
+  listUser() {
+    return gscriptrun('listUsers');
+  }
+  getUserInfo({ id }) {
+    return gscriptrun('getUserInfo', { id });
+  }
+}
 
+export default new ApiService();
 
 /*
 
@@ -35,7 +37,7 @@ function handleGet() {
       next: function(value) {
         //insert your logic
         observer.next(value);
-        
+
       },
       error: function(err) {
         //insert your logic
@@ -63,7 +65,7 @@ function handlePost() {
       next: function(value) {
         //insert your logic
         observer.next(value);
-        
+
       },
       error: function(err) {
         //insert your logic
