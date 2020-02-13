@@ -22,3 +22,5 @@ function listUsers(maxResults) {
 function getUserInfo() {
   return AdminDirectory.Users.get(Session.getActiveUser().getEmail())
 }
+
+global.getUserInfo = getUserInfo;
