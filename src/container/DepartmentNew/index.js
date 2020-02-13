@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import ChipsContainer from './../../components/ChipsContainer';
-
 import './style.less'
 
 class DepartmentNewPage extends React.Component {
@@ -23,19 +22,10 @@ class DepartmentNewPage extends React.Component {
     this.handleActiveStatus     = this.handleActiveStatus.bind(this);
   }
 
-  componentDidMount(){
-    google.script.run.withSuccessHandler((data) => {
-      this.setState({ names: data });
-      console.log(data);
-    })
-    .withFailureHandler((error) => alert(error))
-    .getUserInfo();
-  }
   handleSave(event){
     console.log("Tên bộ phận : " ,this.state.departmentName);
     console.log("Người quản lý : ", this.state.manager);
     console.log("Active status   : ", this.state.active);
-    google.script.run.getUserInfo();
     event.preventDefault();
   }
 
