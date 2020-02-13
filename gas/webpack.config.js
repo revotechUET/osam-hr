@@ -36,7 +36,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: 'api.bundle.js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
