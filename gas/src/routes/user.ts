@@ -1,11 +1,9 @@
-import { GoogleUser, User, UserRole, Department } from "../@types/user";
+import { GoogleUser, User, UserRole } from "../@types/user";
 import { db } from "../db";
 import { googleUser, userInfo, isValid,uuid } from "../utils";
 
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
-global.addNewDepartment = addNewDepartment;
-global.appendUser       = appendUser;
 global.generateUid      = generateUid;
 
 function listUsersDomain(maxResults) {
@@ -26,12 +24,3 @@ function generateUid(){
 function listUsers() {
   return db.from<User>('user').getDataJSON();
 }
-
-function addNewDepartment(data){
-  return db.from<Department>('department').insert(data);
-}
-
-function appendUser(data){
-  return db.from<User>('user').insert(data);
-}
-

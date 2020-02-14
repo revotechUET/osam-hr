@@ -8,7 +8,8 @@ function gscriptrun(fnName, ...args) {
 }
 
 class ApiService {
-  
+
+  // user
   listUsers() {
     return gscriptrun('listUsers');
   }
@@ -16,11 +17,17 @@ class ApiService {
   getUserInfo() {
     return gscriptrun('getUserInfo');
   }
-  
+
+  // department
   addNewDepartment(data){
     return gscriptrun('addNewDepartment', data);
   }
-  
+
+  // leave
+  listLeaves(payload) {
+    return gscriptrun('leaveList', payload);
+  }
+
   getSheetData(){
     return gscriptrun('getSheetData');
   }
