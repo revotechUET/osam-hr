@@ -5,24 +5,18 @@ import './style.less';
 import apiService from '../../service/api.service';
 
 
-const displays = [
+const columns = [
   {
-    name: "Tên nhân viên",
-    selector: "name",
+    name: 'Tên nhân viên',
+    selector: 'name',
+    sortable: true,
   },
   {
-    name: "Email",
-    selector: "email",
-  },
-  {
-    name: "Bo phan",
-    selector: "department",
-  },
-  {
-    name: "Job type",
-    selector: "jobtype",
+    name: 'Email',
+    selector: 'email',
+    sortable: true,
   }
-]
+];
 
 class StaffPage extends React.Component {
   constructor(props) {

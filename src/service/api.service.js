@@ -8,7 +8,7 @@ function gscriptrun(fnName, ...args) {
 }
 
 class ApiService {
-  listUser() {
+  listUsers() {
     return gscriptrun('listUsers');
   }
   getUserInfo() {
@@ -23,7 +23,6 @@ class ApiService {
 }
 
 export default new ApiService();
-
 /*
 
 let config = require('./../config/config');

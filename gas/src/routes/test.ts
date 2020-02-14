@@ -16,5 +16,9 @@ function getUserInfo() {
   return user.getEmail()
 }
 
+<<<<<<< HEAD
 
 
+=======
+global.getUserInfo = getUserInfo;
+>>>>>>> 0644003cccedfd7f64d23814addff3d1ddd4e574
