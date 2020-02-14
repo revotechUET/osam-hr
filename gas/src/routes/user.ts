@@ -14,6 +14,6 @@ function listUsersDomain(maxResults) {
 global.listUsersDomain = listUsersDomain;
 
 function listUsers() {
-  return db.from<User>('user').getDataJSON();
+  return db.from<User>('user').toJSON();
 }
 global.listUsers = listUsers;

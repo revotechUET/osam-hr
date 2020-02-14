@@ -5,17 +5,18 @@ import './style.less';
 import apiService from '../../service/api.service';
 
 
-const columns = [
+const displays = [
   {
     name: 'Tên nhân viên',
     selector: 'name',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'Email',
     selector: 'email',
-    sortable: true,
-  }
+    sortable: true
+  },
+  
 ];
 
 class StaffPage extends React.Component {
