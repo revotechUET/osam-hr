@@ -5,6 +5,7 @@ import { googleUser, userInfo, isValid,uuid } from "../utils";
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
 global.generateUid      = generateUid;
+global.appendUser       = appendUser;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
@@ -24,3 +25,9 @@ function generateUid(){
 function listUsers() {
   return db.from<User>('user').getDataJSON();
 }
+
+function appendUser(data){
+  return db.from<User>('user').insert(data);
+}
+
+

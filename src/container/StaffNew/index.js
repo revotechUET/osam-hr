@@ -33,7 +33,6 @@ class StaffNewPage extends React.Component {
   }
   async handleSave(){
     let id = await apiService.generateUid();
-    console.log(typeof(id));
     let data = {
       "id"        : id, 
       "name"      : this.state.userName,
