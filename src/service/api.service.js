@@ -11,8 +11,14 @@ class ApiService {
   listUsers() {
     return gscriptrun('listUsers');
   }
-  getUserInfo({ id }) {
-    return gscriptrun('getUserInfo', { id });
+  getUserInfo() {
+    return gscriptrun('getUserInfo');
+  }
+  addNewDepartment(data){
+    return gscriptrun('addNewDepartment', data);
+  }
+  getSheetData(){
+    return gscriptrun('getSheetData');
   }
 }
 

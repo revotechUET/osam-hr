@@ -4,6 +4,7 @@ import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import ChipsContainer from './../../components/ChipsContainer';
 import './style.less';
+import apiService from '../../service/api.service';
 
 class DepartmentNewPage extends React.Component {
   constructor(props) {
@@ -22,18 +23,16 @@ class DepartmentNewPage extends React.Component {
     this.handleActiveStatus     = this.handleActiveStatus.bind(this);
   }
 
-  componentDidMount() {
-    apis.getAllUsersInGG({
-
-    }, (rs)=>{
-
-    })
-  }
-
-  handleSave(event){
-    console.log("Tên bộ phận : " ,this.state.departmentName);
-    console.log("Người quản lý : ", this.state.manager);
-    console.log("Active status   : ", this.state.active);
+  async handleSave(event){
+    let data = {
+      "id"          : this.state.countActive.toString(),
+      "name"        : this.state.departmentName,
+      "active"      : this.state.active.toString(),
+      "idManager"   : "Le Van Thinh",
+      "idApprovers" : "Mr.Thinh"
+    }
+    let newSheetData = await apiService.addNewDepartment(data);
+    console.log(newSheetData);
     event.preventDefault();
   }
 
@@ -47,6 +46,10 @@ class DepartmentNewPage extends React.Component {
 
   handleDepartmentChange(event){
     this.setState({departmentName : event.target.value});
+  }
+
+  async componentDidMount(){
+    
   }
 
   handleActiveStatus(){
