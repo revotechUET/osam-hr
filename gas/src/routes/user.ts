@@ -1,10 +1,9 @@
-import { GoogleUser, User, UserRole, Department } from "../@types/user";
+import { GoogleUser, User, UserRole } from "../@types/user";
 import { db } from "../db";
 import { googleUser, userInfo, isValid } from "../utils";
 
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
-global.addNewDepartment = addNewDepartment;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
@@ -20,8 +19,3 @@ function listUsersDomain(maxResults) {
 function listUsers() {
   return db.from<User>('user').getDataJSON();
 }
-
-function addNewDepartment(data){
-  return db.from<Department>('department').insert(data);
-}
-

@@ -1,7 +1,7 @@
+import uniqid from 'uniqid';
+import { GoogleUser, User } from "./@types/user";
 import { userCache } from "./const";
 import { db } from "./db";
-import { GoogleUser, User } from "./@types/user";
-import { v4 } from 'uuid';
 
 export function isValid(object) {
   if (Array.isArray(object)) {
@@ -37,6 +37,6 @@ export function dateString(date: Date = new Date()) {
   return Utilities.formatDate(date, "GMT", "yyyy-MM-dd'T'00:00:00'Z'");
 }
 
-export function uuid() {
-  return v4();
+export function uuid(prefix?:string, suffix?: string) {
+  return uniqid(prefix, suffix);
 }
