@@ -14,5 +14,3 @@ export function getFirstDayOfMonth() {
   now.setHours(0, 0, 0, 0);
   return now;
 }
-export default class Utils {
-}

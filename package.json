@@ -34,6 +34,7 @@
     "babel-polyfill": "^6.26.0",
     "file-loader": "^4.2.0",
     "font-awesome": "^4.7.0",
+    "gsheetdb": "github:revotechUET/gsheetdb#fe0259d",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "react": "^16.9.0",
