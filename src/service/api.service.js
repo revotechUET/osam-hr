@@ -7,7 +7,6 @@ module.exports.getAllUsersInGG = function(params, callback, errcallback) {
   getGGscriptRunChain(callback, errcallback).listAllUsers(params);
 }
 
-
 function getGGscriptRunChain(callback, errcallback) {
   return google.script.run
   .withSuccessHandler(callback ? callback : (value) => {
@@ -17,8 +16,6 @@ function getGGscriptRunChain(callback, errcallback) {
     console.log(err);
   });
 }
-
-
 
 
 /*

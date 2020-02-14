@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import ChipsContainer from './../../components/ChipsContainer';
-import './style.less'
+import './style.less';
 
 class DepartmentNewPage extends React.Component {
   constructor(props) {
@@ -20,6 +20,14 @@ class DepartmentNewPage extends React.Component {
     this.handleCancel           = this.handleCancel.bind(this);
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus     = this.handleActiveStatus.bind(this);
+  }
+
+  componentDidMount() {
+    apis.getAllUsersInGG({
+
+    }, (rs)=>{
+
+    })
   }
 
   handleSave(event){
