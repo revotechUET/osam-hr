@@ -2,30 +2,21 @@ import React from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
 import './style.less';
+import apiService from '../../service/api.service';
 
 
-const displays = [
+const columns = [
   {
-    header: "Tên nhân viên",
-    field: "name",
-    width: 0.3
+    name: 'Tên nhân viên',
+    selector: 'name',
+    sortable: true,
   },
   {
-    header: "Email",
-    field: "email",
-    width: 0.3
-  },
-  {
-    header: "Bo phan",
-    field: "department",
-    width: 0.1
-  },
-  {
-    header: "Job type",
-    field: "jobtype",
-    width: 0.3
+    name: 'Email',
+    selector: 'email',
+    sortable: true,
   }
-]
+];
 
 class StaffPage extends React.Component {
   constructor(props) {
@@ -37,7 +28,10 @@ class StaffPage extends React.Component {
   }
 
   async componentDidMount() {
+    const users = await apiService.listUser();
+    console.log(users);
 
+    this.setState({ data: users });
   }
 
   render() {
@@ -48,7 +42,7 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-
+        columns={displays}
         data={data}
       />
       {/* <div>

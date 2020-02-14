@@ -1,23 +1,22 @@
-module.exports.getUserInfo = function(callback, errcallback) {
-  getGGscriptRunChain(callback, errcallback)
-  .getUserInfo();
-}
-
-module.exports.getAllUsersInGG = function(params, callback, errcallback) {
-  getGGscriptRunChain(callback, errcallback).listAllUsers(params);
-}
-
-function getGGscriptRunChain(callback, errcallback) {
-  return google.script.run
-  .withSuccessHandler(callback ? callback : (value) => {
-    console.log(value);
+function gscriptrun(fnName, ...args) {
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+    [fnName](...args);
   })
-  .withFailureHandler(errcallback ? errcallback : (err)=>{
-    console.log(err);
-  });
 }
 
+class ApiService {
+  listUsers() {
+    return gscriptrun('listUsers');
+  }
+  getUserInfo({ id }) {
+    return gscriptrun('getUserInfo', { id });
+  }
+}
 
+export default new ApiService();
 /*
 
 let config = require('./../config/config');
@@ -37,7 +36,7 @@ function handleGet() {
       next: function(value) {
         //insert your logic
         observer.next(value);
-        
+
       },
       error: function(err) {
         //insert your logic
@@ -65,7 +64,7 @@ function handlePost() {
       next: function(value) {
         //insert your logic
         observer.next(value);
-        
+
       },
       error: function(err) {
         //insert your logic
