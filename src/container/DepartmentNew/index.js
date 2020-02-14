@@ -9,7 +9,7 @@ import apiService from '../../service/api.service';
 class DepartmentNewPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       departmentName : '',
       manager        : '',
       active         : true,
@@ -37,7 +37,7 @@ class DepartmentNewPage extends React.Component {
   }
 
   handleCancel(){
-    console.log("Cancel !")
+    this.props.history.push('/departments');
   }
 
   handleManagerChange(event){

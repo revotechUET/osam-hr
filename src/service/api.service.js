@@ -8,17 +8,29 @@ function gscriptrun(fnName, ...args) {
 }
 
 class ApiService {
+  
   listUsers() {
     return gscriptrun('listUsers');
   }
+  
   getUserInfo() {
     return gscriptrun('getUserInfo');
   }
+  
   addNewDepartment(data){
     return gscriptrun('addNewDepartment', data);
   }
+  
   getSheetData(){
     return gscriptrun('getSheetData');
+  }
+
+  appendUser(data){
+    return gscriptrun('appendUser', data);
+  }
+
+  generateUid(){
+    return gscriptrun('generateUid');
   }
 }
 
