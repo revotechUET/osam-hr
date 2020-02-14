@@ -16,7 +16,7 @@ function leaveList({ id, startTime, endTime, status }) {
   if (status) {
     leavesQuery.where('status', status);
   }
-  return leavesQuery.getResultsJson();
+  return leavesQuery.toJSON();
 }
 global.leaveList = leaveList;
 
