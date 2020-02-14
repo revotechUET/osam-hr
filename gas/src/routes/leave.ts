@@ -2,6 +2,10 @@ import { googleUser, uuid, isValid } from "../utils";
 import { db } from "../db";
 import { Leave, LeaveStatus } from "../@types/leave";
 
+global.leaveList = leaveList;
+global.leaveApprove = leaveApprove;
+   
+
 function leaveList({ id, startTime, endTime, status }) {
   const leavesQuery = db.from<Leave>('leave').query;
   if (id) {
@@ -18,7 +22,7 @@ function leaveList({ id, startTime, endTime, status }) {
   }
   return leavesQuery.getResultsJson();
 }
-global.leaveList = leaveList;
+
 
 function leaveApprove({ id, status }) {
   const user = googleUser();
@@ -28,4 +32,3 @@ function leaveApprove({ id, status }) {
   }
   return ok;
 }
-global.leaveApprove = leaveApprove;

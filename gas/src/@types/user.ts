@@ -21,3 +21,11 @@ export interface User {
   active: number,
   idContract?: string,
 }
+
+export interface Department {
+  id          : string,
+  name        :string,
+  active      :number,
+  idManager   :string,
+  idApprovers : string
+}

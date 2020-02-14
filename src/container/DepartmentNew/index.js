@@ -3,7 +3,8 @@ import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import ChipsContainer from './../../components/ChipsContainer';
-import './style.less'
+import './style.less';
+import apiService from '../../service/api.service';
 
 class DepartmentNewPage extends React.Component {
   constructor(props) {
@@ -22,10 +23,18 @@ class DepartmentNewPage extends React.Component {
     this.handleActiveStatus     = this.handleActiveStatus.bind(this);
   }
 
-  handleSave(event){
-    console.log("Tên bộ phận : " ,this.state.departmentName);
-    console.log("Người quản lý : ", this.state.manager);
-    console.log("Active status   : ", this.state.active);
+  async handleSave(event){
+    // console.log("Tên bộ phận : " ,this.state.departmentName);
+    // console.log("Người quản lý : ", this.state.manager);
+    // console.log("Active status   : ", this.state.active);
+    let newSheetData = await apiService.addNewDepartment(
+      this.state.countActive.toString(),
+      this.state.departmentName,
+      this.state.active.toString(),
+      "Thinhlv",
+      "Mr.Thinh"
+    );
+    console.log(newSheetData);
     event.preventDefault();
   }
 
@@ -39,6 +48,10 @@ class DepartmentNewPage extends React.Component {
 
   handleDepartmentChange(event){
     this.setState({departmentName : event.target.value});
+  }
+
+  async componentDidMount(){
+    
   }
 
   handleActiveStatus(){

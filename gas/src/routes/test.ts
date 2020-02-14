@@ -1,17 +1,20 @@
+global.getUserInfo = getUserInfo;
+global.testUserInfo = testUserInfo;
+global.test = test;
+
 function testUserInfo() {
   const user = People.People.get('people/me', { personFields: 'names,emailAddresses' });
   return user;
 }
-global.testUserInfo = testUserInfo;
 
 function test(args) {
   return args;
 }
-global.test = test;
 
 function getUserInfo() {
-  return AdminDirectory.Users.get(Session.getActiveUser().getEmail())
+  const user =  Session.getActiveUser()
+  return user.getEmail()
 }
 
-global.getUserInfo = getUserInfo;
+
 
