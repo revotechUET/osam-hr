@@ -1,4 +1,4 @@
-import { GoogleUser, User, UserRole } from "../@types/user";
+import { GoogleUser, User, UserRole} from "../@types/user";
 import { db } from "../db";
 import { googleUser, userInfo, isValid,uuid } from "../utils";
 
@@ -6,6 +6,7 @@ global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
 global.generateUid      = generateUid;
 global.appendUser       = appendUser;
+
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
@@ -29,5 +30,10 @@ function listUsers() {
 function appendUser(data){
   return db.from<User>('user').insert(data);
 }
+
+
+
+
+
 
 
