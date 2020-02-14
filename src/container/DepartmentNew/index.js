@@ -24,16 +24,14 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave(event){
-    // console.log("Tên bộ phận : " ,this.state.departmentName);
-    // console.log("Người quản lý : ", this.state.manager);
-    // console.log("Active status   : ", this.state.active);
-    let newSheetData = await apiService.addNewDepartment(
-      this.state.countActive.toString(),
-      this.state.departmentName,
-      this.state.active.toString(),
-      "Thinhlv",
-      "Mr.Thinh"
-    );
+    let data = {
+      "id"          : this.state.countActive.toString(),
+      "name"        : this.state.departmentName,
+      "active"      : this.state.active.toString(),
+      "idManager"   : "Le Van Thinh",
+      "idApprovers" : "Mr.Thinh"
+    }
+    let newSheetData = await apiService.addNewDepartment(data);
     console.log(newSheetData);
     event.preventDefault();
   }

@@ -14,8 +14,8 @@ class ApiService {
   getUserInfo() {
     return gscriptrun('getUserInfo');
   }
-  addNewDepartment(){
-    return gscriptrun('addNewDepartment');
+  addNewDepartment(data){
+    return gscriptrun('addNewDepartment', data);
   }
   getSheetData(){
     return gscriptrun('getSheetData');
