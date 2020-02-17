@@ -33,12 +33,6 @@ class DepartmentPage extends React.Component {
         super(props);
         this.state = {
             data : [
-                // {
-                //     "STT" : "1",
-                //     "name": "CEO",
-                //     "idManager" : "ThinhLv",
-                //     "idApprovers" : "Mr.Thinh"
-                // }
             ]
         }
     }

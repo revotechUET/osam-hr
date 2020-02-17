@@ -53,6 +53,11 @@ class ApiService {
   leaveNew(data){
     return gscriptrun('leaveNew',data);
   }
+
+  // checking
+  listChecking(){
+    return gscriptrun('listCheck');
+  }
 }
 
 export default new ApiService();
