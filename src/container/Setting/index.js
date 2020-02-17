@@ -100,73 +100,73 @@ class SettingPage extends React.Component {
             this.setState({ workDayModal: false });
           }}
         >
-          <div className="work-day-setting-modal">
-            <div style={{ flexBasis: "60px", borderBottom: "1px solid" }}>
+          <div>
+            <div className="header">
               Cài đặt ngày làm việc
             </div>
             <div className="field-container">
               <div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
-                  <div>
-                    <select>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
+                  <div >
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
               </div>
               <div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-field">
-                  <div style={{ width: "20%" }}>Thứ hai</div>
+                <div className="input-field">
+                  <div className="label">Thứ hai</div>
                   <div>
-                    <select>
+                    <select className="input">
                       <option>Hello</option>
                     </select>
                   </div>
                 </div>
               </div>
             </div>
-            <div style={{ flexBasis: "60px", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+            <div className="footer">
               <div className="my-button">Hủy</div>
               <div className="my-button active-btn">Lưu</div>
             </div>

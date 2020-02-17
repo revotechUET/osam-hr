@@ -1,6 +1,6 @@
 import { GoogleUser, User, UserRole} from "../@types/user";
 import { db } from "../db";
-import { googleUser, userInfo, isValid,uuid } from "../utils";
+import { isValid,uuid } from "../utils";
 
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
@@ -10,7 +10,6 @@ global.appendUser       = appendUser;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
-      customer: 'my_customer',
       maxResults: maxResults || 100,
       orderBy: 'email'
   };

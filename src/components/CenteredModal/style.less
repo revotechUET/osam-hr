@@ -4,6 +4,7 @@
     left: 50%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
+    background-color: white;
 }
 
 .modal-background {
@@ -20,11 +21,26 @@
 }
 
 .CenteredModal {
+    .modal-layer {
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
+        width: 600px;
+    }
+
     .header {
         font-size: 2em;
         border-bottom: 1px solid;
+        font-weight: 600;
+        padding-left: 10px;
+        padding-bottom: 10px;
     }
     .footer {
-        
+        flex-basis: 60px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-top: 1px solid;
+        padding-top: 10px;
     }
 }

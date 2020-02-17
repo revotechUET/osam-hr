@@ -13,6 +13,5 @@ export interface Contract {
     id: string,
     type: ContractType,
     lunch: boolean,
-    sabbatical: boolean,
-    description: string
+    sabbatical: boolean
 }

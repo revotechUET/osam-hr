@@ -9,13 +9,13 @@ const columns = [
   {
     name: 'Tên nhân viên',
     selector: 'name',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'Email',
     selector: 'email',
-    sortable: true,
-  }
+    sortable: true
+  },
 ];
 
 class StaffPage extends React.Component {
@@ -42,7 +42,7 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-        columns={columns}
+        columns={displays}
         data={data}
       />
     </div>)

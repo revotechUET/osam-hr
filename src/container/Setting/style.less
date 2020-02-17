@@ -8,39 +8,14 @@
     }
 
 
-    .work-day-setting-modal {
-        background-color: white;
-        width: 600px;
-        height: 400px;
+    .field-container {
         display: flex;
-        overflow: hidden;
-        flex-direction: column;
-
-        .field-container {
-            display: flex;
-            overflow: auto;
+        overflow: auto;
+        flex: 1;
+        padding-bottom: 20px;
+        &>div {
             flex: 1;
-            border-bottom: 1px solid;
-            &>div {
-                flex: 1;
-            }
         }
-
-        .modal-field {
-            display: flex;
-        }
-
-        .my-button {
-            padding: 5px 15px;
-            border-radius: 2px;
-            background-color: #b2b2b2;
-            margin: 15px;
-            color: white;
-        }
-
-        .active-btn {
-            background-color: #3f51b5;
-        }
-    
     }
+    
 }
