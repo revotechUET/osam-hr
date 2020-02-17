@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 webpackConfigure = {
   entry: "./src/index.js",
   output: {
@@ -46,6 +48,7 @@ webpackConfigure = {
       }
     })
   ],
+  mode: isProduction ? 'production' : 'none',
 };
 
 module.exports = webpackConfigure;
