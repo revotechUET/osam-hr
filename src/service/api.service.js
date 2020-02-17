@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 function gscriptrun(fnName, ...args) {
   return new Promise((resolve, reject) => {
     google.script.run
@@ -7,7 +9,43 @@ function gscriptrun(fnName, ...args) {
   })
 }
 
+function makeCancelable(promise, isThrow) {
+  let isCanceled = false;
+  const wrappedPromise = new Promise((resolve, reject) => {
+    promise
+      .then(val => (isCanceled ? reject({ isCanceled }) : resolve(val)))
+      .catch(error => (isCanceled ? reject({ isCanceled }) : reject(error)));
+  });
+  return {
+    promise: wrappedPromise,
+    cancel() {
+      isCanceled = true;
+    },
+  };
+}
+
+function useCancellable() {
+  const promises = useRef([]);
+  useEffect(() => {
+    return () => {
+      promises.current.forEach(p => p.cancel());
+      promises.current = [];
+    };
+  }, []);
+  function cancellablePromise(p) {
+    const cPromise = makeCancelable(p);
+    promises.current.push(cPromise);
+    return cPromise.promise;
+  }
+  return cancellablePromise;
+}
+
 class ApiService {
+  constructor() {
+    // hooks
+    this.useCancellable = useCancellable;
+  }
+
   insertContract(contract) {
     return gscriptrun('insertContract', contract);
   }
@@ -19,13 +57,13 @@ class ApiService {
   listEmails(maxResult) {
     return gscriptrun('listUsersDomain', maxResult);
   }
-  
+
   getUserInfo() {
     return gscriptrun('getUserInfo');
   }
 
   // department
-  addNewDepartment(data){
+  addNewDepartment(data) {
     return gscriptrun('addNewDepartment', data);
   }
 
@@ -37,21 +75,20 @@ class ApiService {
   listLeaves(payload) {
     return gscriptrun('leaveList', payload);
   }
+  addLeave(payload) {
+    return gscriptrun('leaveAdd', payload);
+  }
 
-  getSheetData(){
+  getSheetData() {
     return gscriptrun('getSheetData');
   }
 
-  appendUser(data){
+  appendUser(data) {
     return gscriptrun('appendUser', data);
   }
 
-  generateUid(){
-    return gscriptrun('generateUid');
-  }
-
-  leaveNew(data){
-    return gscriptrun('leaveNew',data);
+  leaveNew(data) {
+    return gscriptrun('leaveNew', data);
   }
 
   // checking
