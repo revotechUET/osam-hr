@@ -6,8 +6,8 @@ export default function ChipsContainer(props) {
     return (
         <div className = "ChipsContainer">
             {
-                props.items.map((e, idx)=>
-                    <Chip key={idx} content = {props.getContent(e)} item = {e} onClick={props.onClick  || (()=>{})}/>
+                (props.items||[]).map((e, idx)=>
+                    <Chip key={idx} content = {props.getContent ? props.getContent(e) : ""} item = {e} onClick={props.onClick  || (()=>{})}/>
                 )
             }
         </div>

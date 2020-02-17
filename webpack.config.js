@@ -40,7 +40,9 @@ webpackConfigure = {
     new HtmlWebpackInlineSourcePlugin(),
     new RemovePlugin({
       after: {
-        include: ['./gas/dist/app.bundle.js']
+        include: ['./gas/dist/app.bundle.js'],
+        log: false,
+        trash: false,
       }
     })
   ],

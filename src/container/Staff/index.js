@@ -29,7 +29,7 @@ class StaffPage extends React.Component {
   }
 
   async componentDidMount() {
-    const users = await apiService.listUser();
+    const users = await apiService.listUsers();
     console.log(users);
 
     this.setState({ data: users });
@@ -43,16 +43,11 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-        columns={displays}
+        columns={columns}
         data={data}
       />
-      {/* <div>
-        <StyledPaginationTable items={this.state.data} displays={displays} />
-      </div> */}
     </div>)
   }
 }
 
-
 export default withRouter(StaffPage);
-

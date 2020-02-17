@@ -1,28 +1,28 @@
-import { googleUser, uuid, isValid } from "../utils";
-import { db } from "../db";
 import { Leave, LeaveStatus } from "../@types/leave";
+import { User } from "../@types/user";
+import { db } from "../db";
+import { googleUser } from "../utils";
 
 global.leaveList = leaveList;
 global.leaveApprove = leaveApprove;
-   
+
 
 function leaveList({ id, startTime, endTime, status }) {
-  const leavesQuery = db.from<Leave>('leave').query;
+  const leavesQuery = db.join<Leave, User>('leave', 'user', 'idRequester', 'requester');
   if (id) {
-    leavesQuery.where('id', id);
+    leavesQuery.sWhere('id', id);
   }
   if (startTime) {
-    leavesQuery.where('startTime', startTime);
+    leavesQuery.sWhere('startTime', startTime);
   }
   if (endTime) {
-    leavesQuery.where('endTime', endTime);
+    leavesQuery.sWhere('endTime', endTime);
   }
   if (status) {
-    leavesQuery.where('status', status);
+    leavesQuery.sWhere('status', status);
   }
   return leavesQuery.toJSON();
 }
-
 
 function leaveApprove({ id, status }) {
   const user = googleUser();
