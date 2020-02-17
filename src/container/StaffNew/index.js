@@ -9,7 +9,11 @@ import './style.less'
 class StaffNewPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+    //console.log(props);
+  }
+  
+  componentDidMount() {
+    
   }
 
   render() {

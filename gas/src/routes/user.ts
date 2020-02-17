@@ -18,7 +18,7 @@ function listUsersDomain(maxResults) {
 
 
 function listUsers() {
-  return db.from<User>('user').toJSON();
+  return db.from<User>('user').getDataJSON();
 }
 
 function addNewDepartment(data){
