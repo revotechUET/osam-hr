@@ -29,6 +29,10 @@ class ApiService {
     return gscriptrun('addNewDepartment', data);
   }
 
+  listDepartment(){
+    return gscriptrun('listDepartment');
+  }
+
   // leave
   listLeaves(payload) {
     return gscriptrun('leaveList', payload);
