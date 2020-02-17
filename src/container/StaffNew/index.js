@@ -65,14 +65,9 @@ class StaffNewPage extends React.Component {
     this.props.history.push('/staffs');
   }
 
-  handleActiveStatus(){
-    this.state.countActive += 1;
-    if(this.state.countActive % 2 === 0){
-      this.setState({active : false});
-    }
-    else if (this.state.countActive % 2 !== 0){
-      this.setState({active : true});
-    }
+  handleActiveStatus(e){
+    this.setState({active : e});
+    
   }
 
   render() {
@@ -85,10 +80,10 @@ class StaffNewPage extends React.Component {
         </div>
         <BorderedContainer>
           <h3>Tên nhân viên</h3>
-          <BorderBottomInput placeholder="Tên nhân viên" value = {this.state.userName} onChange = {this.handleNameChange}/>
+          <BorderBottomInput placeholder="Tên nhân viên" value = {this.state.userName} onChange = {this.handleNameChange} required/>
           <div className="input-field">
             <div className = "label" >Email</div>
-            <input className = "input" value={this.state.email} onChange={this.handleEmailChange}/>
+            <input className = "input" value={this.state.email} onChange={this.handleEmailChange} required/>
           </div>
           <div className="input-field">
             <div className = "label">Hợp đồng</div>
@@ -108,7 +103,7 @@ class StaffNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className = "label">Hoạt động</div>
-            <input className = "input checkbox" type="checkbox" onClick={this.handleActiveStatus}/>
+            <input className = "input checkbox" type="checkbox" onChange={(e)=>this.handleActiveStatus(e.target.checked)}/>
           </div>
           <div className="input-field">
             <div className = "label">Vai trò</div>

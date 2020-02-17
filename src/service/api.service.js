@@ -39,6 +39,10 @@ class ApiService {
   generateUid(){
     return gscriptrun('generateUid');
   }
+
+  leaveNew(data){
+    return gscriptrun('leaveNew',data);
+  }
 }
 
 export default new ApiService();

@@ -3,8 +3,9 @@ import { User } from "../@types/user";
 import { db } from "../db";
 import { googleUser } from "../utils";
 
-global.leaveList = leaveList;
+global.leaveList    = leaveList;
 global.leaveApprove = leaveApprove;
+global.leaveNew     = leaveNew; 
 
 
 function leaveList({ id, startTime, endTime, status }) {
@@ -31,4 +32,8 @@ function leaveApprove({ id, status }) {
     db.from<Leave>('leave').update(id, 'idApprover', user.id);
   }
   return ok;
+}
+
+function leaveNew(data){
+  db.from<Leave>('leave').insert(data);
 }
