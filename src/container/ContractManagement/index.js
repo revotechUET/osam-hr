@@ -3,8 +3,32 @@ import {withRouter} from 'react-router-dom';
 import StyledPaginationTable from '../../components/StyledPaginationTable';
 import CenteredModal from './../../components/CenteredModal';
 import apis from './../../service/api.service';
+import DataTable from 'react-data-table-component';
 
 import './style.less';
+
+const displays = [
+    {
+        name: 'Tên loại hợp đồng',
+        selector: 'name',
+        sortable: true
+    },
+    {
+        name: 'Cách tính công',
+        selector: 'type',
+        sortable: true
+    },
+    {
+        name: "Ăn trưa",
+        selector: 'lunch',
+        sortable: true
+    },
+    {
+        name: "Nghỉ phép",
+        selector: 'sabbatical',
+        sortable: true
+    }
+  ];
 
 class ContractManagementPage extends React.Component {
     constructor(props) {
@@ -13,7 +37,7 @@ class ContractManagementPage extends React.Component {
         this.state = {
             modalActive: false,
             newContractName: "",
-            newContractType: "",
+            newContractType: "fulltime",
             newContractLunch: false,
             newContractSabbatical: false
         };
@@ -21,7 +45,11 @@ class ContractManagementPage extends React.Component {
 
     componentDidMount() {
         this.setState({
-            modalActive: false
+            modalActive: false,
+            newContractName: "",
+            newContractType: "fulltime",
+            newContractLunch: false,
+            newContractSabbatical: false
         });
     }
 
@@ -29,7 +57,7 @@ class ContractManagementPage extends React.Component {
         this.setState({
             modalActive: false,
             newContractName: "",
-            newContractType: "",
+            newContractType: "fulltime",
             newContractLunch: false,
             newContractSabbatical: false
         });
@@ -58,6 +86,10 @@ class ContractManagementPage extends React.Component {
         if (this.state.newContractName.length === 0) {
             return;
         }
+        if (!this.state.newContractType) {
+            console.log(this.state.newContractType);
+            return;
+        }
         //do request
         apis.insertContract({
             name: this.state.newContractName,
@@ -74,6 +106,12 @@ class ContractManagementPage extends React.Component {
         return (<div className="ContractManagement">
             <h1 style={{marginBottom: "10px"}}>Hợp đồng</h1>
             <button className="my-button active-btn" onClick={()=>this.setState({modalActive: true})}>Tạo mới</button>
+            <DataTable
+                noHeader
+                noDataComponent='Không có hợp đồng'
+                columns={displays}
+                data={data}
+            />
             <CenteredModal active = {this.state.modalActive} onCancel={() => {this.clearModal()}}>
                 <div className="header">
                     Loại hợp đồng
