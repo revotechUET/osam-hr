@@ -42,7 +42,7 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-        columns={displays}
+        columns={columns}
         data={data}
       />
     </div>)

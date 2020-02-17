@@ -5,7 +5,6 @@ import { uuid } from "../utils";
 
 global.leaveList    = leaveList;
 global.leaveApprove = leaveApprove;
-global.leaveNew     = leaveNew; 
 
 
 function leaveList({ id, startTime, endTime, status }) {

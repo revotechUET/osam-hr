@@ -15,7 +15,8 @@ class StaffNewPage extends React.Component {
       email       : '',
       active      : true,
       contract    : '',
-      role        : ''  
+      role        : '',
+      errors       : {}
     };
 
     this.handleSave             = this.handleSave.bind(this);
@@ -26,21 +27,29 @@ class StaffNewPage extends React.Component {
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus     = this.handleActiveStatus.bind(this);
     this.handleNameChange       = this.handleNameChange.bind(this);
+    this.handleValidation       = this.handleValidation.bind(this);
   }
 
   handleNameChange(evt){
     this.setState({userName : evt.target.value});
   }
-  async handleSave(){
-    let data = {
-      "id"        : id, 
-      "name"      : this.state.userName,
-      "email"     : this.state.email,
-      "active"    : this.state.active,
-      "idContract"  : this.state.contract,
-      "role"      : this.state.role
+  async handleSave(e){
+    let id = await apiService.generateUid();
+    if(this.handleValidation()){
+      let data = {
+        "id"        : id, 
+        "name"      : this.state.userName,
+        "email"     : this.state.email,
+        "active"    : this.state.active,
+        "idContract"  : this.state.contract,
+        "role"      : this.state.role
+      }
+      apiService.appendUser(data);
     }
-    apiService.appendUser(data);
+    else {
+      console.log(this.state.errors);
+    }
+    e.preventDefault();
   }
 
 
@@ -66,7 +75,37 @@ class StaffNewPage extends React.Component {
 
   handleActiveStatus(e){
     this.setState({active : e});
-    
+  }
+
+  handleValidation(){
+    let formIsValid = true;
+    let e           = {};
+
+    // name
+    if(this.state.userName === ''){
+      formIsValid = false;
+      e["name"] = "Cannot be empty";
+    }
+
+    //Email
+    if(this.state.email === ''){
+      formIsValid = false;
+      e["email"] = "Cannot be empty";
+    }
+
+    if(this.state.email !== ''){
+      let lastAtPos = this.state.email.lastIndexOf('@');
+      let lastDotPos = this.state.email.lastIndexOf('.');
+
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && this.state.email.indexOf('@@') == -1 && lastDotPos > 2 && (this.state.email.length - lastDotPos) > 2)) {
+        formIsValid = false;
+        e["email"] = "Email is not valid";
+      }
+    }
+    this.setState({
+      errors : e
+    })
+    return formIsValid;
   }
 
   render() {
@@ -79,10 +118,16 @@ class StaffNewPage extends React.Component {
         </div>
         <BorderedContainer>
           <h3>Tên nhân viên</h3>
-          <BorderBottomInput placeholder="Tên nhân viên" value = {this.state.userName} onChange = {this.handleNameChange} required/>
+          <BorderBottomInput placeholder="Tên nhân viên" value = {this.state.userName} onChange = {this.handleNameChange}/>
+          <span className="error">{this.state.errors["name"]}</span>
           <div className="input-field">
             <div className = "label" >Email</div>
-            <input className = "input" value={this.state.email} onChange={this.handleEmailChange} required/>
+            <input className = "input" value={this.state.email} onChange={this.handleEmailChange}/>
+            {/* <span className="error">{this.state.errors['email']}</span> */}
+          </div>
+          <div className="input-field">
+            <div className = "label" ></div>
+            <span className="error">{this.state.errors['email']}</span>
           </div>
           <div className="input-field">
             <div className = "label">Hợp đồng</div>
