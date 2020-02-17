@@ -10,7 +10,6 @@ global.appendUser       = appendUser;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
-      customer: 'my_customer',
       maxResults: maxResults || 100,
       orderBy: 'email'
   };

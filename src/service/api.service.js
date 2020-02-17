@@ -8,10 +8,16 @@ function gscriptrun(fnName, ...args) {
 }
 
 class ApiService {
-
+  insertContract(contract) {
+    return gscriptrun('insertContract', contract);
+  }
   // user
   listUsers() {
     return gscriptrun('listUsers');
+  }
+
+  listEmails(maxResult) {
+    return gscriptrun('listUsersDomain', maxResult);
   }
   
   getUserInfo() {

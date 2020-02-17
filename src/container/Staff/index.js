@@ -16,7 +16,6 @@ const displays = [
     selector: 'email',
     sortable: true
   },
-  
 ];
 
 class StaffPage extends React.Component {
@@ -43,7 +42,7 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-        columns={columns}
+        columns={displays}
         data={data}
       />
     </div>)

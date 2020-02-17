@@ -15,3 +15,7 @@ function insertContract(contract: Contract) {
     contract.id = uuid();
     return db.from<Contract>('contract').insert(contract);
 }
+
+global.getContracts = getContracts;
+global.getContractById = getContractById;
+global.insertContract = insertContract;

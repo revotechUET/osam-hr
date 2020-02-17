@@ -27,7 +27,9 @@ export default class CenteredModal extends React.Component {
           }}
         >
           <div ref={this.contentRef} className="modal-center">
-            {this.props.children}
+            <div className="modal-layer">
+              {this.props.children}
+            </div>
           </div>
         </div>
       </div>
