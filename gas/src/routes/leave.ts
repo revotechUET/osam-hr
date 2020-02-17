@@ -1,7 +1,7 @@
 import { Leave, LeaveStatus } from "../@types/leave";
 import { User } from "../@types/user";
 import { db } from "../db";
-import { googleUser } from "../utils";
+import { uuid } from "../utils";
 
 global.leaveList = leaveList;
 global.leaveApprove = leaveApprove;
@@ -25,10 +25,22 @@ function leaveList({ id, startTime, endTime, status }) {
 }
 
 function leaveApprove({ id, status }) {
-  const user = googleUser();
-  const ok = db.from<Leave>('leave').update(id, 'status', status || LeaveStatus.Approved);
-  if (ok) {
-    db.from<Leave>('leave').update(id, 'idApprover', user.id);
-  }
+  const user = { id: null };
+  const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Approved, idApprover: user.id });
   return ok;
+}
+
+global.leaveAdd = leaveAdd;
+function leaveAdd({ idRequester, startTime, endTime, reason, description }) {
+  const leave: Leave = {
+    id: uuid('lr-'),
+    idRequester,
+    startTime,
+    endTime,
+    reason,
+    description,
+    status: LeaveStatus.Waiting,
+  }
+  db.from<Leave>('leave').insert(leave);
+  return leave;
 }

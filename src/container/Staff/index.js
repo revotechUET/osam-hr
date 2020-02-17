@@ -5,7 +5,7 @@ import './style.less';
 import apiService from '../../service/api.service';
 
 
-const displays = [
+const columns = [
   {
     name: 'Tên nhân viên',
     selector: 'name',

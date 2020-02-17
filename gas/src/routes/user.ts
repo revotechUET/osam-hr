@@ -1,6 +1,6 @@
 import { GoogleUser, User, UserRole} from "../@types/user";
 import { db } from "../db";
-import { googleUser, userInfo, isValid,uuid } from "../utils";
+import { isValid,uuid } from "../utils";
 
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
