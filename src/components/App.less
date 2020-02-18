@@ -19,16 +19,22 @@ body {
   display: flex;
   margin-top: 15px;
   margin-left: 15px;
-  .label {
+  flex-wrap: wrap;
+  >.label {
       font-weight: 500;
       flex-basis: 200px;
   }
-  .input {
+  >.input {
       padding: 5px;
       border-radius: 2px;
       box-shadow: none;
       border: 1px solid #ccc;
       flex: 1;
+  }
+  >.error {
+    flex-basis: 100%;
+    color: red;
+    margin-top: 3px;
   }
   .checkbox {
     flex: unset;

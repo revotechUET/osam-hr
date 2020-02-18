@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
 import apiService from '../../service/api.service';
@@ -34,26 +34,27 @@ const columns = [
   },
 ]
 
-class StaffLeavePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+function StaffLeavePage({ history }) {
+  const [state, setState] = useReducer((prevState, newState) => ({ ...prevState, ...newState }),
+    {
       list: [],
       loading: false,
-    }
-  }
+    });
+  const cancellable = apiService.useCancellable();
 
-  async componentDidMount() {
-    this.setState({ loading: true })
-    const list = await apiService.listLeaves({});
-    this.setState({ list, loading: false });
-  }
+  useEffect(() => {
+    (async () => {
+      setState({ loading: true })
+      const list = await cancellable(apiService.listLeaves({}));
+      setState({ list, loading: false });
+    })();
+  }, []);
 
-  render() {
-    const { list, loading } = this.state;
-    return (<div >
+  const { list, loading } = state;
+  return (
+    <div >
       <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ</h1>
-      <button className="my-button active-btn" onClick={() => this.props.history.push("/leaves/new")}>Tạo mới</button>
+      <button className="my-button active-btn" onClick={() => history.push("/leaves/new")}>Tạo mới</button>
       <div>
         <DataTable
           noHeader
@@ -64,8 +65,8 @@ class StaffLeavePage extends React.Component {
           data={list}
         />
       </div>
-    </div>)
-  }
+    </div>
+  )
 }
 
 export default withRouter(StaffLeavePage);
