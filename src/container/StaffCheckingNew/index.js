@@ -1,7 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
-
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import apiService from '../../service/api.service';
 
 import './style.less'
 
@@ -10,7 +12,7 @@ class StaffCheckingNewPage extends React.Component {
     super(props);
     this.state = {
       staffName: '',
-      date: '',
+      date: new Date(),
       checkIn: '',
       checkOut: '',
       note: ''
@@ -26,7 +28,20 @@ class StaffCheckingNewPage extends React.Component {
   }
 
   handleSave() {
-    console.log(staffName, date, checkIn, checkOut, note);
+    let data = {
+      date: this.state.date.toISOString(),
+      checkinTime: this.state.checkIn,
+      checkoutTime: this.state.checkOut,
+      reportContent: "toDo",
+      responseContent: "toDo",
+      reportStatus: "toDo",
+      idUser: "toDo",
+      note: this.state.note
+    }
+
+    console.log(data);
+
+    apiService.checkingNew(data);
   }
   handleCheckInChange(evt) {
     this.setState({ checkIn: evt.target.value });
@@ -44,8 +59,8 @@ class StaffCheckingNewPage extends React.Component {
     this.setState({ staffName: evt.target.value });
   }
 
-  handleDateChange(evt) {
-    this.setState({ date: evt.target.value });
+  handleDateChange(val) {
+    this.setState({ date: val });
   }
 
   handleNoteChange(evt) {
@@ -67,7 +82,10 @@ class StaffCheckingNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className="label">Ngày</div>
-            <input type="date" value={this.state.date} onChange={this.handleCheckInChange}/>
+            {/* <input type="date" value={this.state.date} onChange={this.handleCheckInChange}/> */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker value={this.state.date} onChange={this.handleDateChange} />
+            </MuiPickersUtilsProvider>
           </div>
 
           <div className="input-field">

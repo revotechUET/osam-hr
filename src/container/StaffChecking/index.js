@@ -45,17 +45,17 @@ class StaffChecking extends React.Component {
     }
 
     async componentDidMount(){
-        let check = await apiService.listChecking();
+        let check = await apiService.listCheck();
         this.setState({staffChecking : check})
     }
     render() {
-        let { staffChecking } = this.state;
+        let {staffChecking} = this.state;
         return (<div >
             <h1 style={{marginBottom: "10px"}}>Chấm công</h1>
             <button className="my-button active-btn" onClick={()=>this.props.history.push("/checking/new")}>Tạo mới</button>
             <DataTable
             noHeader
-            noDataComponent='...'
+            noDataComponent='.......'
             columns={columns}
             data={staffChecking}
       />

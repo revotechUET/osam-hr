@@ -92,8 +92,11 @@ class ApiService {
   }
 
   // checking
-  listChecking(){
+  listCheck(){
     return gscriptrun('listCheck');
+  }
+  checkingNew(data){
+    return gscriptrun('checkingNew',data);
   }
 }
 
