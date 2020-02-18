@@ -44,6 +44,7 @@ class ApiService {
   constructor() {
     // hooks
     this.useCancellable = useCancellable;
+    this.gscriptrun = gscriptrun;
   }
 
   getContracts() {
@@ -96,8 +97,11 @@ class ApiService {
   }
 
   // checking
-  listChecking(){
+  listCheck(){
     return gscriptrun('listCheck');
+  }
+  checkingNew(data){
+    return gscriptrun('checkingNew',data);
   }
 }
 

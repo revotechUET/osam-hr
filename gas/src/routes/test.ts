@@ -8,11 +8,11 @@ function testUserInfo() {
 }
 
 function test(args) {
-  return args;
+  return { idToken: ScriptApp.getIdentityToken(), oauth: ScriptApp.getOAuthToken() }
 }
 
 function getUserInfo() {
-  const user =  Session.getActiveUser()
+  const user = Session.getActiveUser()
   return user.getEmail()
 }
 

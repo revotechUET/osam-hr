@@ -3,7 +3,8 @@ import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
 import routerConfig from './router.config.js';
 import SideBar from './../container/RouteSideBar';
 import TopBar from './../container/TopBar';
-import api from './../service/fakeapi.service'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.min.css';
@@ -38,6 +39,7 @@ class App extends React.Component {
         return (
             <div style={{display: "flex"}}>
                 <BrowserRouter>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <div style={{width: "20%"}}>
                         <SideBar />
                     </div>
@@ -50,6 +52,7 @@ class App extends React.Component {
                             </Switch>
                         </Suspense>
                     </div>
+                </MuiPickersUtilsProvider>
                 </BrowserRouter>
             </div>
         );

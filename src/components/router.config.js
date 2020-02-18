@@ -18,6 +18,7 @@ import DayOffSettingPage from './../container/DayOffSetting';
 import PayrollPage from './../container/Payroll';
 import MyNotifyPage from './../container/MyNotify';
 import MyNotifyDetailPage from './../container/MyNotifyDetail';
+import TestPage from '../container/TestPage';
 
 export default [
     {
@@ -82,6 +83,12 @@ export default [
     },
     {
         type: "normal",
+        path: "/leaves/:id",
+        exact: true,
+        component: StaffLeavePage
+    },
+    {
+        type: "normal",
         path: "/contracts",
         exact: true,
         component: ContractManagementPage
@@ -127,5 +134,10 @@ export default [
         path: "/my-notifies/:id",
         exact: true,
         component: MyNotifyDetailPage
-    }
+    },
+    {
+        path: "/test",
+        exact: true,
+        component: TestPage,
+    },
 ];
