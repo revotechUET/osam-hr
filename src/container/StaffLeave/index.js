@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useCallback } from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
 import apiService from '../../service/api.service';
@@ -49,7 +49,9 @@ function StaffLeavePage({ history }) {
       setState({ list, loading: false });
     })();
   }, []);
+  const onRowClicked = useCallback(() => {
 
+  });
   const { list, loading } = state;
   return (
     <div >
@@ -63,6 +65,7 @@ function StaffLeavePage({ history }) {
           persistTableHead
           columns={columns}
           data={list}
+          onRowClicked={(row) => history.push(`/leaves/${row.id}`)}
         />
       </div>
     </div>

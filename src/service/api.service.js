@@ -44,6 +44,7 @@ class ApiService {
   constructor() {
     // hooks
     this.useCancellable = useCancellable;
+    this.gscriptrun = gscriptrun;
   }
 
   insertContract(contract) {
