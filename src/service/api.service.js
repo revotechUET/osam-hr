@@ -46,6 +46,10 @@ class ApiService {
     this.useCancellable = useCancellable;
   }
 
+  getContracts() {
+    return gscriptrun('getContracts');
+  }
+
   insertContract(contract) {
     return gscriptrun('insertContract', contract);
   }

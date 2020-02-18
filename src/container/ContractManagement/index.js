@@ -21,12 +21,14 @@ const displays = [
     {
         name: "Ăn trưa",
         selector: 'lunch',
-        sortable: true
+        sortable: true,
+        cell: (row) => <input defaultChecked = {row} type="checkbox"/>
     },
     {
         name: "Nghỉ phép",
         selector: 'sabbatical',
-        sortable: true
+        sortable: true,
+        cell: (row) => <input defaultChecked = {row} type="checkbox"/>
     }
   ];
 
@@ -39,7 +41,8 @@ class ContractManagementPage extends React.Component {
             newContractName: "",
             newContractType: "fulltime",
             newContractLunch: false,
-            newContractSabbatical: false
+            newContractSabbatical: false,
+            contracts: []
         };
     }
 
@@ -49,8 +52,17 @@ class ContractManagementPage extends React.Component {
             newContractName: "",
             newContractType: "fulltime",
             newContractLunch: false,
-            newContractSabbatical: false
+            newContractSabbatical: false,
+            contracts: []
         });
+        this.load();
+    }
+
+    async load() {
+        let rs = await apis.getContracts();
+        this.setState({
+            contracts: rs
+        })
     }
 
     clearModal() {
@@ -87,7 +99,7 @@ class ContractManagementPage extends React.Component {
             return;
         }
         if (!this.state.newContractType) {
-            console.log(this.state.newContractType);
+            //console.log(this.state.newContractType);
             return;
         }
         //do request
@@ -110,7 +122,7 @@ class ContractManagementPage extends React.Component {
                 noHeader
                 noDataComponent='Không có hợp đồng'
                 columns={displays}
-                data={data}
+                data={this.state.contracts}
             />
             <CenteredModal active = {this.state.modalActive} onCancel={() => {this.clearModal()}}>
                 <div className="header">
