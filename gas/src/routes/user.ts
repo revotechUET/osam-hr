@@ -12,11 +12,11 @@ global.appendUser       = appendUser;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
-      maxResults: maxResults || 100,
+      maxResults: maxResults || 1000,
       orderBy: 'email'
   };
   var response = AdminDirectory.Users.list(optionalArgs);
-  return { total: response.users.length, users: response.users };
+  return response.users;
 }
 
 function generateUid(){

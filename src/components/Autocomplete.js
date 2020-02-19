@@ -73,5 +73,5 @@ HrAutocomplete.propTypes = {
   onChange: PropTypes.func.isRequired,
   keyProp: PropTypes.string,
   labelProp: PropTypes.string,
-  InputProps: PropTypes.shape(TextField.propTypes),
+  InputProps: PropTypes.shape(TextField.propTypes)
 }

@@ -22,7 +22,8 @@ class StaffNewPage extends React.Component {
       errors: {},
       departments: null,
       departmentList: [],
-      contract: null
+      contract: null,
+      emailLists: []
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -54,13 +55,22 @@ class StaffNewPage extends React.Component {
       departments: null,
       contracts: null,
       departmentList: [],
-      contract: null
+      contract: null,
+      emailLists: []
     })
   }
 
   load() {
+    this.loadEmailList();
     this.loadDepartments();
     this.loadContracts();
+  }
+
+  async loadEmailList() {
+    let rs = await apiService.listEmails();
+    this.setState({
+      emailLists: rs
+    })
   }
 
   async loadDepartments() {
@@ -169,7 +179,23 @@ class StaffNewPage extends React.Component {
           <span className="error">{this.state.errors["name"]}</span>
           <div className="input-field">
             <div className="label" >Email</div>
-            <input className="input" value={this.state.email} onChange={this.handleEmailChange} />
+            <Autocomplete
+              filterSelectedOptions
+              //loading={this.state.contracts === null}
+              style={{ flex: 1 }}
+              options={[
+                {value: "user", name: "Nhân viên"},
+                {value: "manager", name: "Back Office"},
+                {value: "admin", name: "Admin"}
+              ]}
+              keyProp='value'
+              labelProp='name'
+              onChange={(event, value) => {
+                console.log(value);
+                console.log(event);
+                this.setState({ email: value });
+              }}
+            />
             {/* <span className="error">{this.state.errors['email']}</span> */}
           </div>
           <div className="input-field">
@@ -201,6 +227,7 @@ class StaffNewPage extends React.Component {
               keyProp='id'
               labelProp='name'
               onChange={(event, values) => {
+
                 this.setState({ departmentList: values.map(v => v.id) });
               }}
             />
