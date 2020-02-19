@@ -4,9 +4,6 @@ import { withRouter } from 'react-router-dom';
 import './style.less';
 import apiService from '../../service/api.service';
 
-let departments = [];
-let contracts = [];
-
 const columns = [
   {
     name: 'Tên nhân viên',
@@ -42,7 +39,7 @@ class StaffPage extends React.Component {
       data: [],
       loading: true,
     }
-    return nameList.join(", ");
+    //return nameList.join(", ");
   }
 
   componentDidMount() {
