@@ -1,7 +1,8 @@
 import {Checking} from '../@types/checking';
 import { User } from '../@types/user';
 import {db} from '../db';
-import { dateString } from '../utils';
+import { dateString , uuid } from '../utils';
+
 
 global.listCheck = listCheck;
 global.checkingNew = checkingNew;
@@ -14,6 +15,7 @@ function listCheck({ idUser}){
     return checkingQuery.toJSON(); 
 }
 
-function checkingNew(data){
+function checkingNew(data : Checking){
+     data.id = uuid();
     return db.from<Checking>('checking').insert(data);
 }

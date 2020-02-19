@@ -1,9 +1,10 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import apiService from '../../service/api.service';
+import Autocomplete from "../../components/Autocomplete";
 
 import './style.less'
 
@@ -11,11 +12,12 @@ class StaffCheckingNewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      staffName: '',
-      date: new Date(),
-      checkIn: '',
-      checkOut: '',
-      note: ''
+      staffName: null,
+      date: new Date(0),
+      checkIn: new Date(),
+      checkOut: new Date(),
+      note: '',
+      idRequester: null,
     }
 
     this.handleCancle = this.handleCancle.bind(this);
@@ -27,28 +29,29 @@ class StaffCheckingNewPage extends React.Component {
     this.handleSave = this.handleSave.bind(this);
   }
 
-  handleSave() {
+  async handleSave() {
     let data = {
       date: this.state.date.toISOString(),
-      checkinTime: this.state.checkIn,
-      checkoutTime: this.state.checkOut,
+      checkinTime: new Date(this.state.checkIn).toISOString(),
+      checkoutTime: new Date(this.state.checkOut).toISOString(),
       reportContent: "toDo",
       responseContent: "toDo",
       reportStatus: "toDo",
-      idUser: "toDo",
+      idUser: this.state.idRequester,
       note: this.state.note
     }
 
-    console.log(data);
-
-    apiService.checkingNew(data);
+    let success = await apiService.checkingNew(data);
+    if(success){
+      this.props.history.push('/checking');
+    }
   }
-  handleCheckInChange(evt) {
-    this.setState({ checkIn: evt.target.value });
+  handleCheckInChange(val) {
+    this.setState({ checkIn: val });
   }
 
-  handleCheckOutChange(evt) {
-    this.setState({ checkOut: evt.target.value });
+  handleCheckOutChange(val) {
+    this.setState({ checkOut: val });
   }
 
   handleCancle() {
@@ -66,6 +69,11 @@ class StaffCheckingNewPage extends React.Component {
   handleNoteChange(evt) {
     this.setState({ note: evt.target.value });
   }
+
+  async componentDidMount(){
+    let user = await apiService.listUsers();
+    this.setState({staffName : user});
+  }
   render() {
     return (
       <div className="StaffCheckingNew">
@@ -78,11 +86,21 @@ class StaffCheckingNewPage extends React.Component {
           <h3>Mới</h3>
           <div className="input-field">
             <div className="label">Nhân Viên</div>
-            <input className="input" value={this.state.staffName} onChange={this.handleStaffNameChange} />
+            {/* <input className="input" value={this.state.staffName} onChange={this.handleStaffNameChange} /> */}
+            <Autocomplete
+              loading={this.state.staffName === null}
+              style={{ flex: 1 }}
+              options={this.state.staffName}
+              keyProp='id'
+              labelProp='name'
+              onChange={(event, value) => {
+                this.setState({ idRequester: value && value.id });
+                console.log(this.state.idRequester);
+              }}
+            />
           </div>
           <div className="input-field">
             <div className="label">Ngày</div>
-            {/* <input type="date" value={this.state.date} onChange={this.handleCheckInChange}/> */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker value={this.state.date} onChange={this.handleDateChange} />
             </MuiPickersUtilsProvider>
@@ -90,11 +108,24 @@ class StaffCheckingNewPage extends React.Component {
 
           <div className="input-field">
             <div className="label">Check in</div>
-            <input type="time" value={this.state.checkIn} onChange={this.handleCheckInChange} />
+            <TimePicker
+              clearable
+              ampm={false}
+              label="24 hours"
+              value={this.state.checkIn}
+              onChange={this.handleCheckInChange}
+            />
           </div>
           <div className="input-field">
             <div className="label">Check out</div>
-            <input type="time" value={this.state.checkOut} onChange={this.handleCheckOutChange} />
+            {/* <input type="time" value={this.state.checkOut} onChange={this.handleCheckOutChange} /> */}
+            <TimePicker
+              clearable
+              ampm={false}
+              label="24 hours"
+              value={this.state.checkOut}
+              onChange={this.handleCheckOutChange}
+            />
           </div>
           <div className="input-field">
             <div className="label">Ghi chú</div>
