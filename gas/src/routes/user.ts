@@ -1,6 +1,8 @@
 import { GoogleUser, User, UserRole} from "../@types/user";
 import { db } from "../db";
 import { isValid,uuid } from "../utils";
+import { User_Department } from "../@types/user_department";
+import { Department } from "../@types/department";
 
 global.listUsersDomain  = listUsersDomain;
 global.listUsers        = listUsers;
@@ -23,10 +25,19 @@ function generateUid(){
 }
 
 function listUsers() {
-  return db.from<User>('user').getDataJSON();
+  let users = db.from<User>('user').getDataJSON();
+  let user_department = db.from<User_Department>('user_department').getDataJSON();
+  for (let i = 0; i < users.length; i++) {
+    users[i].departments = user_department.filter((e)=>e.idUser == users[i].id).map((e)=>e.idDepartment)
+  }
+  return users;
 }
 
-function appendUser(data){
+function appendUser(data, listDepartment) {
+  //gen
+  for (let i = 0; i < listDepartment.length; i++) {
+    db.from<User_Department>('user_department').insert({idUser: data.id, idDepartment: listDepartment[i]});
+  }
   return db.from<User>('user').insert(data);
 }
 

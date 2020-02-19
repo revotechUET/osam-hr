@@ -21,12 +21,14 @@ const displays = [
     {
         name: "Ăn trưa",
         selector: 'lunch',
-        sortable: true
+        sortable: true,
+        cell: (row) => <input defaultChecked = {row.lunch} type="checkbox"/>
     },
     {
         name: "Nghỉ phép",
         selector: 'sabbatical',
-        sortable: true
+        sortable: true,
+        cell: (row) => <input defaultChecked = {row.sabbatical} type="checkbox"/>
     }
   ];
 
@@ -39,7 +41,8 @@ class ContractManagementPage extends React.Component {
             newContractName: "",
             newContractType: "fulltime",
             newContractLunch: false,
-            newContractSabbatical: false
+            newContractSabbatical: false,
+            contracts: []
         };
     }
 
@@ -49,8 +52,17 @@ class ContractManagementPage extends React.Component {
             newContractName: "",
             newContractType: "fulltime",
             newContractLunch: false,
-            newContractSabbatical: false
+            newContractSabbatical: false,
+            contracts: []
         });
+        this.load();
+    }
+
+    async load() {
+        let rs = await apis.getContracts();
+        this.setState({
+            contracts: rs
+        })
     }
 
     clearModal() {
@@ -86,10 +98,6 @@ class ContractManagementPage extends React.Component {
         if (this.state.newContractName.length === 0) {
             return;
         }
-        if (!this.state.newContractType) {
-            console.log(this.state.newContractType);
-            return;
-        }
         //do request
         apis.insertContract({
             name: this.state.newContractName,
@@ -110,7 +118,7 @@ class ContractManagementPage extends React.Component {
                 noHeader
                 noDataComponent='Không có hợp đồng'
                 columns={displays}
-                data={data}
+                data={this.state.contracts}
             />
             <CenteredModal active = {this.state.modalActive} onCancel={() => {this.clearModal()}}>
                 <div className="header">

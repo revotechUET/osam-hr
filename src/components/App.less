@@ -2,6 +2,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+a {
+  text-decoration-line: none
+}
+
 .my-button {
   padding: 5px 15px;
   border-radius: 2px;
@@ -9,6 +13,10 @@ body {
   margin: 5px;
   color: white;
   user-select: none;
+  cursor: pointer;
+  &[disabled] {
+    cursor: not-allowed;
+  }
 }
 
 .active-btn {
@@ -20,23 +28,51 @@ body {
   margin-top: 15px;
   margin-left: 15px;
   flex-wrap: wrap;
+
   >.label {
-      font-weight: 500;
-      flex-basis: 200px;
+    font-weight: 500;
+    flex-basis: 200px;
   }
+
   >.input {
-      padding: 5px;
-      border-radius: 2px;
-      box-shadow: none;
-      border: 1px solid #ccc;
-      flex: 1;
+    padding: 5px;
+    border-radius: 2px;
+    box-shadow: none;
+    border: 1px solid #ccc;
+    flex: 1;
   }
+
   >.error {
     flex-basis: 100%;
     color: red;
     margin-top: 3px;
   }
+
   .checkbox {
     flex: unset;
   }
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+
+  .info-row {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+
+    .field {
+      flex: 1;
+      max-width: 35%;
+      margin-right: 5px;
+    }
+    .value {
+
+    }
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

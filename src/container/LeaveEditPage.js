@@ -1,16 +1,20 @@
 import React, { useCallback, useEffect, useReducer } from "react";
-import { withRouter } from "react-router-dom";
-import Autocomplete from "../../components/Autocomplete";
-import Error from "../../components/Error";
-import apiService from "../../service/api.service";
-import { leaveReason } from "../../utils/enums";
-import BorderedContainer from "./../../components/BorderedContainer";
-import './style.less';
+import { useParams, withRouter } from "react-router-dom";
+import Autocomplete from "../components/Autocomplete";
+import BorderedContainer from "../components/BorderedContainer";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
+import apiService from "../service/api.service";
+import { leaveReason } from "../utils/enums";
+import { Select } from "@material-ui/core";
 
-function StaffLeaveNewPage({ history }) {
+function LeaveEditPage({ history }) {
+  const { id } = useParams();
   const [state, setState] = useReducer((prevState, newState) => ({ ...prevState, ...newState }),
     {
+      id,
       idRequester: null,
+      idApprover: null,
       startTime: '',
       endTime: '',
       reason: '',
@@ -18,14 +22,15 @@ function StaffLeaveNewPage({ history }) {
       notifyList: [],
       users: null,
       errors: {},
+      loading: true,
     });
   const cancellable = apiService.useCancellable();
   useEffect(() => {
     (async () => {
       try {
-        setState({ loading: true });
         const users = await cancellable(apiService.listUsers());
-        setState({ users, loading: false });
+        const leave = await cancellable(apiService.leaveDetail({ id }));
+        setState({ ...leave, users, loading: false });
       } catch (error) {
       }
     })();
@@ -38,33 +43,33 @@ function StaffLeaveNewPage({ history }) {
     }
     if (!state.startTime) {
       errors.startTime = 'Chọn thời gian bắt đầu';
-    } else if (new Date(state.startTime) <= new Date()) {
-      errors.startTime = 'Thời gian bắt đầu không hợp lệ';
     }
     if (!state.endTime) {
       errors.endTime = 'Chọn thời gian kết thúc'
     } else if (state.endTime <= state.startTime) {
       errors.endTime = 'Thời gian kết thúc không hợp lệ';
     }
-    if (!state.reason) {
+    if (!state.reason === '') {
       errors.reason = 'Chọn lý do nghỉ';
     }
     if (Object.keys(errors).length) {
       return setState({ errors });
     }
-    const { idRequester, startTime, endTime, reason, description } = state;
-    await apiService.leaveNew({ idRequester, startTime, endTime, reason, description });
+    const { id, idRequester, idApprover, startTime, endTime, reason, description } = state;
+    await apiService.leaveEdit({ id, idRequester, idApprover, startTime, endTime, reason, description });
     history.goBack();
   }, [state]);
+  if (state.loading) return <Loading />;
+  console.log(state);
   return (
     <div className="StaffLeaveNew">
-      <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / Mới</h1>
+      <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / <span className="uppercase">{id}</span></h1>
       <div style={{ display: "flex" }}>
         <div className="my-button active-btn" onClick={save}>Lưu</div>
         <div className="my-button" onClick={() => history.goBack()}>Hủy</div>
       </div>
       <BorderedContainer>
-        <h3>Mới</h3>
+        <h3 className="uppercase">{id}</h3>
         <div className="input-field">
           <div className="label">Nhân Viên</div>
           <Autocomplete
@@ -73,6 +78,7 @@ function StaffLeaveNewPage({ history }) {
             options={state.users}
             keyProp='id'
             labelProp='name'
+            defaultValue={state.users.find(u => u.id === state.idRequester)}
             onChange={(event, value) => {
               setState({ idRequester: value && value.id })
             }}
@@ -98,21 +104,6 @@ function StaffLeaveNewPage({ history }) {
           <Error error={state.errors.endTime} />
         </div>
         <div className="input-field">
-          <div className="label">Thông báo cho</div>
-          <Autocomplete
-            multiple
-            filterSelectedOptions
-            loading={state.users === null}
-            style={{ flex: 1 }}
-            options={state.users}
-            keyProp='id'
-            labelProp='name'
-            onChange={(event, values) => {
-              setState({ notifyList: values.map(v => v.id) });
-            }}
-          />
-        </div>
-        <div className="input-field">
           <div className="label">Mô tả</div>
           <textarea className="input" value={state.description} onChange={event => setState({ description: event.target.value })} />
         </div>
@@ -121,4 +112,4 @@ function StaffLeaveNewPage({ history }) {
   );
 }
 
-export default withRouter(StaffLeaveNewPage);
+export default withRouter(LeaveEditPage);

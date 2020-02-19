@@ -15,7 +15,7 @@ const columns = [
     name: 'Email',
     selector: 'email',
     sortable: true
-  },
+  }
 ];
 
 class StaffPage extends React.Component {
@@ -24,14 +24,45 @@ class StaffPage extends React.Component {
     this.state = {
       selected: "",
       data: [],
+      contracts: [],
+      departments: []
     }
   }
 
-  async componentDidMount() {
-    const users = await apiService.listUsers();
-    console.log(users);
+  componentDidMount() {
+    this.clear();
+    this.loadUsers();
+    this.loadContracts();
+    this.loadDepartments();
+  }
 
+  clear() {
+    this.setState({
+      selected: "",
+      data: [],
+      contracts: [],
+      departments: []
+    })
+  }
+
+  async loadUsers() {
+    let users = await apiService.listUsers();
+    //console.log(users);
     this.setState({ data: users });
+  }
+
+  async loadContracts() {
+    let contracts = await apiService.getContracts();
+    this.setState({
+      contracts: contracts
+    });
+  }
+
+  async loadDepartments() {
+    let departments = await apiService.listDepartment();
+    this.setState({
+      departments: departments
+    });
   }
 
   render() {
