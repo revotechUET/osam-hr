@@ -13,7 +13,7 @@ class StaffCheckingNewPage extends React.Component {
     super(props);
     this.state = {
       staffName: null,
-      date: new Date(0),
+      date: new Date(),
       checkIn: new Date(),
       checkOut: new Date(),
       note: '',
@@ -30,6 +30,7 @@ class StaffCheckingNewPage extends React.Component {
   }
 
   async handleSave() {
+    this.state.date.setHours(0,0,0,0);
     let data = {
       date: this.state.date.toISOString(),
       checkinTime: new Date(this.state.checkIn).toISOString(),
