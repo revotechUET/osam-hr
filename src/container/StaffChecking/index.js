@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useReducer, useEffect, useCallback } from 'react';
 import {withRouter} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import apiService from '../../service/api.service';
@@ -6,35 +6,26 @@ import './style.less';
 
 const columns = [
     {
-      name: 'Ngày',
-      selector: 'date',
-      sortable: true
-    },
-    {
-      name: 'Nhân viên',
-      selector: 'name',
-      sortable: true
-    },
-    {
-        name: 'Giờ check in',
-        selector: 'checkinTime',
-        sortable: true
-    },
-    {
-        name: 'Giờ check out',
-        selector: 'checkoutTime',
-        sortable: true
-    },
-    {
-        name: 'Tổng công',
-        selector: 'sum',
-        sortable: true
-    },
-    {
-        name: 'Ghi chú',
-        selector: 'note',
-        sortable: true
-    },
+        name: 'Mã',
+        selector: 'id',
+        style: { textTransform: 'uppercase' },
+      },
+      {
+        name: 'Nhân viên',
+        selector: 'requester.name',
+      },
+      {
+        name: "Giờ check in"
+      },
+      {
+        name: "Giờ check out"
+      },
+      {
+        name: "Tổng công"
+      },
+      {
+        name: "Ghi chú"
+      }
   ];
 class StaffChecking extends React.Component {
     constructor(props) {
@@ -45,7 +36,7 @@ class StaffChecking extends React.Component {
     }
 
     async componentDidMount(){
-        let check = await apiService.listCheck();
+        let check = await apiService.listCheck({});
         this.setState({staffChecking : check})
     }
     render() {
@@ -62,5 +53,42 @@ class StaffChecking extends React.Component {
         </div>)
     }
 }
+
+// function StaffChecking({ history }) {
+//     const [state, setState] = useReducer((prevState, newState) => ({ ...prevState, ...newState }),
+//       {
+//         list: [],
+//         loading: false,
+//       });
+//     const cancellable = apiService.useCancellable();
+  
+//     useEffect(() => {
+//       (async () => {
+//         setState({ loading: true })
+//         const list = await cancellable(apiService.listCheck({}));
+//         setState({ list, loading: false });
+//       })();
+//     }, []);
+//     const onRowClicked = useCallback(() => {
+  
+//     });
+//     const { list, loading } = state;
+//     return (
+//       <div >
+//         <h1 style={{ marginBottom: "10px" }}>Chấm công</h1>
+//         <button className="my-button active-btn" onClick={() => history.push("/checking/new")}>Tạo mới</button>
+//         <div>
+//           <DataTable
+//             noHeader
+//             noDataComponent='........'
+//             progressPending={loading}
+//             persistTableHead
+//             columns={columns}
+//             data={list}
+//           />
+//         </div>
+//       </div>
+//     )
+//   }
 
 export default withRouter(StaffChecking);
