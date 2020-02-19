@@ -1,3 +1,5 @@
+import { userInfo, googleUser } from "../utils";
+
 global.getUserInfo = getUserInfo;
 global.testUserInfo = testUserInfo;
 global.test = test;
@@ -8,7 +10,10 @@ function testUserInfo() {
 }
 
 function test(args) {
-  return { idToken: ScriptApp.getIdentityToken(), oauth: ScriptApp.getOAuthToken() }
+  return {
+    gUser: googleUser(),
+    user: userInfo(),
+  }
 }
 
 function getUserInfo() {

@@ -9,5 +9,33 @@
       }
     ],
     "@babel/preset-react"
+  ],
+  "plugins": [
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/core",
+        "libraryDirectory": "esm",
+        "camel2DashComponentName": false
+      },
+      "muicore"
+    ],[
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/lab",
+        "libraryDirectory": "esm",
+        "camel2DashComponentName": false
+      },
+      "muilab"
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/icons",
+        "libraryDirectory": "esm",
+        "camel2DashComponentName": false
+      },
+      "muiicons"
+    ]
   ]
 }

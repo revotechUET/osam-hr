@@ -15,64 +15,59 @@ const columns = [
     name: 'Email',
     selector: 'email',
     sortable: true
-  }
+  },
+  {
+    name: 'Bộ phận',
+    selector: user => user.departments.map(d => d.name),
+    sortable: true
+  },
+  {
+    name: 'Kiểu hợp đồng',
+    selector: user => user.contract && user.contract.name || '',
+    sortable: true
+  },
+  {
+    name: 'Trạng thái',
+    selector: user => user.active ? 'Hoạt động' : 'Ngừng hoạt động',
+    sortable: true
+  },
 ];
 
 class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "",
       data: [],
-      contracts: [],
-      departments: []
+      loading: true,
     }
   }
 
   componentDidMount() {
     this.clear();
     this.loadUsers();
-    this.loadContracts();
-    this.loadDepartments();
   }
 
   clear() {
     this.setState({
-      selected: "",
       data: [],
-      contracts: [],
-      departments: []
+      loading: true,
     })
   }
 
   async loadUsers() {
-    let users = await apiService.listUsers();
-    //console.log(users);
-    this.setState({ data: users });
-  }
-
-  async loadContracts() {
-    let contracts = await apiService.getContracts();
-    this.setState({
-      contracts: contracts
-    });
-  }
-
-  async loadDepartments() {
-    let departments = await apiService.listDepartment();
-    this.setState({
-      departments: departments
-    });
+    let users = await apiService.listUsers({ full: true });
+    this.setState({ data: users, loading: false });
   }
 
   render() {
-    const { data } = this.state;
+    const { data, loading } = this.state;
     return (<div>
       <h1 style={{ marginBottom: "10px" }}>Nhân viên</h1>
       <button className="my-button active-btn" onClick={() => { this.props.history.push("/staffs/new") }}>Tạo mới</button>
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
+        progressPending={loading}
         columns={columns}
         data={data}
       />

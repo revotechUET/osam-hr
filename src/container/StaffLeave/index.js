@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
-import Loading from '../../components/Loading';
 import apiService from '../../service/api.service';
 import { dateFormat } from '../../utils/date';
 import { leaveReason, leaveStatus } from '../../utils/enums';
