@@ -21,7 +21,9 @@ function leaveList({ id, startTime, endTime, status }) {
   if (status) {
     leavesQuery.sWhere('status', status);
   }
-  return leavesQuery.toJSON();
+  const leaves = leavesQuery.toJSON();
+  console.log(leaves);
+  return leaves;
 }
 
 function leaveApprove({ id, status }) {
