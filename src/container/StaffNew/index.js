@@ -3,6 +3,9 @@ import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import ChipsContainer from './../../components/ChipsContainer';
+import Autocomplete from './../../components/Autocomplete';
+// import Select from '@material-ui/core/Select';
+// import MenuItem from '@material-ui/core/MenuItem';
 import apiService from '../../service/api.service';
 import './style.less'
 
@@ -16,7 +19,10 @@ class StaffNewPage extends React.Component {
       active: true,
       contract: '',
       role: '',
-      errors: {}
+      errors: {},
+      departments: null,
+      departmentList: [],
+      contract: null
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -28,6 +34,47 @@ class StaffNewPage extends React.Component {
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
+  }
+
+  componentDidMount() {
+    //load department
+    this.clear();
+    this.load();
+  }
+
+  clear() {
+    this.setState({
+      countActive: 0,
+      userName: '',
+      email: '',
+      active: true,
+      contract: '',
+      role: '',
+      errors: {},
+      departments: null,
+      contracts: null,
+      departmentList: [],
+      contract: null
+    })
+  }
+
+  load() {
+    this.loadDepartments();
+    this.loadContracts();
+  }
+
+  async loadDepartments() {
+    let rs = await apiService.listDepartment();
+    this.setState({
+      departments: rs
+    });
+  }
+  
+  async loadContracts() {
+    let rs = await apiService.getContracts();
+    this.setState({
+      contracts: rs
+    });
   }
 
   handleNameChange(evt) {
@@ -62,7 +109,7 @@ class StaffNewPage extends React.Component {
   }
 
   handleDepartmentChange() {
-
+    
   }
 
   handleRoleChange(evt) {
@@ -104,7 +151,7 @@ class StaffNewPage extends React.Component {
     }
     this.setState({
       errors: e
-    })
+    });
     return formIsValid;
   }
 
@@ -131,19 +178,32 @@ class StaffNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className="label">Hợp đồng</div>
-            <select className="input" defaultValue='' onChange={this.handleContractChange}>
-              <option value="" disabled hidden>Choose here</option>
-              <option value="Hợp đồng 1">Hợp đồng 1</option>
-              <option value="Hợp đồng 2">Hợp đồng 2</option>
-              <option value="Hợp đồng 3">Hợp đồng 3</option>
-              <option value="Hợp đồng 4">Hợp đồng 4</option>
-            </select>
+            <Autocomplete
+              filterSelectedOptions
+              loading={this.state.contracts === null}
+              style={{ flex: 1 }}
+              options={this.state.contracts}
+              keyProp='id'
+              labelProp='name'
+              onChange={(event, value) => {
+                this.setState({ contract: value });
+              }}
+            />
           </div>
           <div className="input-field">
             <div className="label">Bộ phận</div>
-            <div className="input">
-              <ChipsContainer />
-            </div>
+            <Autocomplete
+              multiple
+              filterSelectedOptions
+              loading={this.state.departments === null}
+              style={{ flex: 1 }}
+              options={this.state.departments}
+              keyProp='id'
+              labelProp='name'
+              onChange={(event, values) => {
+                this.setState({ departmentList: values.map(v => v.id) });
+              }}
+            />
           </div>
           <div className="input-field">
             <div className="label">Hoạt động</div>
@@ -151,13 +211,28 @@ class StaffNewPage extends React.Component {
           </div>
           <div className="input-field">
             <div className="label">Vai trò</div>
-            <select className="input" defaultValue='' onChange={this.handleRoleChange}>
+            {/* <select className="input" defaultValue='' onChange={this.handleRoleChange}>
               <option value="" disabled hidden>Choose here</option>
-              <option value="CEO">CEO</option>
-              <option value="CTO">CTO</option>
-              <option value="Nhân Viên">Nhân viên</option>
-              <option value="Bảo Vệ">Bảo vệ</option>
-            </select>
+              <option value="user">Nhân viên</option>
+              <option value="manager">Back Office</option>
+              <option value="admin">Admin</option>
+            </select> */}
+            <Autocomplete
+              filterSelectedOptions
+              //loading={this.state.contracts === null}
+              style={{ flex: 1 }}
+              options={[
+                {value: "user", name: "Nhân viên"},
+                {value: "manager", name: "Back Office"},
+                {value: "admin", name: "Admin"}
+              ]}
+              keyProp='value'
+              labelProp='name'
+              onChange={(event, value) => {
+                //console.log(value);
+                this.setState({ role: value });
+              }}
+            />
           </div>
         </BorderedContainer>
       </div>

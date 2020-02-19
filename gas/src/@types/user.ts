@@ -19,6 +19,7 @@ export interface User {
   role: UserRole,
   name: string,
   active: number,
-  idContract?: string,
+  idContract: string,
+  departments?: string[]
 }
 
