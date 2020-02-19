@@ -1,13 +1,12 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import BorderedContainer from "./../../components/BorderedContainer";
-import BorderBottomInput from "./../../components/BorderBottomInput";
-import ChipsContainer from './../../components/ChipsContainer';
-import Autocomplete from './../../components/Autocomplete';
 // import Select from '@material-ui/core/Select';
 // import MenuItem from '@material-ui/core/MenuItem';
 import apiService from '../../service/api.service';
-import './style.less'
+import Autocomplete from './../../components/Autocomplete';
+import BorderBottomInput from "./../../components/BorderBottomInput";
+import BorderedContainer from "./../../components/BorderedContainer";
+import './style.less';
 
 class StaffNewPage extends React.Component {
   constructor(props) {
@@ -22,7 +21,6 @@ class StaffNewPage extends React.Component {
       errors: {},
       departments: null,
       departmentList: [],
-      contract: null
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -54,7 +52,6 @@ class StaffNewPage extends React.Component {
       departments: null,
       contracts: null,
       departmentList: [],
-      contract: null
     })
   }
 
@@ -69,7 +66,7 @@ class StaffNewPage extends React.Component {
       departments: rs
     });
   }
-  
+
   async loadContracts() {
     let rs = await apiService.getContracts();
     this.setState({
@@ -81,10 +78,8 @@ class StaffNewPage extends React.Component {
     this.setState({ userName: evt.target.value });
   }
   async handleSave(e) {
-    let id = await apiService.generateUid();
     if (this.handleValidation()) {
       let data = {
-        "id": id,
         "name": this.state.userName,
         "email": this.state.email,
         "active": this.state.active,
@@ -109,7 +104,7 @@ class StaffNewPage extends React.Component {
   }
 
   handleDepartmentChange() {
-    
+
   }
 
   handleRoleChange(evt) {
@@ -222,9 +217,9 @@ class StaffNewPage extends React.Component {
               //loading={this.state.contracts === null}
               style={{ flex: 1 }}
               options={[
-                {value: "user", name: "Nhân viên"},
-                {value: "manager", name: "Back Office"},
-                {value: "admin", name: "Admin"}
+                { value: "user", name: "Nhân viên" },
+                { value: "manager", name: "Back Office" },
+                { value: "admin", name: "Admin" }
               ]}
               keyProp='value'
               labelProp='name'

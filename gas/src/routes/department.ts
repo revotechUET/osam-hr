@@ -1,14 +1,14 @@
-import {Department} from '../@types/department';
-import {db} from '../db';
+import { Department } from '../@types/department';
+import { db } from '../db';
+import { uuid } from '../utils';
 
 global.addNewDepartment = addNewDepartment;
-global.listDepartment   = listDepartment;
+global.listDepartment = listDepartment;
 
-function addNewDepartment(data){
-    return db.from<Department>('department').insert(data);
+function addNewDepartment(data) {
+  return db.from<Department>('department').insert({ id: uuid(), ...data });
 }
 
-function listDepartment(){
-    return db.from<Department>('department').getDataJSON();
+function listDepartment() {
+  return db.from<Department>('department').getDataJSON();
 }
-  

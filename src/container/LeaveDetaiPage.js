@@ -1,15 +1,18 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import BorderedContainer from '../components/BorderedContainer';
+import Confirm from '../components/Confirm';
 import Loading from '../components/Loading';
 import apiService from '../service/api.service';
-import BorderedContainer from '../components/BorderedContainer';
-import { leaveStatus, leaveReason } from '../utils/enums';
 import { dateFormat } from '../utils/date';
-import Confirm from '../components/Confirm';
+import { leaveReason, leaveStatus } from '../utils/enums';
+
 
 export default function LeaveDetailPage({ history }) {
   const { id } = useParams();
   const cancellable = apiService.useCancellable();
+  const { enqueueSnackbar } = useSnackbar();
   const [leave, setLeave] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -19,14 +22,25 @@ export default function LeaveDetailPage({ history }) {
       setLoading(false);
     })()
   }, [id]);
+  const approve = async (approved = true) => {
+    const status = approved ? 'approved' : 'rejected';
+    const ok = await apiService.leaveApprove({ id, status });
+    if (ok) {
+      enqueueSnackbar(leaveStatus[status], { variant: 'success' });
+      history.goBack();
+    } else {
+      enqueueSnackbar('Không thành công', { variant: 'error' });
+    }
+  }
   if (loading) return <Loading />;
   return (
     <div>
       <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / <span className="uppercase">{id}</span></h1>
       <div style={{ display: "flex" }}>
         <Link className="my-button active-btn" to={`/leaves/${id}/edit`}>Sửa</Link>
-        <div className="my-button">Từ chối</div>
-        <div className="my-button active-btn">Phê duyệt</div>
+        <Confirm onOk={() => approve(false)} label="Từ chối" title="Từ chối yêu cầu nghỉ?" />
+        <Confirm buttonProps={{ className: "my-button active-btn" }}
+          onOk={() => approve()} label="Phê duyệt" title="Phê duyệt yêu cầu nghỉ?" />
       </div>
       <BorderedContainer>
         <h3 className="uppercase">{id}</h3>

@@ -3,10 +3,7 @@ import { User } from "../@types/user";
 import { db } from "../db";
 import { uuid } from "../utils";
 
-global.leaveList    = leaveList;
-global.leaveApprove = leaveApprove;
-
-
+global.leaveList = leaveList;
 function leaveList({ id, startTime, endTime, status }) {
   const leavesQuery = db.join<Leave, User>('leave', 'user', 'idRequester', 'requester');
   if (id) {
@@ -26,14 +23,20 @@ function leaveList({ id, startTime, endTime, status }) {
   return leaves;
 }
 
+global.leaveDetail = leaveDetail;
+function leaveDetail({ id }) {
+  return db.join<Leave, User>('leave', 'user', 'idRequester', 'requester').sWhere('id', id).toJSON()[0];
+}
+
+global.leaveApprove = leaveApprove;
 function leaveApprove({ id, status }) {
   const user = { id: null };
   const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Approved, idApprover: user.id });
   return ok;
 }
 
-global.leaveAdd = leaveAdd;
-function leaveAdd({ idRequester, startTime, endTime, reason, description }) {
+global.leaveNew = leaveNew;
+function leaveNew({ idRequester, startTime, endTime, reason, description }) {
   const leave: Leave = {
     id: uuid('lr-'),
     idRequester,
@@ -45,4 +48,9 @@ function leaveAdd({ idRequester, startTime, endTime, reason, description }) {
   }
   db.from<Leave>('leave').insert(leave);
   return leave;
+}
+
+global.leaveEdit = leaveEdit;
+function leaveEdit({ id, startTime, endTime, reason, description, idRequester, idApprover }) {
+  return db.from<Leave>('leave').update(id, { startTime, endTime, reason, description, idRequester, idApprover });
 }

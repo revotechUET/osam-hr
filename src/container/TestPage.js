@@ -11,7 +11,7 @@ export default function TestPage() {
     <div>
       <button onClick={onClick}>Test</button>
       <br/>
-      <textarea value={text} readOnly/>
+      <textarea cols="100" rows="20" value={text} readOnly/>
     </div>
   )
 }

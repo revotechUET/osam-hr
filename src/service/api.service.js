@@ -54,8 +54,8 @@ class ApiService {
     return gscriptrun('insertContract', contract);
   }
   //#region user
-  listUsers() {
-    return gscriptrun('listUsers');
+  listUsers(payload) {
+    return gscriptrun('listUsers', payload);
   }
 
   listEmails(maxResult) {
@@ -94,9 +94,12 @@ class ApiService {
   leaveEdit(data) {
     return gscriptrun('leaveEdit', data);
   }
+  leaveApprove(payload) {
+    return gscriptrun('leaveApprove', payload)
+  }
   //#endregion
 
-  // checking
+  //#region checking
   listCheck(payload){
     return gscriptrun('listCheck', payload);
   }
