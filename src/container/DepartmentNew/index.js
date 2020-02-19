@@ -24,9 +24,7 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave(event){
-    let id = apiService.generateUid();
     let data = {
-      "id"          : id,
       "name"        : this.state.departmentName,
       "active"      : this.state.active.toString(),
       "idManager"   : "Le Van Thinh",
@@ -50,7 +48,7 @@ class DepartmentNewPage extends React.Component {
   }
 
   async componentDidMount(){
-    
+
   }
 
   handleActiveStatus(){

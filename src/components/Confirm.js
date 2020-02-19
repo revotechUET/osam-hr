@@ -5,30 +5,27 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function Confirm({ label, color = 'primary', title, content, onOk, buttonComponent, actionComponents }) {
+export default function Confirm({ label, title, content, onOk, buttonProps }) {
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleOk = async () => {
+    await onOk();
+    handleClose();
+  }
+
   return (
-    <div>
-      {buttonComponent ? buttonComponent
-        : <Button variant="outlined" color={color} onClick={handleClickOpen}>
-          {label}
-        </Button>
-      }
+    <>
+      <button className="my-button" onClick={() => setOpen(true)} {...buttonProps}>
+        {label}
+      </button>
       <Dialog
         TransitionComponent={Transition}
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         {content &&
@@ -39,21 +36,14 @@ export default function Confirm({ label, color = 'primary', title, content, onOk
           </DialogContent>
         }
         <DialogActions>
-          {
-            actionComponents ? actionComponents
-              : (
-                <>
-                  <Button onClick={onOk} color="primary" autoFocus>
-                    Ok
-                  </Button>
-                  <Button onClick={handleClose} color="">
-                    Huỷ
-                  </Button>
-                </>
-              )
-          }
+          <Button onClick={handleOk} color="primary" autoFocus>
+            Ok
+          </Button>
+          <Button onClick={handleClose} color="">
+            Huỷ
+          </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   )
 }

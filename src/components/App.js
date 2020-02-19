@@ -1,31 +1,20 @@
+import DateFnsUtils from '@date-io/date-fns';
+import { IconButton } from '@material-ui/core';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { SnackbarProvider } from 'notistack';
 import React, { Suspense } from 'react';
-import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
-import routerConfig from './router.config.js';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import SideBar from './../container/RouteSideBar';
 import TopBar from './../container/TopBar';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-
-// import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.min.css';
-
 import './App.less';
-
-
-//import AsyncPrivateRoute from './AsyncPrivateRoute';
 import PrivateRoute from './PrivateRoute';
+import routerConfig from './router.config.js';
+import { Close } from '@material-ui/icons'
 
-// toast.configure({
-//     autoClose: 3000,
-//     draggable: false,
-//     position: toast.POSITION.TOP_RIGHT,
-//     style: {
-//         fontSize: "15px"
-//     }
-// });
-
-
-
+const notistackRef = React.createRef();
+const onClickDismiss = key => () => {
+  notistackRef.current.closeSnackbar(key);
+}
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -40,18 +29,32 @@ class App extends React.Component {
       <div style={{ display: "flex" }}>
         <BrowserRouter>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <div style={{ width: "20%" }}>
-              <SideBar />
-            </div>
-            <div style={{ width: "100%", marginLeft: "20px", marginRight: "20px" }}>
-              <TopBar />
-              <Suspense fallback={<div>Loading...</div>}>
-                <Switch>
-                  {getRouter(routerConfig)}
-                  <Redirect to="/staffs" />
-                </Switch>
-              </Suspense>
-            </div>
+            <SnackbarProvider
+              ref={notistackRef}
+              dense preventDuplicate
+              action={(key) => (
+                <IconButton onClick={onClickDismiss(key)}>
+                  <Close />
+                </IconButton>
+              )}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+            >
+              <div style={{ width: "20%" }}>
+                <SideBar />
+              </div>
+              <div style={{ width: "100%", marginLeft: "20px", marginRight: "20px" }}>
+                <TopBar />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Switch>
+                    {getRouter(routerConfig)}
+                    <Redirect to="/staffs" />
+                  </Switch>
+                </Suspense>
+              </div>
+            </SnackbarProvider>
           </MuiPickersUtilsProvider>
         </BrowserRouter>
       </div>

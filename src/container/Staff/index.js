@@ -7,53 +7,40 @@ import apiService from '../../service/api.service';
 let departments = [];
 let contracts = [];
 
+const columns = [
+  {
+    name: 'Tên nhân viên',
+    selector: 'name',
+    sortable: true
+  },
+  {
+    name: 'Email',
+    selector: 'email',
+    sortable: true
+  },
+  {
+    name: 'Bộ phận',
+    selector: user => user.departments.map(d => d.name),
+    sortable: true
+  },
+  {
+    name: 'Kiểu hợp đồng',
+    selector: user => user.contract && user.contract.name || '',
+    sortable: true
+  },
+  {
+    name: 'Trạng thái',
+    selector: user => user.active ? 'Hoạt động' : 'Ngừng hoạt động',
+    sortable: true
+  },
+];
 
 class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "",
       data: [],
-      contracts: [],
-      departments: []
-    };
-    this.getDepartmentListName = this.getDepartmentListName.bind(this);
-    this.getDepartmentName = this.getDepartmentName.bind(this);
-    this.columns = [
-      {
-        name: 'Tên nhân viên',
-        selector: 'name',
-        sortable: true
-      },
-      {
-        name: 'Email',
-        selector: 'email',
-        sortable: true
-      },
-      {
-        name: 'Bộ phận',
-        selector: 'departments',
-        sortable: false,
-        cell: (row) => {console.log(row); console.log(row.getDepartmentNames(row.departments)); return <div></div>}
-      },
-      {
-        name: 'Trạng thái',
-        selector: 'active',
-        cell: (row) => <input defaultChecked = {row.active} type="checkbox"/>
-      }
-    ];
-  }
-
-  getDepartmentName(idDepartment) {
-    let idx = this.state.departments.findIndex((e)=>e.id == idDepartment);
-    if (idx < 0) return "";
-    return this.state.departments[idx].name;
-   }
-
-  getDepartmentListName(departments) {
-    let nameList = [];
-    for (let i = 0; i < departments.length; i++) {
-      nameList.push(this.getDepartmentName(departments[i]))
+      loading: true,
     }
     return nameList.join(", ");
   }
@@ -61,49 +48,30 @@ class StaffPage extends React.Component {
   componentDidMount() {
     this.clear();
     this.loadUsers();
-    this.loadContracts();
-    this.loadDepartments();
   }
 
   clear() {
     this.setState({
-      selected: "",
       data: [],
-      contracts: [],
-      departments: []
+      loading: false,
     })
   }
 
   async loadUsers() {
-    let users = await apiService.listUsers();
-    //console.log(users);
-    this.setState({ data: users.map((e)=>{e.getDepartmentNames = this.getDepartmentListName; return e}) });
-  }
-
-  async loadContracts() {
-    let contracts = await apiService.getContracts();
-    this.setState({
-      contracts: contracts
-    });
-  }
-
-  async loadDepartments() {
-    let departments = await apiService.listDepartment();
-    this.setState({
-      departments: departments
-    });
+    let users = await apiService.listUsers({ full: true });
+    this.setState({ data: users });
   }
 
   render() {
-    const { data } = this.state;
-
+    const { data, loading } = this.state;
     return (<div>
       <h1 style={{ marginBottom: "10px" }}>Nhân viên</h1>
       <button className="my-button active-btn" onClick={() => { this.props.history.push("/staffs/new") }}>Tạo mới</button>
       <DataTable
         noHeader
         noDataComponent='Không có nhân viên'
-        columns={this.columns}
+        progressPending={loading}
+        columns={columns}
         data={data}
       />
     </div>)

@@ -1,3 +1,6 @@
+import { Department } from "./department";
+import { Contract } from "./contract";
+
 export interface GoogleUser {
   id: string,
   email: string,
@@ -20,6 +23,7 @@ export interface User {
   name: string,
   active: number,
   idContract: string,
-  departments?: string[]
+  contract?: Contract,
+  departments?: Department[],
 }
 
