@@ -103,6 +103,9 @@ class ApiService {
   checkingNew(data) {
     return gscriptrun('checkingNew', data);
   }
+  verifyCheckingDate(date){
+    return gscriptrun('verifyCheckingDate', date);
+  }
   //#endregion
 }
 

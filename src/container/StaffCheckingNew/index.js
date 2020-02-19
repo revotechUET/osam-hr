@@ -18,6 +18,7 @@ class StaffCheckingNewPage extends React.Component {
       checkOut: new Date(),
       note: '',
       idRequester: null,
+      loading: false
     }
 
     this.handleCancle = this.handleCancle.bind(this);
@@ -30,7 +31,7 @@ class StaffCheckingNewPage extends React.Component {
   }
 
   async handleSave() {
-    this.state.date.setHours(0,0,0,0);
+    this.state.date.setHours(0, 0, 0, 0, 0, 0);
     let data = {
       date: this.state.date.toISOString(),
       checkinTime: new Date(this.state.checkIn).toISOString(),
@@ -42,8 +43,14 @@ class StaffCheckingNewPage extends React.Component {
       note: this.state.note
     }
 
-    let success = await apiService.checkingNew(data);
-    if(success){
+    let testDate = await apiService.verifyCheckingDate(this.state.date.toISOString());
+    if (testDate) {
+      let success = await apiService.checkingNew(data);
+      if (success) {
+        this.props.history.push('/checking');
+      }
+    }
+    else{
       this.props.history.push('/checking');
     }
   }
@@ -71,9 +78,9 @@ class StaffCheckingNewPage extends React.Component {
     this.setState({ note: evt.target.value });
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     let user = await apiService.listUsers();
-    this.setState({staffName : user});
+    this.setState({ staffName: user });
   }
   render() {
     return (
