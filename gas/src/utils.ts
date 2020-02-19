@@ -1,4 +1,5 @@
 import uniqid from 'uniqid';
+import { User } from './@types/user';
 import { db } from './db';
 
 export function isValid(object) {
@@ -21,12 +22,12 @@ export function uuid(prefix?: string, suffix?: string) {
 }
 
 
-export function googleUser(email?) {
+export function googleUser(email?: string) {
   email = email || Session.getActiveUser().getEmail();
   return AdminDirectory.Users.get(email);
 }
 
-export function userInfo(email?) {
+export function userInfo(email?: string): User {
   const gUser = googleUser(email);
   return db.from('user').query.where('id', gUser.id).toJSON()[0];
 }
