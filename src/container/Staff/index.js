@@ -50,13 +50,13 @@ class StaffPage extends React.Component {
   clear() {
     this.setState({
       data: [],
-      loading: false,
+      loading: true,
     })
   }
 
   async loadUsers() {
     let users = await apiService.listUsers({ full: true });
-    this.setState({ data: users });
+    this.setState({ data: users, loading: false });
   }
 
   render() {
