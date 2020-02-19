@@ -4,8 +4,7 @@ function gscriptrun(fnName, ...args) {
   return new Promise((resolve, reject) => {
     google.script.run
       .withSuccessHandler(resolve)
-      .withFailureHandler(reject)
-    [fnName](...args);
+      .withFailureHandler(reject)[fnName](...args);
   })
 }
 
@@ -54,7 +53,7 @@ class ApiService {
   insertContract(contract) {
     return gscriptrun('insertContract', contract);
   }
-  // user
+  //#region user
   listUsers() {
     return gscriptrun('listUsers');
   }
@@ -67,42 +66,44 @@ class ApiService {
     return gscriptrun('getUserInfo');
   }
 
-  // department
+  appendUser(data) {
+    return gscriptrun('appendUser', data);
+  }
+  //#endregion
+
+  //#region department
   addNewDepartment(data) {
     return gscriptrun('addNewDepartment', data);
   }
 
-  listDepartment(){
+  listDepartment() {
     return gscriptrun('listDepartment');
   }
+  //#endregion
 
-  // leave
+  //#region leave
   listLeaves(payload) {
     return gscriptrun('leaveList', payload);
   }
-  addLeave(payload) {
-    return gscriptrun('leaveAdd', payload);
-  }
-
-  getSheetData() {
-    return gscriptrun('getSheetData');
-  }
-
-  appendUser(data) {
-    return gscriptrun('appendUser', data);
-  }
-
   leaveNew(data) {
     return gscriptrun('leaveNew', data);
   }
+  leaveDetail({ id }) {
+    return gscriptrun('leaveDetail', { id });
+  }
+  leaveEdit(data) {
+    return gscriptrun('leaveEdit', data);
+  }
+  //#endregion
 
   // checking
   listCheck(payload){
     return gscriptrun('listCheck', payload);
   }
-  checkingNew(data){
-    return gscriptrun('checkingNew',data);
+  checkingNew(data) {
+    return gscriptrun('checkingNew', data);
   }
+  //#endregion
 }
 
 export default new ApiService();

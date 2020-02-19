@@ -1,6 +1,7 @@
-import React, { useReducer, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
+import Loading from '../../components/Loading';
 import apiService from '../../service/api.service';
 import { dateFormat } from '../../utils/date';
 import { leaveReason, leaveStatus } from '../../utils/enums';
@@ -49,8 +50,8 @@ function StaffLeavePage({ history }) {
       setState({ list, loading: false });
     })();
   }, []);
-  const onRowClicked = useCallback(() => {
-
+  const onRowClicked = useCallback((row, event) => {
+    history.push(`/leaves/${row.id}`);
   });
   const { list, loading } = state;
   return (
@@ -65,7 +66,9 @@ function StaffLeavePage({ history }) {
           persistTableHead
           columns={columns}
           data={list}
-          onRowClicked={(row) => history.push(`/leaves/${row.id}`)}
+          onRowClicked={onRowClicked}
+          pointerOnHover
+          highlightOnHover
         />
       </div>
     </div>

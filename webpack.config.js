@@ -5,7 +5,7 @@ const RemovePlugin = require('remove-files-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-webpackConfigure = {
+const webpackConfigure = {
   entry: "./src/index.js",
   output: {
     path: path.join(__dirname, "gas", "dist"),

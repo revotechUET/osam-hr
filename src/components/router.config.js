@@ -1,143 +1,133 @@
-import HomePage from './../container/HomePage';
-import PrivatePage from './../container/PrivatePage';
-import SettingPage from './../container/Setting';
-import StaffPage from './../container/Staff';
-import DepartmentPage from './../container/Department';
-import StaffEditPage from './../container/StaffEdit';
-import StaffNewPage from './../container/StaffNew';
-import StaffCheckingPage from './../container/StaffChecking';
-import StaffCheckingNewPage from './../container/StaffCheckingNew';
-import DepartmentNewPage from './../container/DepartmentNew';
-import StaffLeavePage from './../container/StaffLeave';
-import StaffLeaveNewPage from './../container/StaffLeaveNew';
+import LeaveDetailPage from '../container/LeaveDetaiPage';
+import LeaveEditPage from '../container/LeaveEditPage';
+import TestPage from '../container/TestPage';
 import ContractManagementPage from './../container/ContractManagement';
 import ContractNewPage from './../container/ContractNew';
-import NotificationPage from './../container/Notification';
-import NotificationNewPage from './../container/NotificationNew';
 import DayOffSettingPage from './../container/DayOffSetting';
-import PayrollPage from './../container/Payroll';
+import DepartmentPage from './../container/Department';
+import DepartmentNewPage from './../container/DepartmentNew';
 import MyNotifyPage from './../container/MyNotify';
 import MyNotifyDetailPage from './../container/MyNotifyDetail';
-import TestPage from '../container/TestPage';
+import NotificationPage from './../container/Notification';
+import NotificationNewPage from './../container/NotificationNew';
+import PayrollPage from './../container/Payroll';
+import SettingPage from './../container/Setting';
+import StaffPage from './../container/Staff';
+import StaffCheckingPage from './../container/StaffChecking';
+import StaffCheckingNewPage from './../container/StaffCheckingNew';
+import StaffEditPage from './../container/StaffEdit';
+import StaffLeavePage from './../container/StaffLeave';
+import StaffLeaveNewPage from './../container/StaffLeaveNew';
+import StaffNewPage from './../container/StaffNew';
 
 export default [
-    {
-        type: "normal",
-        path: "/staffs",
-        exact: true,
-        component: StaffPage,
-    },
-    {
-        type: "normal",
-        path: "/staffs/edit/:editUser",
-        exact: true,
-        component: StaffEditPage,
-    },
-    {
-        type: "normal",
-        path: "/departments",
-        exact: true,
-        component: DepartmentPage,
-    },
-    {
-        type: "normal",
-        path: "/setting",
-        exact: true,
-        component: SettingPage
-    },
-    {
-        type: "normal",
-        path: "/staffs/new",
-        exact: true,
-        component: StaffNewPage
-    },
-    {
-        type: "normal",
-        path: "/departments/new",
-        exact: true,
-        component: DepartmentNewPage
-    },
-    {
-        type: "normal",
-        path: "/checking",
-        exact: true,
-        component: StaffCheckingPage
-    },
-    {
-        type: "normal",
-        path: "/checking/new",
-        exact: true,
-        component: StaffCheckingNewPage
-    },
-    {
-        type: "normal",
-        path: "/leaves",
-        exact: true,
-        component: StaffLeavePage
-    },
-    {
-        type: "normal",
-        path: "/leaves/new",
-        exact: true,
-        component: StaffLeaveNewPage
-    },
-    {
-        type: "normal",
-        path: "/leaves/:id",
-        exact: true,
-        component: StaffLeavePage
-    },
-    {
-        type: "normal",
-        path: "/contracts",
-        exact: true,
-        component: ContractManagementPage
-    },
-    {
-        type: "normal",
-        path: "/contracts/new",
-        exact: true,
-        component: ContractNewPage
-    },
-    {
-        type: "normal",
-        path: "/notifies",
-        exact: true,
-        component: NotificationPage
-    },
-    {
-        type: "normal",
-        path: "/notifies/new",
-        exact: true,
-        component: NotificationNewPage
-    },
-    {
-        type: "normal",
-        path: "/setting/day-off",
-        exact: true,
-        component: DayOffSettingPage
-    },
-    {
-        type: "normal",
-        path: "/payroll",
-        exact: true,
-        component: PayrollPage
-    },
-    {
-        type: "normal",
-        path: "/my-notifies",
-        exact: true,
-        component: MyNotifyPage
-    },
-    {
-        type: "normal",
-        path: "/my-notifies/:id",
-        exact: true,
-        component: MyNotifyDetailPage
-    },
-    {
-        path: "/test",
-        exact: true,
-        component: TestPage,
-    },
+  {
+    path: "/",
+    component: StaffPage,
+  },
+  {
+    path: "/staffs",
+    exact: true,
+    component: StaffPage,
+  },
+  {
+    path: "/staffs/edit/:editUser",
+    exact: true,
+    component: StaffEditPage,
+  },
+  {
+    path: "/departments",
+    exact: true,
+    component: DepartmentPage,
+  },
+  {
+    path: "/setting",
+    exact: true,
+    component: SettingPage
+  },
+  {
+    path: "/staffs/new",
+    exact: true,
+    component: StaffNewPage
+  },
+  {
+    path: "/departments/new",
+    exact: true,
+    component: DepartmentNewPage
+  },
+  {
+    path: "/checking",
+    exact: true,
+    component: StaffCheckingPage
+  },
+  {
+    path: "/checking/new",
+    exact: true,
+    component: StaffCheckingNewPage
+  },
+  {
+    path: "/leaves",
+    exact: true,
+    component: StaffLeavePage
+  },
+  {
+    path: "/leaves/new",
+    exact: true,
+    component: StaffLeaveNewPage
+  },
+  {
+    path: "/leaves/:id",
+    exact: true,
+    component: LeaveDetailPage
+  },
+  {
+    path: "/leaves/:id/edit",
+    exact: true,
+    component: LeaveEditPage
+  },
+  {
+    path: "/contracts",
+    exact: true,
+    component: ContractManagementPage
+  },
+  {
+    path: "/contracts/new",
+    exact: true,
+    component: ContractNewPage
+  },
+  {
+    path: "/notifies",
+    exact: true,
+    component: NotificationPage
+  },
+  {
+    path: "/notifies/new",
+    exact: true,
+    component: NotificationNewPage
+  },
+  {
+    path: "/setting/day-off",
+    exact: true,
+    component: DayOffSettingPage
+  },
+  {
+    path: "/payroll",
+    exact: true,
+    component: PayrollPage
+  },
+  {
+    path: "/my-notifies",
+    exact: true,
+    component: MyNotifyPage
+  },
+  {
+    path: "/my-notifies/:id",
+    exact: true,
+    component: MyNotifyDetailPage
+  },
+  {
+    path: "/test",
+    exact: true,
+    component: TestPage,
+  },
 ];

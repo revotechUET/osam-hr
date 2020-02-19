@@ -10,7 +10,7 @@ export default class BorderedContainer extends React.Component {
     render() {
         return (
             <div className = "BorderedContainer">
-                <div style={{margin: "15px", width: "60%"}}>
+                <div style={{margin: "15px"}}>
                 {this.props.children}
                 </div>
             </div>

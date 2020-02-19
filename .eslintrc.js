@@ -1,7 +1,8 @@
 module.exports = {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true,
   },
   "extends": [
     "eslint:recommended",
@@ -10,6 +11,7 @@ module.exports = {
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly",
+    "google": "readonly",
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -31,5 +33,7 @@ module.exports = {
     "react/display-name": 0,
     "react/prop-types": 0,
     "no-unused-vars": 0,
+    "no-empty": "off",
   },
+  "ignorePatterns": ["node_modules/", "gas"],
 };
