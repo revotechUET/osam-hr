@@ -1,6 +1,7 @@
 import React,{ useReducer, useEffect, useCallback } from 'react';
 import {withRouter} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
+import { dateFormat } from '../../utils/date';
 import apiService from '../../service/api.service';
 import './style.less';
 
@@ -15,16 +16,21 @@ const columns = [
         selector: 'requester.name',
       },
       {
-        name: "Giờ check in"
+        name: "Giờ check in",
+        // selector: 'checkinTime'
+        selector: row => dateFormat(row.checkinTime, 'hh:mm')
       },
       {
-        name: "Giờ check out"
+        name: "Giờ check out",
+        // selector: 'checkoutTime'
+        selector: row => dateFormat(row.checkoutTime, 'hh:mm')
       },
       {
         name: "Tổng công"
       },
       {
-        name: "Ghi chú"
+        name: "Ghi chú",
+        selector: 'note'
       }
   ];
 class StaffChecking extends React.Component {
