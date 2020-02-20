@@ -19,7 +19,7 @@ function listUsersDomain(maxResults) {
   return { total: response.users.length, users: response.users };
 }
 
-function listUsers({ full, loadDepartments, loadContracts }) {
+function listUsers({ full = false, loadDepartments = false, loadContracts = false } = {}) {
   let users;
   if (full || loadContracts) {
     users = db.join<User, Contract>('user', 'contract', 'idContract', 'contract').toJSON();

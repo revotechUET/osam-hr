@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 function gscriptrun(fnName, ...args) {
+  if (args.length === 1 && args[0] === undefined) args.length = 0;
   return new Promise((resolve, reject) => {
     google.script.run
       .withSuccessHandler(resolve)
@@ -100,13 +101,13 @@ class ApiService {
   //#endregion
 
   //#region checking
-  listCheck(payload){
+  listCheck(payload) {
     return gscriptrun('listCheck', payload);
   }
   checkingNew(data) {
     return gscriptrun('checkingNew', data);
   }
-  verifyCheckingDate(date){
+  verifyCheckingDate(date) {
     return gscriptrun('verifyCheckingDate', date);
   }
   //#endregion
