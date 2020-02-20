@@ -144,10 +144,6 @@ class StaffNewPage extends React.Component {
     this.setState({ contract: evt.target.value })
   }
 
-  handleDepartmentChange() {
-
-  }
-
   handleRoleChange(evt) {
     this.setState({ role: evt.target.value });
   }

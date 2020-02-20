@@ -17,7 +17,7 @@ const columns = [
   },
   {
     name: 'Bộ phận',
-    selector: user => user.departments.map(d => d.name),
+    selector: user => user.departments.map(d => d.name).join(", "),
     sortable: true
   },
   {
