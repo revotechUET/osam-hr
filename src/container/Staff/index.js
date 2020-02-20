@@ -82,6 +82,8 @@ class StaffPage extends React.Component {
         progressComponent={<Loading/>}
         columns={columns}
         data={data}
+        pointerOnHover
+        highlightOnHover
         onRowClicked={(row, event) => {this.goToUserDetail(row)}}
       />
     </div>)
