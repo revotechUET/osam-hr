@@ -32,6 +32,7 @@ export default function HrAutocomplete(props) {
 
   return (
     <Autocomplete
+    debug
       onOpen={() => {
         getOptions && setLoading(true);
       }}
