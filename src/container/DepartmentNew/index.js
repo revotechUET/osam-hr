@@ -72,47 +72,57 @@ class DepartmentNewPage extends React.Component {
   }
   render() {
     return (
-      <div className="DepartmentNew">
-        <h1 style={{ marginBottom: "10px" }}>Bộ Phận / Mới</h1>
-        <div style={{ display: "flex" }}>
-          <button className="my-button active-btn" onClick={this.handleSave}>Lưu</button>
-          <button className="my-button" onClick={this.handleCancel}>Hủy</button>
+      <div className = "DepartmentNew">
+        <div className="title-vs-btn">
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="title">Bộ Phận / Mới</div>
         </div>
         <BorderedContainer>
-          <h3>Tên Bộ Phận</h3>
-          <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
-          <div className="input-field">
-            <div className="label">Người quản lý</div>
-            <Autocomplete
-              loading={this.state.manager === null}
-              style={{ flex: 1 }}
-              options={this.state.manager}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, value) => {
-                this.setState({ idRequester: value && value.id });
-                console.log(typeof(this.state.idRequester));
-              }}
-            />
+          <div className="item-wrap">
+              <span>Tên Bộ Phận</span>
+              <div>
+                <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
+              </div>
           </div>
-          <div className="input-field">
-            <div className="label">Người phụ trách duyệt leave request</div>
-            <Autocomplete
-              multiple
-              filterSelectedOptions
-              loading={this.state.approvers === null}
-              style={{ flex: 1 }}
-              options={this.state.approvers}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, value) => {
-                this.setState({ idApprovers: value.map(v => v.id) });
-              }}
-            />
+          <div className="item-wrap">
+              <span>Người quản lý</span>
+              <div>
+                  <Autocomplete
+                  loading={this.state.manager === null}
+                  style={{ flex: 1 }}
+                  options={this.state.manager}
+                  keyProp='id'
+                  labelProp='name'
+                  onChange={(event, value) => {
+                    this.setState({ idRequester: value && value.id });
+                    console.log(typeof(this.state.idRequester));
+                  }}
+                />
+              </div>
           </div>
-          <div className="input-field">
-            <div className="label">Hoạt động</div>
-            <input className="input checkbox" type="checkbox" checked={this.state.active} onClick={this.handleActiveStatus} />
+          <div className="item-wrap">
+            <span>Người phụ trách duyệt leave request</span>
+            <div>
+              <Autocomplete
+                multiple
+                filterSelectedOptions
+                loading={this.state.approvers === null}
+                style={{ flex: 1 }}
+                options={this.state.approvers}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  this.setState({ idApprovers: value.map(v => v.id) });
+                }}
+              />
+            </div>
+          </div>
+          <div className="item-wrap" style={{width: "70px"}}>
+            <span>Hoạt động</span>
+            <div>
+              <input className="input checkbox" type="checkbox" checked={this.state.active} onClick={this.handleActiveStatus} />
+            </div>
           </div>
         </BorderedContainer>
       </div>

@@ -45,42 +45,67 @@ class TopBar extends React.Component {
     return (
       <React.Fragment>
         <div className="TopBar">
-          <div>
-            <div ref={this.bellRef} className="bell-svg" onClick={() => this.setState({ opening: !opening })}></div>
-            <div ref={this.contentRef}>
-            {opening && 
-            <div className="drop-down-noti">
-              <div>
-                <div style={{textAlign: "right"}}>
-                  <p style={{marginRight: "10px", fontSize: "65%"}}>Đánh dấu tất cả đã đọc</p>
-                </div>
-                
-              </div>
-              <div>
-                {/* content for notify */}
-                <div style={{display: "flex", padding: "10px", border: "1px solid black"}}>
-                  <div className="img-user">
-                    
-                  </div>
-                  <div>
-                    Thông báo lịch trực nhật
-                    <br />
-                    <p style={{fontStyle: "italic", margin: "0px"}}>25/10/2019</p>
-                  </div> 
-                  
-                </div>
-              </div>
-              <div style={{textAlign: "center", position: "absolute", bottom: "0px", width: "100%", height: "35px"}}>
-                <hr style={{margin: "3px"}}/>
-                <span className={"see-all"} onClick={()=>{this.setState({opening: false}); this.props.history.push("/my-notifies");}}>Xem tất cả</span>
-              </div>
+          <div style={{position: "relative"}}>
+            <div ref={this.bellRef} className="bell-svg" onClick={() => this.setState({ opening: !opening })}>
+              <div className="bage"></div>
             </div>
-            }
+            <div ref={this.contentRef} className="container-drop-down-noti">
+            {opening && 
+              <div className="drop-down-noti">
+                <div style={{flex: 1, overflow: "auto", margin: "10px"}}>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                    <div className="item-noti">
+                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                      <div style={{flex: 1}}>
+                        <div>Thông báo lịch trực nhật</div>
+                        <span>25/10/2019</span>
+                      </div>
+                    </div>
+                </div>
+                <div style={{height:"40px", display: "grid", gridGap: "10px", gridTemplateColumns: "auto auto", margin: "0 10px 10px 10px"}}>
+                  <div className="btn-noti">Đánh dấu tất cả đã đọc</div>
+                  <div className="btn-noti" onClick={()=>{this.setState({opening: false}); this.props.history.push("/my-notifies");}}>Xem tất cả</div>
+                </div>
+              </div>
+              }
             </div>
           </div>
           <div className="user-profile-svg"></div>
         </div>
-        <hr />
       </React.Fragment>
     );
   }

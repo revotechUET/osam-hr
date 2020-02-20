@@ -46,9 +46,11 @@ async componentDidMount(){
     render() {
         const { data } = this.state;
         return (<div >
-            <h1 style={{ marginBottom: "10px" }}>Bộ phận</h1>
-            <button className="my-button active-btn" onClick={() => this.props.history.push("/departments/new")}>Tạo mới</button>
-            <DataTable
+            <div className="title-vs-btn">
+                <div className="my-button active-btn ti ti-plus" onClick={() => this.props.history.push("/departments/new")}></div>
+                <div className="title">Bộ phận</div>
+            </div>
+            <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
                 noHeader
                 noDataComponent='Không có bộ phận'
                 columns={columns}

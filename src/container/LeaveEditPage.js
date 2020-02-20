@@ -63,10 +63,10 @@ function LeaveEditPage({ history }) {
   console.log(state);
   return (
     <div className="StaffLeaveNew">
-      <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / <span className="uppercase">{id}</span></h1>
-      <div style={{ display: "flex" }}>
-        <div className="my-button active-btn" onClick={save}>Lưu</div>
-        <div className="my-button" onClick={() => history.goBack()}>Hủy</div>
+      <div className="title-vs-btn">
+        <div className="my-button active-btn ti ti-check" onClick={save} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+        <div className="my-button ti ti-close" onClick={() => history.goBack()} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+        <div className="title">Yêu cầu nghỉ / <span className="uppercase">{id}</span></div>
       </div>
       <BorderedContainer>
         <h3 className="uppercase">{id}</h3>

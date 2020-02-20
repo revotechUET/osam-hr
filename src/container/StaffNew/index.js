@@ -163,75 +163,76 @@ class StaffNewPage extends React.Component {
   render() {
     return (
       <div className="StaffNew">
-        <h1 style={{ marginBottom: "10px" }}>Nhân viên / Mới</h1>
-        <div style={{ display: "flex" }}>
-          <button className="my-button active-btn" onClick={this.handleSave}>Lưu</button>
-          <button className="my-button" onClick={this.handleCancel}>Hủy</button>
+        <div className="title-vs-btn">
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="title">Nhân viên / Mới</div>
         </div>
         <BorderedContainer>
-          <h3>Tên nhân viên</h3>
-          <BorderBottomInput placeholder="Tên nhân viên" value={this.state.userName} onChange={this.handleNameChange} />
-          <span className="error">{this.state.errors["name"]}</span>
-          <div className="input-field">
-            <div className="label" >Email</div>
-            <Autocomplete
-              filterSelectedOptions
-              loading={this.state.emailLists === null}
-              style={{ flex: 1 }}
-              options={this.state.emailLists}
-              keyProp='id'
-              labelProp='primaryEmail'
-              onChange={(event, value) => {
-                this.setState({ email: value.primaryEmail, idUser: value.id });
-              }}
-            />
-            {/* <span className="error">{this.state.errors['email']}</span> */}
+          <div className="item-wrap">
+            <span>Tên nhân viên</span>
+            <div>
+              <BorderBottomInput placeholder="Tên nhân viên" value={this.state.userName} onChange={this.handleNameChange} />
+            </div>
+            <div className="error">{this.state.errors["name"]}</div>
           </div>
-          <div className="input-field">
-            <div className="label" ></div>
-            <span className="error">{this.state.errors['email']}</span>
+          <div className="item-wrap">
+            <span>Email</span>
+            <div>
+              <Autocomplete
+                filterSelectedOptions
+                loading={this.state.emailLists === null}
+                style={{ flex: 1 }}
+                options={this.state.emailLists}
+                keyProp='id'
+                labelProp='primaryEmail'
+                onChange={(event, value) => {
+                  this.setState({ email: value.primaryEmail, idUser: value.id });
+                }}
+              />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Hợp đồng</div>
-            <Autocomplete
-              filterSelectedOptions
-              loading={this.state.contracts === null}
-              style={{ flex: 1 }}
-              options={this.state.contracts}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, value) => {
-                this.setState({ contract: value.id });
-              }}
-            />
+          <div className="item-wrap">
+            <span>Hợp đồng</span>
+            <div>
+              <Autocomplete
+                filterSelectedOptions
+                loading={this.state.contracts === null}
+                style={{ flex: 1 }}
+                options={this.state.contracts}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  this.setState({ contract: value.id });
+                }}
+              />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Bộ phận</div>
-            <Autocomplete
-              multiple
-              filterSelectedOptions
-              loading={this.state.departments === null}
-              style={{ flex: 1 }}
-              options={this.state.departments}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, values) => {
-                this.setState({ departmentList: values.map(v => v.id) });
-              }}
-            />
+          <div className="item-wrap">
+            <span>Bộ phận</span>
+            <div>
+              <Autocomplete
+                multiple
+                filterSelectedOptions
+                loading={this.state.departments === null}
+                style={{ flex: 1 }}
+                options={this.state.departments}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, values) => {
+                  this.setState({ departmentList: values.map(v => v.id) });
+                }}/>
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Hoạt động</div>
-            <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
+          <div className="item-wrap" style={{width: "80px"}}>
+            <span>Hoạt động</span>
+            <div>
+              <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Vai trò</div>
-            {/* <select className="input" defaultValue='' onChange={this.handleRoleChange}>
-              <option value="" disabled hidden>Choose here</option>
-              <option value="user">Nhân viên</option>
-              <option value="manager">Back Office</option>
-              <option value="admin">Admin</option>
-            </select> */}
+          <div className="item-wrap">
+            <span>Vai trò</span>
+            <div>
             <Autocomplete
               filterSelectedOptions
               //loading={this.state.contracts === null}
@@ -248,6 +249,7 @@ class StaffNewPage extends React.Component {
                 this.setState({ role: value.value });
               }}
             />
+            </div>
           </div>
         </BorderedContainer>
       </div>

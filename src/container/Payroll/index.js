@@ -13,8 +13,10 @@ class PayrollPage extends React.Component {
     render() {
         return (
         <div className = "Payroll">
-            <h1 style={{marginBottom: "10px"}}>Tính công</h1>
-            <button className="my-button active-btn">Xuất file</button>
+             <div className="title-vs-btn">
+                <div className="button-text my-button active-btn ti ti-import"></div>
+                <div className="title">Tính công</div>
+            </div>
             <div className="count-setting">
                 <div style={{display: "flex", alignContent: "center", justifyContent: "center"}}>
                     <div className = "field-member">

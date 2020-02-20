@@ -12,8 +12,10 @@ class NotifyPage extends React.Component {
     render() {
         return (
         <div className = "NotiPage">
-            <h1 style={{marginBottom: "10px"}}>Thông báo</h1>
-            <button className="my-button active-btn" onClick={()=>this.props.history.push("/notifies/new")}>Tạo mới</button>
+            <div className="title-vs-btn">
+                <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/notifies/new")}></div>
+                <div className="title">Thông báo</div>
+            </div>
             <div>
                
             </div>

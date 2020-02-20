@@ -20,7 +20,7 @@ export default class CenteredModal extends React.Component {
     return (
       <div className="CenteredModal">
         <div
-          style={{ display: this.props.active ? "block" : "none" }}
+          style={{ display: this.props.active ? "flex" : "none" }}
           className="modal-background"
           onClick={e => {
             this.onBackGroundClick(e);
