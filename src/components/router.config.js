@@ -19,6 +19,7 @@ import StaffEditPage from './../container/StaffEdit';
 import StaffLeavePage from './../container/StaffLeave';
 import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
+import StaffDetailPage from './../container/StaffDetail';
 
 export default [
   {
@@ -130,4 +131,9 @@ export default [
     exact: true,
     component: TestPage,
   },
+  {
+    path: "/staffs/:idUser",
+    exact: true,
+    component: StaffDetailPage
+  }
 ];

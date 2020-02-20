@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "gsheetdb": "github:revotechUET/gsheetdb#56c5023",
+    "gsheetdb": "github:revotechUET/gsheetdb#4373f9b",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

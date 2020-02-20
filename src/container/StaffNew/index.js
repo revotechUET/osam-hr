@@ -16,11 +16,13 @@ class StaffNewPage extends React.Component {
       userName: '',
       email: '',
       active: true,
-      contract: '',
       role: '',
       errors: {},
       departments: null,
       departmentList: [],
+      contract: null,
+      emailLists: null,
+      idUser: null
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -46,14 +48,14 @@ class StaffNewPage extends React.Component {
       userName: '',
       email: '',
       active: true,
-      contract: '',
       role: '',
       errors: {},
       departments: null,
       contracts: null,
       departmentList: [],
       contract: null,
-      emailLists: []
+      emailLists: null,
+      idUser: null
     })
   }
 
@@ -64,10 +66,15 @@ class StaffNewPage extends React.Component {
   }
 
   async loadEmailList() {
-    let rs = await apiService.listEmails();
+    let rs = [];
+    try {
+      rs = await apiService.listEmails();
+    } catch(e) {
+      console.log(e);
+    }
     this.setState({
       emailLists: rs
-    })
+    });
   }
 
   async loadDepartments() {
@@ -87,16 +94,20 @@ class StaffNewPage extends React.Component {
   handleNameChange(evt) {
     this.setState({ userName: evt.target.value });
   }
+
   async handleSave(e) {
     if (this.handleValidation()) {
       let data = {
         "name": this.state.userName,
         "email": this.state.email,
+        "id": this.state.idUser,
         "active": this.state.active,
         "idContract": this.state.contract,
-        "role": this.state.role
+        "role": this.state.role,
+        "departments": this.state.departmentList
       }
-      apiService.appendUser(data);
+      await apiService.appendUser(data);
+      this.props.history.push('/staffs'); 
     }
     else {
       console.log(this.state.errors);
@@ -104,6 +115,26 @@ class StaffNewPage extends React.Component {
     e.preventDefault();
   }
 
+  handleValidation() {
+    let formIsValid = true;
+    let e = {};
+
+    // name
+    if (this.state.userName === '') {
+      formIsValid = false;
+      e["name"] = "Cannot be empty";
+    }
+
+    //Email
+    if (this.state.email === '') {
+      formIsValid = false;
+      e["email"] = "Cannot be empty";
+    }
+    this.setState({
+      errors: e
+    });
+    return formIsValid;
+  }
 
   handleEmailChange(evt) {
     this.setState({ email: evt.target.value });
@@ -129,37 +160,6 @@ class StaffNewPage extends React.Component {
     this.setState({ active: e });
   }
 
-  handleValidation() {
-    let formIsValid = true;
-    let e = {};
-
-    // name
-    if (this.state.userName === '') {
-      formIsValid = false;
-      e["name"] = "Cannot be empty";
-    }
-
-    //Email
-    if (this.state.email === '') {
-      formIsValid = false;
-      e["email"] = "Cannot be empty";
-    }
-
-    if (this.state.email !== '') {
-      let lastAtPos = this.state.email.lastIndexOf('@');
-      let lastDotPos = this.state.email.lastIndexOf('.');
-
-      if (!(lastAtPos < lastDotPos && lastAtPos > 0 && this.state.email.indexOf('@@') == -1 && lastDotPos > 2 && (this.state.email.length - lastDotPos) > 2)) {
-        formIsValid = false;
-        e["email"] = "Email is not valid";
-      }
-    }
-    this.setState({
-      errors: e
-    });
-    return formIsValid;
-  }
-
   render() {
     return (
       <div className="StaffNew">
@@ -176,19 +176,13 @@ class StaffNewPage extends React.Component {
             <div className="label" >Email</div>
             <Autocomplete
               filterSelectedOptions
-              //loading={this.state.contracts === null}
+              loading={this.state.emailLists === null}
               style={{ flex: 1 }}
-              options={[
-                {value: "user", name: "Nhân viên"},
-                {value: "manager", name: "Back Office"},
-                {value: "admin", name: "Admin"}
-              ]}
-              keyProp='value'
-              labelProp='name'
+              options={this.state.emailLists}
+              keyProp='id'
+              labelProp='primaryEmail'
               onChange={(event, value) => {
-                console.log(value);
-                console.log(event);
-                this.setState({ email: value });
+                this.setState({ email: value.primaryEmail, idUser: value.id });
               }}
             />
             {/* <span className="error">{this.state.errors['email']}</span> */}
@@ -207,7 +201,7 @@ class StaffNewPage extends React.Component {
               keyProp='id'
               labelProp='name'
               onChange={(event, value) => {
-                this.setState({ contract: value });
+                this.setState({ contract: value.id });
               }}
             />
           </div>
@@ -222,7 +216,6 @@ class StaffNewPage extends React.Component {
               keyProp='id'
               labelProp='name'
               onChange={(event, values) => {
-
                 this.setState({ departmentList: values.map(v => v.id) });
               }}
             />
@@ -252,7 +245,7 @@ class StaffNewPage extends React.Component {
               labelProp='name'
               onChange={(event, value) => {
                 //console.log(value);
-                this.setState({ role: value });
+                this.setState({ role: value.value });
               }}
             />
           </div>

@@ -46,6 +46,10 @@ class ApiService {
     this.gscriptrun = gscriptrun;
   }
 
+  getUserById(id, option) {
+    return gscriptrun('loadUserById', id, option)
+  }
+
   getContracts() {
     return gscriptrun('getContracts');
   }

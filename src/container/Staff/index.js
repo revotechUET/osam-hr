@@ -59,6 +59,14 @@ class StaffPage extends React.Component {
     this.setState({ data: users, loading: false });
   }
 
+  goToUserDetail(user) {
+    //console.log(user);
+    this.props.history.push({
+      pathname: '/staffs/' + user.id,
+      state: {user: user}
+    });
+  }
+
   render() {
     const { data, loading } = this.state;
     return (<div>
@@ -70,6 +78,7 @@ class StaffPage extends React.Component {
         progressPending={loading}
         columns={columns}
         data={data}
+        onRowClicked={(row, event) => {this.goToUserDetail(row)}}
       />
     </div>)
   }

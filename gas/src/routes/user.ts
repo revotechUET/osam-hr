@@ -12,11 +12,12 @@ global.appendUser = appendUser;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
-      maxResults: maxResults || 1000,
-      orderBy: 'email'
+      maxResults: maxResults || 500,
+      orderBy: 'email',
+      domain: ''
   };
   var response = AdminDirectory.Users.list(optionalArgs);
-  return response.users;
+  return response.users.map((e)=>({primaryEmail: e.primaryEmail, id: e.id, name: {familyName: e.name.familyName, givenName: e.name.givenName, fullName: e.name.fullName}}));
 }
 
 function listUsers({ full, loadDepartments, loadContracts }) {
@@ -37,9 +38,32 @@ function listUsers({ full, loadDepartments, loadContracts }) {
   return users;
 }
 
-function appendUser(data, listDepartment) {
-  for (let i = 0; i < listDepartment.length; i++) {
-    db.from<User_Department>('user_department').insert({ idUser: data.id, idDepartment: listDepartment[i] });
+function loadUserById(id, {full, loadDepartments, loadContracts}) {
+  let users = db.from<User>('user').query.where('id', id).toJSON();
+  if (users.length == 0) return null;
+  let user = users[0];
+  if (full || loadContracts) {
+    let contract = db.from<Contract>('contract').query.where('id', user.idContract).toJSON();
+    user.contract = contract.length === 0 ? null : contract[0];
+  }
+  if (full || loadDepartments) {
+    let user_department = db.from<User_Department>('user_department').query.where('idUser', user.id).toJSON();
+    let departments = [];
+    for (let i = 0; i < user_department.length; i++) {
+      departments.push(db.from<Department>('department').query.where('id', user_department[i].idDepartment).toJSON());
+    }
+    user.departments = departments;
+  }
+  return user;
+}
+
+function deleteUserById(id) {
+  
+}
+
+function appendUser(data) {
+  for (let i = 0; i < data.departments.length; i++) {
+    db.from<User_Department>('user_department').insert({ idUser: data.id, idDepartment: data.departments[i] });
   }
   return db.from<User>('user').insert(data);
 }
