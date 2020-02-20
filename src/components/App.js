@@ -26,7 +26,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={{ display: "flex" }}>
+      <div className="slim-scroller" style={{ display: "flex", height:"100%", background: "rgb(245, 245, 245)" }}>
         <BrowserRouter>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <SnackbarProvider
@@ -42,10 +42,10 @@ class App extends React.Component {
                 horizontal: 'center',
               }}
             >
-              <div style={{ width: "20%" }}>
+              <div style={{ minWidth: "300px", maxWidth: "300px" }}>
                 <SideBar />
               </div>
-              <div style={{ width: "100%", marginLeft: "20px", marginRight: "20px" }}>
+              <div style={{ width: "100%", padding: "40px", background: "transparent", position: "relative" }}>
                 <TopBar />
                 <Suspense fallback={<div>Loading...</div>}>
                   <Switch>

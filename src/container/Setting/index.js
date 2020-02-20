@@ -27,7 +27,10 @@ class SettingPage extends React.Component {
     return (
       <div className="SettingPage">
         <div>
-          <h1 style={{ marginBottom: "10px" }}>Cài đặt</h1>
+          <div className="title-vs-btn">
+            <div className="my-button active-btn ti ti-settings"></div>
+            <div className="title">Cài đặt</div>
+         </div>
           <div className="fieldrow">
             <div className="fieldname">Ngày kết thúc kì lương</div>
             <div className="fieldinput">

@@ -55,10 +55,11 @@ function StaffLeavePage({ history }) {
   const { list, loading } = state;
   return (
     <div >
-      <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ</h1>
-      <button className="my-button active-btn" onClick={() => history.push("/leaves/new")}>Tạo mới</button>
-      <div>
-        <DataTable
+      <div className="title-vs-btn">
+        <div className="my-button active-btn ti ti-plus" onClick={() => history.push("/leaves/new")}></div>
+        <div className="title">Yêu cầu nghỉ</div>
+      </div>
+        <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
           noHeader
           noDataComponent='Không có yêu cầu nghỉ'
           progressPending={loading}
@@ -69,7 +70,6 @@ function StaffLeavePage({ history }) {
           pointerOnHover
           highlightOnHover
         />
-      </div>
     </div>
   )
 }

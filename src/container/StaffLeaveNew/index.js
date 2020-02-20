@@ -58,64 +58,75 @@ function StaffLeaveNewPage({ history }) {
   }, [state]);
   return (
     <div className="StaffLeaveNew">
-      <h1 style={{ marginBottom: "10px" }}>Yêu cầu nghỉ / Mới</h1>
-      <div style={{ display: "flex" }}>
-        <div className="my-button active-btn" onClick={save}>Lưu</div>
-        <div className="my-button" onClick={() => history.goBack()}>Hủy</div>
+      <div className="title-vs-btn">
+        <div className="my-button active-btn ti ti-check" onClick={save} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+        <div className="my-button ti ti-close" onClick={() => history.goBack()} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+        <div className="title">Yêu cầu nghỉ / Mới</div>
       </div>
       <BorderedContainer>
-        <h3>Mới</h3>
-        <div className="input-field">
-          <div className="label">Nhân Viên</div>
-          <Autocomplete
-            loading={state.users === null}
-            style={{ flex: 1 }}
-            options={state.users}
-            keyProp='id'
-            labelProp='name'
-            onChange={(event, value) => {
-              setState({ idRequester: value && value.id })
-            }}
-          />
-          <Error error={state.errors.idRequester} />
-        </div>
-        <div className="input-field">
-          <div className="label">Lý do nghỉ</div>
-          <select className="input" value={state.reason} onChange={event => setState({ reason: event.target.value })} >
-            <option value='' label='---Chọn lý do nghỉ---' />
-            {leaveReason.all.map(r => <option key={r} value={r} label={leaveReason[r]} />)}
-          </select>
-          <Error error={state.errors.reason} />
-        </div>
-        <div className="input-field">
-          <div className="label">Thời gian bắt đầu</div>
-          <input className="input" type="datetime-local" value={state.startTime} onChange={event => setState({ startTime: event.target.value })} />
-          <Error error={state.errors.startTime} />
-        </div>
-        <div className="input-field">
-          <div className="label">Thời gian kết thúc</div>
-          <input className="input" type="datetime-local" value={state.endTime} onChange={event => setState({ endTime: event.target.value })} />
-          <Error error={state.errors.endTime} />
-        </div>
-        <div className="input-field">
-          <div className="label">Thông báo cho</div>
-          <Autocomplete
-            multiple
-            filterSelectedOptions
-            loading={state.users === null}
-            style={{ flex: 1 }}
-            options={state.users}
-            keyProp='id'
-            labelProp='name'
-            onChange={(event, values) => {
-              setState({ notifyList: values.map(v => v.id) });
-            }}
-          />
-        </div>
-        <div className="input-field">
-          <div className="label">Mô tả</div>
-          <textarea className="input" value={state.description} onChange={event => setState({ description: event.target.value })} />
-        </div>
+          <div className="item-wrap">
+            <span>Nhân Viên</span>
+            <div>
+                <Autocomplete
+                loading={state.users === null}
+                style={{ flex: 1 }}
+                options={state.users}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  setState({ idRequester: value && value.id })
+                }}
+              />
+            </div>
+            <Error error={state.errors.idRequester} />
+          </div>
+          <div className="item-wrap">
+            <span>Lý do nghỉ</span>
+            <div>
+                <select className="input" value={state.reason} onChange={event => setState({ reason: event.target.value })} >
+                <option value='' label='---Chọn lý do nghỉ---' />
+                {leaveReason.all.map(r => <option key={r} value={r} label={leaveReason[r]} />)}
+              </select>
+            </div>
+            <Error error={state.errors.reason} />
+          </div>
+          <div className="item-wrap">
+            <span>Thời gian bắt đầu</span>
+            <div>
+              <input className="input" type="datetime-local" value={state.startTime} onChange={event => setState({ startTime: event.target.value })} />
+            </div>
+            <Error error={state.errors.startTime} />
+          </div>
+          <div className="item-wrap">
+            <span>Thời gian kết thúc</span>
+            <div>
+              <input className="input" type="datetime-local" value={state.endTime} onChange={event => setState({ endTime: event.target.value })} />
+            </div>
+             <Error error={state.errors.endTime} />
+          </div>
+          <div className="item-wrap">
+            <span>Thông báo cho</span>
+            <div>
+                <Autocomplete
+                multiple
+                filterSelectedOptions
+                loading={state.users === null}
+                style={{ flex: 1 }}
+                options={state.users}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, values) => {
+                  setState({ notifyList: values.map(v => v.id) });
+                }}
+              />
+            </div>
+          </div>
+          <div className="item-wrap">
+            <span>Mô tả</span>
+            <div>
+              <textarea className="input" value={state.description} onChange={event => setState({ description: event.target.value })} />
+            </div>
+          </div>
       </BorderedContainer>
     </div>
   );

@@ -19,9 +19,9 @@ export default function Confirm({ label, title, content, onOk, buttonProps }) {
 
   return (
     <>
-      <button className="my-button" onClick={() => setOpen(true)} {...buttonProps}>
+      <div className="my-button" onClick={() => setOpen(true)} {...buttonProps}>
         {label}
-      </button>
+      </div>
       <Dialog
         TransitionComponent={Transition}
         open={open}

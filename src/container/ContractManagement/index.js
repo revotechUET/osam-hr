@@ -112,9 +112,11 @@ class ContractManagementPage extends React.Component {
 
     render() {
         return (<div className="ContractManagement">
-            <h1 style={{marginBottom: "10px"}}>Hợp đồng</h1>
-            <button className="my-button active-btn" onClick={()=>this.setState({modalActive: true})}>Tạo mới</button>
-            <DataTable
+             <div className="title-vs-btn">
+                <div className="my-button active-btn ti ti-plus" onClick={()=>this.setState({modalActive: true})}></div>
+                <div className="title">Hợp đồng</div>
+            </div>
+            <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
                 noHeader
                 noDataComponent='Không có hợp đồng'
                 columns={displays}

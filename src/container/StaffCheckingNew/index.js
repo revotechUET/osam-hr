@@ -85,10 +85,10 @@ class StaffCheckingNewPage extends React.Component {
   render() {
     return (
       <div className="StaffCheckingNew">
-        <h1 style={{ marginBottom: "10px" }}>Chấm công / Mới</h1>
-        <div style={{ display: "flex" }}>
-          <button className="my-button active-btn" onClick={this.handleSave}>Lưu</button>
-          <button className="my-button" onClick={this.handleCancle}>Hủy</button>
+        <div className="title-vs-btn">
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancle} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="title">Chấm công / Mới</div>
         </div>
         <BorderedContainer>
           <h3>Mới</h3>

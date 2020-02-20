@@ -1,15 +1,13 @@
 .modal-center {
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
-    background-color: white;
+    top: 0;
+    animation: drop-dialog 0.3s ease;
 }
 
 .modal-background {
     position: fixed; /* Sit on top of the page content */
-    display: block; /* Hidden by default */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
     top: 0;
@@ -26,21 +24,32 @@
         overflow: hidden;
         flex-direction: column;
         width: 600px;
+        background: #fff;
+        box-shadow: 0 0 30px #00000014;
+        border-radius: 10px;
     }
 
     .header {
-        font-size: 2em;
-        border-bottom: 1px solid;
-        font-weight: 600;
-        padding-left: 10px;
-        padding-bottom: 10px;
+        font-size: 120%;
+        font-weight: bold;
+        padding: 30px;
+        border-bottom: 1px solid #E9EEF2;
     }
     .footer {
         flex-basis: 60px;
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        border-top: 1px solid;
+        border-top: 1px solid #E9EEF2;
         padding-top: 10px;
+    }
+}
+@keyframes drop-dialog {
+    0% {
+        transform: translateY(-500px);
+    }
+
+    100% {
+        transform: translateY(0);
     }
 }

@@ -50,16 +50,18 @@ class StaffChecking extends React.Component {
     render() {
         let {staffChecking} = this.state;
         return (<div >
-            <h1 style={{marginBottom: "10px"}}>Chấm công</h1>
-            <button className="my-button active-btn" onClick={()=>this.props.history.push("/checking/new")}>Tạo mới</button>
-            <DataTable
+            <div className="title-vs-btn">
+              <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/checking/new")}></div>
+              <div className="title">Chấm công</div>
+            </div>
+            <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
             noHeader
             progressPending={this.state.loading}
             noDataComponent='Loading'
             persistTableHead
             columns={columns}
             data={staffChecking}
-      />
+            />
         </div>)
     }
 }
