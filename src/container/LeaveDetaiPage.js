@@ -42,30 +42,34 @@ export default function LeaveDetailPage({ history }) {
         <div className="title">Yêu cầu nghỉ / <span className="uppercase">{id}</span></div>
       </div>
       <BorderedContainer>
-        <div className="info-container">
-          <div className="info-row">
-            <div className="field">Nhân viên</div>
-            <div className="field">{leave.requester.name}</div>
-          </div>
-          <div className="info-row">
-            <div className="field">Trạng thái yêu cầu</div>
-            <div className="field">{leaveStatus[leave.status]}</div>
-          </div>
-          <div className="info-row">
-            <div className="field">Lý do nghỉ</div>
-            <div className="field">{leaveReason[leave.reason]}</div>
-          </div>
-          <div className="info-row">
-            <div className="field">Thời gian bắt đầu</div>
-            <div className="field">{dateFormat(leave.startTime, 'dd/MM/yyyy hh:mm')}</div>
-          </div>
-          <div className="info-row">
-            <div className="field">Thời gian kết thúc</div>
-            <div className="field">{dateFormat(leave.endTime, 'dd/MM/yyyy hh:mm')}</div>
-          </div>
-          <div className="info-row">
-            <div className="field">Mô tả</div>
-            <div className="field">{leave.description}</div>
+        <div className="item-detail">
+          {/* <div className="image-reject"></div> */}
+          <div className="image-accept"></div>
+          <div className="infor-item-detail">
+            <span>Nhân viên</span>
+            <div style={{fontWeight: "bold", fontSize: "150%", marginBottom: "20px"}}>{leave.requester.name}</div>
+            <div style={{display: "flex", flexDirection: "column"}}>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                  <div style={{flexBasis: "120px", fontWeight: "bold"}}>Trạng thái</div>
+                  <div style={{flex: 1}}>{leaveStatus[leave.status]}</div>
+              </div>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                  <div style={{flexBasis: "120px", fontWeight: "bold"}}>Lý do nghỉ</div>
+                  <div style={{flex: 1}}>{leaveReason[leave.reason]}</div>
+              </div>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                  <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thời gian bắt đầu</div>
+                  <div style={{flex: 1}}>{dateFormat(leave.startTime, 'dd/MM/yyyy hh:mm')}</div>
+              </div>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                  <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thời gian kết thúc</div>
+                  <div style={{flex: 1}}>{dateFormat(leave.endTime, 'dd/MM/yyyy hh:mm')}</div>
+              </div>
+              <div style={{display: "flex", marginBottom: "10px"}}>
+                  <div style={{flexBasis: "120px", fontWeight: "bold"}}>Mô tả</div>
+                  <div style={{flex: 1}}>{leave.description}</div>
+              </div>
+            </div>
           </div>
         </div>
       </BorderedContainer>
