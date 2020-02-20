@@ -25,9 +25,9 @@ const columns = [
         // selector: 'checkoutTime'
         selector: row => dateFormat(row.checkoutTime, 'hh:mm')
       },
-      {
-        name: "Tổng công"
-      },
+      // {
+      //   name: "Tổng công"
+      // },
       {
         name: "Ghi chú",
         selector: 'note'

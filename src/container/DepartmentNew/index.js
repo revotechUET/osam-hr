@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 import BorderBottomInput from "./../../components/BorderBottomInput";
-import ChipsContainer from './../../components/ChipsContainer';
 import Autocomplete from "../../components/Autocomplete";
 import apiService from '../../service/api.service';
 
@@ -38,7 +37,9 @@ class DepartmentNewPage extends React.Component {
       active     : this.state.active   
     };
     let addNewDepartment = await apiService.addNewDepartment(data);
-    console.log(addNewDepartment);
+    if(addNewDepartment){
+      this.props.history.push('/departments');
+    }
   }
 
   handleCancel() {
@@ -66,6 +67,7 @@ class DepartmentNewPage extends React.Component {
 
   async componentDidMount() {
     let users = await apiService.listUsers();
+    console.log(users);
     this.setState({ manager: users, approvers: users });
   }
   render() {
@@ -89,7 +91,7 @@ class DepartmentNewPage extends React.Component {
               labelProp='name'
               onChange={(event, value) => {
                 this.setState({ idRequester: value && value.id });
-                console.log(this.state.idRequester);
+                console.log(typeof(this.state.idRequester));
               }}
             />
           </div>
@@ -104,8 +106,7 @@ class DepartmentNewPage extends React.Component {
               keyProp='id'
               labelProp='name'
               onChange={(event, value) => {
-                this.setState({ idApprovers: value && value.id });
-                console.log(this.state.idApprovers);
+                this.setState({ idApprovers: value.map(v => v.id) });
               }}
             />
           </div>
