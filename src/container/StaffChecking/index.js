@@ -1,6 +1,7 @@
 import React,{ useReducer, useEffect, useCallback } from 'react';
 import {withRouter} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
+import Loading from '../../components/Loading';
 import { dateFormat } from '../../utils/date';
 import apiService from '../../service/api.service';
 import './style.less';
@@ -58,9 +59,12 @@ class StaffChecking extends React.Component {
             noHeader
             progressPending={this.state.loading}
             noDataComponent='Loading'
+            progressComponent={<Loading/>}
             persistTableHead
             columns={columns}
             data={staffChecking}
+            pointerOnHover
+            highlightOnHover
             />
         </div>)
     }

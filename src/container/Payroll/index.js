@@ -14,7 +14,7 @@ class PayrollPage extends React.Component {
         return (
         <div className = "Payroll">
              <div className="title-vs-btn">
-                <div className="button-text my-button active-btn ti ti-import"></div>
+                <div className="button-text my-button active-btn">Tải về</div>
                 <div className="title">Tính công</div>
             </div>
             <div className="count-setting">

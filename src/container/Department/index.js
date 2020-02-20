@@ -55,6 +55,8 @@ async componentDidMount(){
                 noDataComponent='Không có bộ phận'
                 columns={columns}
                 data={data}
+                pointerOnHover
+                highlightOnHover
             />
         </div>)
     }
