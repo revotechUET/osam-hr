@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
+import Loading from '../../components/Loading';
 import apiService from '../../service/api.service';
 import { dateFormat } from '../../utils/date';
 import { leaveReason, leaveStatus } from '../../utils/enums';
@@ -59,17 +60,18 @@ function StaffLeavePage({ history }) {
         <div className="my-button active-btn ti ti-plus" onClick={() => history.push("/leaves/new")}></div>
         <div className="title">Yêu cầu nghỉ</div>
       </div>
-        <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
-          noHeader
-          noDataComponent='Không có yêu cầu nghỉ'
-          progressPending={loading}
-          persistTableHead
-          columns={columns}
-          data={list}
-          onRowClicked={onRowClicked}
-          pointerOnHover
-          highlightOnHover
-        />
+      <DataTable style={{ marginTop: "40px", borderRadius: "20px" }}
+        noHeader
+        noDataComponent='Không có yêu cầu nghỉ'
+        progressPending={loading}
+        progressComponent={<Loading />}
+        persistTableHead
+        columns={columns}
+        data={list}
+        onRowClicked={onRowClicked}
+        pointerOnHover
+        highlightOnHover
+      />
     </div>
   )
 }

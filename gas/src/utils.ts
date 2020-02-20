@@ -28,6 +28,6 @@ export function googleUser(email?: string) {
 }
 
 export function userInfo(email?: string): User {
-  const gUser = googleUser(email);
-  return db.from('user').query.where('id', gUser.id).toJSON()[0];
+  email = email || Session.getActiveUser().getEmail();
+  return db.from('user').query.where('email', email).toJSON(1)[0];
 }

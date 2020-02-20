@@ -1,10 +1,34 @@
 import { UserRole } from "./@types/contract";
-import { userInfo } from "./utils";
+import { db } from "./db";
+import { googleUser, isValid, userInfo } from "./utils";
+
+function noPermission() {
+  return ContentService.createTextOutput('Access Denied');
+}
+
+function initAdmin({ id, email, name }) {
+  const newUser = {
+    id,
+    email,
+    active: true,
+    name,
+    role: UserRole.Admin,
+  }
+  db.from('user').insert(newUser);
+  return newUser;
+}
 
 function doGet() {
   const user = userInfo();
-  if (user.role === UserRole.User) {
-    return ContentService.createTextOutput('You do not have permission!');
+  if (!user) {
+    const gUser = googleUser();
+    if (gUser.isAdmin) {
+      initAdmin({ id: gUser.id, email: gUser.primaryEmail, name: gUser.name.fullName });
+    } else {
+      return noPermission();
+    }
+  } else if (user.role === UserRole.User) {
+    return noPermission();
   }
   return HtmlService.createHtmlOutputFromFile("dist/index.html")
     .setTitle('HR Admin')

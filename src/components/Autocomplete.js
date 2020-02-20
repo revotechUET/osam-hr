@@ -48,7 +48,7 @@ export default function HrAutocomplete(props) {
         <TextField
           {...params}
           fullWidth
-          variant='outlined'
+          variant='standard'
           InputProps={{
             ...params.InputProps,
             endAdornment: (
