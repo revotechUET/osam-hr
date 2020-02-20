@@ -55,12 +55,12 @@ function StaffLeavePage({ history }) {
   });
   const { list, loading } = state;
   return (
-    <div >
+    <div style={{marginTop: "40px", borderRadius: "20px", padding: "10px 20px", borderRadius: "20px", background: "#fff"}}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => history.push("/leaves/new")}></div>
         <div className="title">Yêu cầu nghỉ</div>
       </div>
-      <DataTable style={{ marginTop: "40px", borderRadius: "20px" }}
+      <DataTable 
         noHeader
         noDataComponent='Không có yêu cầu nghỉ'
         progressPending={loading}
