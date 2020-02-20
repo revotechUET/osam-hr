@@ -7,6 +7,7 @@ import { dateString , uuid } from '../utils';
 global.listCheck = listCheck;
 global.checkingNew = checkingNew;
 global.verifyCheckingDate = verifyCheckingDate;
+global.checkingDetail = checkingDetail;
 
 function listCheck({ idUser}){
     const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
@@ -28,4 +29,12 @@ function verifyCheckingDate(date){
   }else{
     return false;
   }
+}
+
+function checkingDetail({idUser}){
+  const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
+  if (idUser) {
+    checkingQuery.sWhere('idUser', idUser);
+  }
+  return checkingQuery.toJSON(); 
 }
