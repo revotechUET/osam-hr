@@ -91,31 +91,33 @@ class StaffCheckingNewPage extends React.Component {
           <div className="title">Chấm công / Mới</div>
         </div>
         <BorderedContainer>
-          <h3>Mới</h3>
-          <div className="input-field">
-            <div className="label">Nhân Viên</div>
-            {/* <input className="input" value={this.state.staffName} onChange={this.handleStaffNameChange} /> */}
-            <Autocomplete
-              loading={this.state.staffName === null}
-              style={{ flex: 1 }}
-              options={this.state.staffName}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, value) => {
-                this.setState({ idRequester: value && value.id });
-                console.log(this.state.idRequester);
-              }}
-            />
+          <div className="item-wrap">
+            <span>Tên nhân viên</span>
+            <div>
+              <Autocomplete
+                loading={this.state.staffName === null}
+                style={{ flex: 1 }}
+                options={this.state.staffName}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  this.setState({ idRequester: value && value.id });
+                  console.log(this.state.idRequester);
+                }}
+              />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Ngày</div>
+          <div className="item-wrap" style={{width: "100px"}}>
+            <span>Ngày</span>
+            <div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker value={this.state.date} onChange={this.handleDateChange} />
             </MuiPickersUtilsProvider>
+            </div>
           </div>
-
-          <div className="input-field">
-            <div className="label">Check in</div>
+          <div className="item-wrap" style={{width: "100px"}}>
+            <span>Check in</span>
+            <div>
             <TimePicker
               clearable
               ampm={false}
@@ -123,10 +125,11 @@ class StaffCheckingNewPage extends React.Component {
               value={this.state.checkIn}
               onChange={this.handleCheckInChange}
             />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Check out</div>
-            {/* <input type="time" value={this.state.checkOut} onChange={this.handleCheckOutChange} /> */}
+          <div className="item-wrap" style={{width: "100px"}}>
+            <span>Check out</span>
+            <div>
             <TimePicker
               clearable
               ampm={false}
@@ -134,10 +137,13 @@ class StaffCheckingNewPage extends React.Component {
               value={this.state.checkOut}
               onChange={this.handleCheckOutChange}
             />
+            </div>
           </div>
-          <div className="input-field">
-            <div className="label">Ghi chú</div>
-            <input className="input" value={this.state.note} onChange={this.handleNoteChange} />
+          <div className="item-wrap">
+            <span>Ghi chú</span>
+            <div>
+              <input className="input" value={this.state.note} onChange={this.handleNoteChange} />
+            </div>
           </div>
         </BorderedContainer>
       </div>

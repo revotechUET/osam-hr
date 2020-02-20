@@ -130,11 +130,11 @@ class ContractManagementPage extends React.Component {
                         
                     </div>
                     <div style={{display: "flex", marginBottom: "20px"}}>
-                        <div style={{flex: 1}}>                        
+                        <div style={{flexBasis: "60%"}}>                        
                             <input className="input" placeholder="Nhập tên hợp đồng" name="contractName" value={this.state.newContractName} onChange={(e)=>this.handleChange(e)}/>
                         </div>
                     </div>
-                    <div style={{display: "flex", marginBottom: "10px"}}>
+                    <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
                         <div style={{flexBasis: "120px", fontWeight: "bold"}}>Cách tính công</div>
                         <div style={{flex: 1}}>     
                             <select className="input" name="contractType" value={this.state.newContractType} onChange={(e)=>this.handleChange(e)}>
@@ -143,14 +143,14 @@ class ContractManagementPage extends React.Component {
                             </select>                   
                         </div>
                     </div>
-                    <div style={{display: "flex", marginBottom: "10px"}}>
+                    <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
                         <div style={{flexBasis: "120px", fontWeight: "bold"}}>Ăn trưa</div>
                         <div style={{flex: 1}}>   
                              <input className = "input checkbox" type="checkbox" name="contractLunch" checked={this.state.newContractLunch}
                                 onChange={(e)=>this.handleChange(e)}/>                     
                         </div>
                     </div>
-                    <div style={{display: "flex", marginBottom: "10px"}}>
+                    <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
                         <div style={{flexBasis: "120px", fontWeight: "bold"}}>Nghỉ phép</div>
                         <div style={{flex: 1}}>   
                             <input className = "input checkbox" name="contractSabbatical" checked={this.state.newContractSabbatical}
