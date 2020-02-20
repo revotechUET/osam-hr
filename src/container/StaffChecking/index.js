@@ -3,6 +3,7 @@ import {withRouter} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { dateFormat } from '../../utils/date';
 import apiService from '../../service/api.service';
+import Loading from '../../components/Loading';
 import './style.less';
 
 const columns = [
@@ -40,6 +41,7 @@ class StaffChecking extends React.Component {
             staffChecking : [],
             loading : false
         }
+
     }
 
     async componentDidMount(){
@@ -56,11 +58,15 @@ class StaffChecking extends React.Component {
             </div>
             <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
             noHeader
-            progressPending={this.state.loading}
             noDataComponent='Loading'
+            progressPending={this.state.loading}
+            progressComponent={<Loading />}
             persistTableHead
             columns={columns}
             data={staffChecking}
+            pointerOnHover
+            highlightOnHover
+            onRowClicked = {(row, event) =>{this.props.history.push(`/checking/${row.id}`);} }
             />
         </div>)
     }

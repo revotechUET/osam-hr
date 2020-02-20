@@ -20,6 +20,7 @@ import StaffLeavePage from './../container/StaffLeave';
 import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
 import StaffDetailPage from './../container/StaffDetail';
+import CheckingDetailPage from './../container/ChekingDetail';
 
 export default [
   {
@@ -67,6 +68,11 @@ export default [
     component: StaffCheckingNewPage
   },
   {
+    path: "/checking/:id",
+    exact: true,
+    component:CheckingDetailPage
+  },
+  {
     path: "/leaves",
     exact: true,
     component: StaffLeavePage
@@ -81,6 +87,7 @@ export default [
     exact: true,
     component: LeaveDetailPage
   },
+  
   {
     path: "/leaves/:id/edit",
     exact: true,
