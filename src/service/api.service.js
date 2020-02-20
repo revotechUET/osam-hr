@@ -118,6 +118,15 @@ class ApiService {
     return gscriptrun('checkingDetail',payload);
   }
   //#endregion
+
+  //#region setting
+  getSetting() {
+    return gscriptrun('getSetting');
+  }
+  updateSetting(setting) {
+    return gscriptrun('updateSetting', setting)
+  }
+  //#endregion
 }
 
 export default new ApiService();
