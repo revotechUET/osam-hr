@@ -119,7 +119,7 @@ class ContractManagementPage extends React.Component {
             <DataTable
                 noHeader
                 fixedHeader
-                fixedHeaderScrollHeight="50vh"
+                fixedHeaderScrollHeight="calc(100vh - 333px)"
                 persistTableHead
                 pagination
                 noDataComponent='Không có hợp đồng'

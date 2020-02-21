@@ -63,7 +63,7 @@ function StaffLeavePage({ history }) {
       <DataTable
         noHeader
         fixedHeader
-        fixedHeaderScrollHeight="50vh"
+        fixedHeaderScrollHeight="calc(100vh - 333px)"
         noDataComponent='Không có yêu cầu nghỉ'
         progressPending={loading}
         progressComponent={<Loading />}
