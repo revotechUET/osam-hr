@@ -55,7 +55,7 @@ class App extends React.Component {
                 <div style={{ minWidth: "300px", maxWidth: "300px" }}>
                   <SideBar />
                 </div>
-                <div style={{ width: "100%", padding: "40px", background: "transparent", position: "relative" }}>
+                <div style={{ width: "100%", padding: "40px", background: "transparent", position: "relative", display: "flex", flexDirection: "column" }}>
                   <TopBar />
                   <Suspense fallback={<div>Loading...</div>}>
                     <Switch>

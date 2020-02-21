@@ -171,49 +171,57 @@ function SettingPage({ history }) {
             setState({ workDayModal: false });
           }}
         >
-          <div>
-            <div className="header">
-              Cài đặt ngày làm việc
+            <div className="content-modal">
+                <div style={{display: "flex", marginBottom: "20px"}}>
+                    <div style={{fontSize: "150%", fontWeight: "bold", marginBottom: "20px"}}>Cài đặt ngày làm việc</div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Hai</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[1])} options={workDayOptions} onChange={(e, option) => setWorkDay(1, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Ba</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[2])} options={workDayOptions} onChange={(e, option) => setWorkDay(2, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Tư</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[3])} options={workDayOptions} onChange={(e, option) => setWorkDay(3, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Năm</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[4])} options={workDayOptions} onChange={(e, option) => setWorkDay(4, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Sáu</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[5])} options={workDayOptions} onChange={(e, option) => setWorkDay(5, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Bảy</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[6])} options={workDayOptions} onChange={(e, option) => setWorkDay(6, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Chủ Nhật</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[0])} options={workDayOptions} onChange={(e, option) => setWorkDay(0, option && option.id)} />
+                    </div>
+                </div>
+                <div className="footer">
+                    <div className="my-button-cancel">Hủy</div>
+                    <div className="my-button-ok">Lưu</div>
+                </div>
             </div>
-            <div className="field-container">
-              <div>
-                <div className="input-field">
-                  <div className="label">Thứ Hai</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[1])} options={workDayOptions} onChange={(e, option) => setWorkDay(1, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Ba</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[2])} options={workDayOptions} onChange={(e, option) => setWorkDay(2, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Tư</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[3])} options={workDayOptions} onChange={(e, option) => setWorkDay(3, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Năm</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[4])} options={workDayOptions} onChange={(e, option) => setWorkDay(4, option && option.id)} />
-                </div>
-              </div>
-              <div>
-                <div className="input-field">
-                  <div className="label">Thứ Sáu</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[5])} options={workDayOptions} onChange={(e, option) => setWorkDay(5, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Bảy</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[6])} options={workDayOptions} onChange={(e, option) => setWorkDay(6, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Chủ Nhật</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[0])} options={workDayOptions} onChange={(e, option) => setWorkDay(0, option && option.id)} />
-                </div>
-              </div>
-            </div>
-            <div className="footer">
-              <div className="my-button">Hủy</div>
-              <div className="my-button active-btn">Lưu</div>
-            </div>
-          </div>
         </CenteredModal>
       </div>
     );

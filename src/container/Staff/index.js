@@ -75,8 +75,12 @@ class StaffPage extends React.Component {
         <div className="my-button active-btn ti ti-plus" onClick={() => { this.props.history.push("/staffs/new") }}></div>
         <div className="title">Nhân viên</div>
       </div>
-      <DataTable 
+      <DataTable
         noHeader
+        fixedHeader
+        fixedHeaderScrollHeight="calc(100vh - 333px)"
+        persistTableHead
+        pagination
         noDataComponent='Không có nhân viên'
         progressPending={loading}
         progressComponent={<Loading/>}
