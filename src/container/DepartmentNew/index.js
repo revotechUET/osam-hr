@@ -1,11 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import BorderedContainer from "./../../components/BorderedContainer";
-import BorderBottomInput from "./../../components/BorderBottomInput";
 import Autocomplete from "../../components/Autocomplete";
 import apiService from '../../service/api.service';
-
+import BorderBottomInput from "./../../components/BorderBottomInput";
+import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
+
 class DepartmentNewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,6 @@ class DepartmentNewPage extends React.Component {
       manager: null,
       idManager: null,
       active: true,
-      countActive: 0,
       name: '',
       approvers: null,
       idApprovers: null,
@@ -31,13 +30,12 @@ class DepartmentNewPage extends React.Component {
   async handleSave() {
     let data = {
       name: this.state.departmentName,
-      active: this.state.active.toString(),
       idManager: this.state.idRequester,
       idApprovers: this.state.idApprovers,
-      active     : this.state.active   
+      active: this.state.active
     };
     let addNewDepartment = await apiService.addNewDepartment(data);
-    if(addNewDepartment){
+    if (addNewDepartment) {
       this.props.history.push('/departments');
     }
   }
@@ -54,15 +52,8 @@ class DepartmentNewPage extends React.Component {
     this.setState({ departmentName: event.target.value });
   }
 
-
-  handleActiveStatus() {
-    this.state.countActive += 1;
-    if (this.state.countActive % 2 === 0) {
-      this.setState({ active: false });
-    }
-    else if (this.state.countActive % 2 !== 0) {
-      this.setState({ active: true });
-    }
+  handleActiveStatus(e) {
+    this.setState({ active: e.target.checked });
   }
 
   async componentDidMount() {
@@ -72,34 +63,34 @@ class DepartmentNewPage extends React.Component {
   }
   render() {
     return (
-      <div className = "DepartmentNew">
+      <div className="DepartmentNew">
         <div className="title-vs-btn">
-          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
-          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
           <div className="title">Bộ Phận / Mới</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">
-              <span>Tên Bộ Phận</span>
-              <div>
-                <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
-              </div>
+            <span>Tên Bộ Phận</span>
+            <div>
+              <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
+            </div>
           </div>
           <div className="item-wrap">
-              <span>Người quản lý</span>
-              <div>
-                  <Autocomplete
-                  loading={this.state.manager === null}
-                  style={{ flex: 1 }}
-                  options={this.state.manager}
-                  keyProp='id'
-                  labelProp='name'
-                  onChange={(event, value) => {
-                    this.setState({ idRequester: value && value.id });
-                    console.log(typeof(this.state.idRequester));
-                  }}
-                />
-              </div>
+            <span>Người quản lý</span>
+            <div>
+              <Autocomplete
+                loading={this.state.manager === null}
+                style={{ flex: 1 }}
+                options={this.state.manager}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  this.setState({ idRequester: value && value.id });
+                  console.log(typeof (this.state.idRequester));
+                }}
+              />
+            </div>
           </div>
           <div className="item-wrap">
             <span>Người phụ trách duyệt leave request</span>
@@ -118,7 +109,7 @@ class DepartmentNewPage extends React.Component {
               />
             </div>
           </div>
-          <div className="item-wrap" style={{width: "70px"}}>
+          <div className="item-wrap" style={{ width: "70px" }}>
             <span>Hoạt động</span>
             <div>
               <input className="input checkbox" type="checkbox" checked={this.state.active} onClick={this.handleActiveStatus} />
