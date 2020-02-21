@@ -22,9 +22,7 @@ class NotificationNewPage extends React.Component {
           <div className="title">Thông báo / Mới</div>
         </div>
         <BorderedContainer>
-          <h3>Mới</h3>
           <div className="input-field">
-            
             <div className = "label">Kiểu thông báo</div>
             <select className = "input">
                 <option value="" selected disabled hidden>Choose here</option>

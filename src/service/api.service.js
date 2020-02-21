@@ -118,6 +118,18 @@ class ApiService {
   verifyCheckingDate(date) {
     return gscriptrun('verifyCheckingDate', date);
   }
+  checkingDetail(payload){
+    return gscriptrun('checkingDetail',payload);
+  }
+  //#endregion
+
+  //#region setting
+  getSetting() {
+    return gscriptrun('getSetting');
+  }
+  updateSetting(setting) {
+    return gscriptrun('updateSetting', setting)
+  }
   //#endregion
 }
 

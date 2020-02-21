@@ -12,7 +12,12 @@ class MyNotifyPage extends React.Component {
     render() {
         return (
         <div className = "MyNotiPage">
-            <h1 style={{marginBottom: "10px"}}>Thông báo của bạn</h1>
+            <div className="title-vs-btn">
+                <div className="my-button active-btn ti ti-pencil"></div>
+                <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
+                <div className="my-button ti ti-close" style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
+                <div className="title">Thông báo của bạn</div>
+            </div>
             <button>Đánh dấu tất cả đã đọc</button>
             <div style={{marginTop: "30px", border: "1px solid"}}>
                 {/* content for notify */}

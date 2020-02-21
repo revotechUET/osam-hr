@@ -5,7 +5,6 @@
 
 .modal-background {
     position: fixed; /* Sit on top of the page content */
-    display: flex;
     align-items: center;
     justify-content: center;
     width: 100%; /* Full width (cover the whole page) */
@@ -14,19 +13,26 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.1); /* Black background with opacity */
+    background-color: #c1c1c178; /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
 }
 
 .CenteredModal {
     .modal-layer {
         display: flex;
+        align-items: center;
         overflow: hidden;
-        flex-direction: column;
-        width: 600px;
+        width: 400px;
         background: #fff;
         box-shadow: 0 0 30px #00000014;
         border-radius: 10px;
+        padding: 40px;
+        position: relative;
+    }
+    .content-modal {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
 
     .header {
@@ -36,20 +42,16 @@
         border-bottom: 1px solid #E9EEF2;
     }
     .footer {
-        flex-basis: 60px;
         display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        border-top: 1px solid #E9EEF2;
         padding-top: 10px;
+        justify-content: flex-end;
     }
 }
 @keyframes drop-dialog {
     0% {
-        transform: translateY(-500px);
+        transform: scale(0);
     }
-
     100% {
-        transform: translateY(0);
+        transform: scale(1);
     }
 }
