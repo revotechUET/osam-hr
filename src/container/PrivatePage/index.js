@@ -10,7 +10,7 @@ class PrivatePage extends React.Component {
     render() {
         return (
             <div>
-                <h1>I'm a private route</h1>
+                <h1>I&apos;m a private route</h1>
             </div>
         );
     }
