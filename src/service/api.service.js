@@ -47,6 +47,10 @@ class ApiService {
     this.gscriptrun = gscriptrun;
   }
 
+  updateUserById(id, info) {
+    return gscriptrun('updateUserById', id, info);
+  }
+
   deleteUserById(id) {
     return gscriptrun('deleteUserById', id);
   }

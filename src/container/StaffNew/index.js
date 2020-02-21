@@ -12,7 +12,6 @@ class StaffNewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countActive: 0,
       userName: '',
       email: '',
       active: true,
@@ -43,7 +42,6 @@ class StaffNewPage extends React.Component {
 
   clear() {
     this.setState({
-      countActive: 0,
       userName: '',
       email: '',
       active: true,
@@ -55,7 +53,7 @@ class StaffNewPage extends React.Component {
       contract: null,
       emailLists: null,
       idUser: null
-    })
+    });
   }
 
   load() {

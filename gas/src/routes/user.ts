@@ -61,6 +61,10 @@ function deleteUserById(id) {
   return db.from<User>('user').delete(id);
 }
 
+function updateUserById(id, info) {
+  return db.from<User>('user').update(id, info);
+}
+
 function appendUser(data) {
   for (let i = 0; i < data.departments.length; i++) {
     db.from<User_Department>('user_department').insert({ idUser: data.id, idDepartment: data.departments[i] });
