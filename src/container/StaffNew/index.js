@@ -30,7 +30,6 @@ class StaffNewPage extends React.Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleContractChange = this.handleContractChange.bind(this);
     this.handleRoleChange = this.handleRoleChange.bind(this);
-    this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);

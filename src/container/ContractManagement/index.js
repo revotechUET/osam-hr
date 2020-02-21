@@ -4,6 +4,7 @@ import StyledPaginationTable from '../../components/StyledPaginationTable';
 import CenteredModal from './../../components/CenteredModal';
 import apis from './../../service/api.service';
 import DataTable from 'react-data-table-component';
+import Loading from '../../components/Loading';
 
 import './style.less';
 
@@ -42,7 +43,8 @@ class ContractManagementPage extends React.Component {
             newContractType: "fulltime",
             newContractLunch: false,
             newContractSabbatical: false,
-            contracts: []
+            contracts: [],
+            loading: true
         };
     }
 
@@ -53,7 +55,8 @@ class ContractManagementPage extends React.Component {
             newContractType: "fulltime",
             newContractLunch: false,
             newContractSabbatical: false,
-            contracts: []
+            contracts: [],
+            loading: true
         });
         this.load();
     }
@@ -61,7 +64,8 @@ class ContractManagementPage extends React.Component {
     async load() {
         let rs = await apis.getContracts();
         this.setState({
-            contracts: rs
+            contracts: rs,
+            loading: false
         })
     }
 
@@ -71,7 +75,7 @@ class ContractManagementPage extends React.Component {
             newContractName: "",
             newContractType: "fulltime",
             newContractLunch: false,
-            newContractSabbatical: false
+            newContractSabbatical: false,
         });
     }
 
@@ -119,6 +123,8 @@ class ContractManagementPage extends React.Component {
             <DataTable style={{marginTop: "40px", borderRadius: "20px"}}
                 noHeader
                 noDataComponent='Không có hợp đồng'
+                progressPending={this.state.loading}
+                progressComponent={<Loading/>}
                 columns={displays}
                 data={this.state.contracts}
             />
