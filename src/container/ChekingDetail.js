@@ -14,6 +14,8 @@ class StaffDetailPage extends React.Component {
             loading: true,
             checkDetail: null
         }
+        this.edit = this.edit.bind(this);
+        this.response = this.response.bind(this);
     }
 
     async componentDidMount() {
@@ -28,6 +30,13 @@ class StaffDetailPage extends React.Component {
         console.log(this.state.checkDetail);
     }
 
+    edit(){
+        this.props.history.push('/checking/new');
+    }
+
+    response(){
+        this.props.history.push('/notifies/new');
+    }
     render() {
         if(this.state.loading){
             return ( <Loading />)
@@ -35,9 +44,8 @@ class StaffDetailPage extends React.Component {
         return (
             <div className="StaffDetail">
                 <div className="title-vs-btn">
-                    <div className="my-button active-btn ti ti-pencil"></div>
-                    <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
-                    <div className="my-button ti ti-close" style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
+                    <div className="my-button active-btn ti ti-pencil" onClick = {this.edit}></div>
+                    <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={this.response}></div>
                     <div className="title">Chấm công / <span className="uppercase">{dateFormat(this.state.checkDetail.date, 'dd/MM/yyyy')}</span></div>
                 </div>
 
