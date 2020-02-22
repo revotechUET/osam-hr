@@ -21,6 +21,7 @@ import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
 import StaffDetailPage from './../container/StaffDetail';
 import CheckingDetailPage from './../container/ChekingDetail';
+import DepartmentDetailPage from '../container/DepartmentDetail';
 
 export default [
   {
@@ -56,6 +57,11 @@ export default [
     path: "/departments/new",
     exact: true,
     component: DepartmentNewPage
+  },
+  {
+    path: "/departments/:id",
+    exact: true,
+    component: DepartmentDetailPage
   },
   {
     path: "/checking",

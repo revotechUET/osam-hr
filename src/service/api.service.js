@@ -81,9 +81,15 @@ class ApiService {
     return gscriptrun('addNewDepartment', data);
   }
 
-  listDepartment() {
-    return gscriptrun('listDepartment');
+  listDepartment(idRequester) {
+    return gscriptrun('listDepartment', idRequester);
   }
+
+  departmentDetail(id){
+    return gscriptrun('departmentDetail', id);
+
+  }
+  
   //#endregion
 
   //#region leave
