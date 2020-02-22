@@ -42,7 +42,7 @@ export default function LeaveDetailPage({ history }) {
         <div className="title">Yêu cầu nghỉ / <span className="uppercase">{id}</span></div>
       </div>
       <BorderedContainer>
-        <div className="item-detail" style={{background: leave.status==='rejected'?'linear-gradient(120deg, #FFC107, #FF9800)': 'linear-gradient(120deg, rgb(154, 226, 118), rgb(69, 234, 76))'}}>
+        <div className="item-detail" style={{color: "#fff", background: leave.status==='rejected'?'linear-gradient(120deg, #FFC107, #FF9800)': 'linear-gradient(120deg, rgb(154, 226, 118), rgb(69, 234, 76))'}}>
           {
             leave.status === 'rejected'
               ? <div className="image-reject"></div>

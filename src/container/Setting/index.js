@@ -94,7 +94,7 @@ function SettingPage({ history }) {
           <div className="title">Cài đặt</div>
         </div>
         <div className="item-setting background-orange w350px bg">
-          <div className="title-setting" style={{fontSize: "150%", textShadow: "text-shadow: 0 1px 7px #0000000f;"}}>Lời chào buổi sáng</div>
+          <div className="title-setting" style={{fontSize: "150%", textShadow: " 0 1px 7px #0000000f;"}}>Lời chào buổi sáng</div>
           <div className="dis-setting"><InputBase inputProps={{style:{color: "#fff", width:"100%"}}} value={state.welcomeMessage} onChange={(e) => setState({ welcomeMessage: e.target.value })} /></div>
         </div>
         <div className="item-setting background-white w350px with-icon">

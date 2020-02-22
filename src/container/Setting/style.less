@@ -5,11 +5,13 @@
     .item-setting {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         padding: 30px;
         margin-right: 40px;
         margin-bottom: 40px;
         border-radius: 20px;
         position: relative;
+        animation: showing-zoom 0.3s ease;
     }
     .background-orange {
         background: linear-gradient(120deg, #ffa907, #FF9800);
@@ -19,8 +21,8 @@
         background: #fff;
         color: rgb(71, 71, 71);
         .button-setting {
-            background: #ffbf607a;
-            border: 1px solid orange;
+            background: #ff980021;
+            // border: 1px solid orange;
         }
     }
     .w250px {
@@ -59,10 +61,10 @@
     .button-setting {
         background: #fff;
         width: fit-content;
-        padding: 8px 15px;
+        padding: 10px 15px;
         border-radius: 7px;
         margin-top: 10px;
-        color: orange;
+        color: #f98b00;
         cursor: pointer;
         font-weight: bold;
         &:hover {
