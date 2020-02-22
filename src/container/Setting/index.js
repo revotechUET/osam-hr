@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core";
+import { TextField, InputBase } from "@material-ui/core";
 import { TimePicker } from "@material-ui/pickers";
 import React, { useEffect, useReducer } from "react";
 import { withRouter } from "react-router-dom";
@@ -89,80 +89,80 @@ function SettingPage({ history }) {
   {
     return (
       <div className="SettingPage">
-        <div>
-          <div className="title-vs-btn">
-            <div className="my-button active-btn ti ti-check" onClick={save}></div>
-            <div className="title">Cài đặt</div>
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Ngày kết thúc kì lương</div>
-            <div className="fieldinput">
-              <Autocomplete value={dateOptions.find(o => o.id === state.monthEnd)} options={dateOptions} onChange={(e, option) => setState({ monthEnd: option && option.id })} />
-            </div>
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Reset nghỉ phép của năm</div>
-            <div className="fieldinput">
-              <Autocomplete value={monthOptions.find(o => o.id === state.yearEnd)} options={monthOptions} onChange={(e, option) => setState({ yearEnd: option && option.id })} />
-            </div>
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Lời chào buổi sáng</div>
-            <div className="fieldinput">
-              <TextField value={state.welcomeMessage} onChange={(e) => setState({ welcomeMessage: e.target.value })} />
-            </div>
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Ngày nghỉ trong năm</div>
-            <div className="fieldinput">
-              <button className="my-button active-btn"
-                onClick={() => {
-                  history.push("/setting/day-off");
-                }}
-              >
-                Cài đặt
-              </button>
-            </div>
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Ca làm sáng</div>
-            <div className="fieldinput">
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningStart} onChange={v => setState({ morningStart: v })} />
-              <span> - </span>
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningEnd} onChange={v => setState({ morningEnd: v })} />
-            </div>
-            <Error error={state.errors.morning} />
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Ca làm chiều</div>
-            <div className="fieldinput">
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonStart} onChange={v => setState({ afternoonStart: v })} />
-              <span> - </span>
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonEnd} onChange={v => setState({ afternoonEnd: v })} />
-            </div>
-            <Error error={state.errors.afternoon} />
-          </div>
-          <div className="fieldrow">
-            <div className="fieldname">Thời gian tính ăn trưa</div>
-            <div className="fieldinput">
-              <span> Check in trước </span>
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchStart} onChange={v => setState({ lunchStart: v })} />
-              <span>& Check out sau </span>
-              <TimePicker variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchEnd} onChange={v => setState({ lunchEnd: v })} />
-            </div>
+        <div className="title-vs-btn">
+          <div className="my-button active-btn ti ti-check" onClick={save}></div>
+          <div className="title">Cài đặt</div>
+        </div>
+        <div className="item-setting background-orange w350px bg">
+          <div className="title-setting" style={{fontSize: "150%", textShadow: "text-shadow: 0 1px 7px #0000000f;"}}>Lời chào buổi sáng</div>
+          <div className="dis-setting"><InputBase inputProps={{style:{color: "#fff", width:"100%"}}} value={state.welcomeMessage} onChange={(e) => setState({ welcomeMessage: e.target.value })} /></div>
+        </div>
+        <div className="item-setting background-white w350px with-icon">
+          <span className="lunch-svg"></span>
+          <div>
+              <span>Thời gian tính ăn trưa</span>
+              <div>
+                <div>
+                  <span>Check in trước</span>
+                  <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchStart} onChange={v => setState({ lunchStart: v })} />
+                </div>
+                <div>
+                  <span>Check out sau</span>
+                  <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchEnd} onChange={v => setState({ lunchEnd: v })} />
+                </div>
+              </div>
             <Error error={state.errors.lunch} />
           </div>
-          <div className="fieldrow">
-            <div className="fieldname">Ngày làm việc</div>
-            <div className="fieldinput">
-              <button className="my-button active-btn"
-                onClick={() => {
-                  setState({ workDayModal: true });
-                }}
-              >
-                Cài đặt
-              </button>
-            </div>
+        </div>
+        <div className="item-setting background-white w150px">
+          <div className="workday-svg"></div>
+          <div className="title-setting">Ngày làm việc</div>
+          <div className="dis-setting">
+            <div className="button-setting" onClick={() => {setState({ workDayModal: true });}}>Cài đặt</div>
+          </div>
+        </div>
+        <div className="item-setting background-white w150px">
+          <div className="freetime-svg"></div>
+          <div className="title-setting">Ngày nghỉ trong năm</div>
+          <div className="dis-setting">
+            <div className="button-setting"onClick={() => {history.push("/setting/day-off");}}>Cài đặt</div>
+          </div>
+        </div>
+        <div className="item-setting background-white w350px">
+          <div className="item-inline">
+            <div className="morning-svg"></div>
+            <div style={{flexBasis: "120px"}}>Ca làm sáng</div>
+            <span>
+              <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}}variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningStart} onChange={v => setState({ morningStart: v })} />
+              <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}}variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningEnd} onChange={v => setState({ morningEnd: v })} />
+            </span>
+            <Error error={state.errors.morning} />
+          </div>
+          <div className="item-inline" style={{marginTop: "10px"}}>
+            <div className="afternoon-svg"></div>
+            <div style={{flexBasis: "120px"}}>Ca làm Chiều</div>
+            <span>
+              <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}}variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonStart} onChange={v => setState({ afternoonStart: v })} />
+              <TimePicker TextFieldComponent={InputBase} inputProps={{style:{fontWeight: "bold", fontSize: "150%"}}}variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonEnd} onChange={v => setState({ afternoonEnd: v })} />
+            </span>
+            <Error error={state.errors.afternoon} />
+          </div>
+        </div>
+
+        <div className="item-setting background-white w450px">
+          <div className="item-inline">
+            <div className="end-date-svg"></div>
+            <div style={{flexBasis: "170px"}}>Ngày kết thúc kì lương</div>
+            <span>
+              <Autocomplete value={dateOptions.find(o => o.id === state.monthEnd)} options={dateOptions} onChange={(e, option) => setState({ monthEnd: option && option.id })} />
+            </span>
+          </div>
+          <div className="item-inline" style={{marginTop: "10px"}}>
+            <div className="reset-salary-svg"></div>
+            <div style={{flexBasis: "170px"}}>Reset nghỉ phép của năm</div>
+            <span>
+              <Autocomplete value={monthOptions.find(o => o.id === state.yearEnd)} options={monthOptions} onChange={(e, option) => setState({ yearEnd: option && option.id })} />
+            </span>
           </div>
         </div>
         <CenteredModal
@@ -171,49 +171,57 @@ function SettingPage({ history }) {
             setState({ workDayModal: false });
           }}
         >
-          <div>
-            <div className="header">
-              Cài đặt ngày làm việc
+            <div className="content-modal">
+                <div style={{display: "flex", marginBottom: "20px"}}>
+                    <div style={{fontSize: "150%", fontWeight: "bold", marginBottom: "20px"}}>Cài đặt ngày làm việc</div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Hai</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[1])} options={workDayOptions} onChange={(e, option) => setWorkDay(1, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Ba</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[2])} options={workDayOptions} onChange={(e, option) => setWorkDay(2, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Tư</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[3])} options={workDayOptions} onChange={(e, option) => setWorkDay(3, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Năm</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[4])} options={workDayOptions} onChange={(e, option) => setWorkDay(4, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Sáu</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[5])} options={workDayOptions} onChange={(e, option) => setWorkDay(5, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Thứ Bảy</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[6])} options={workDayOptions} onChange={(e, option) => setWorkDay(6, option && option.id)} />
+                    </div>
+                </div>
+                <div style={{display: "flex", marginBottom: "10px", alignItems: "center"}}>
+                    <div style={{flexBasis: "120px", fontWeight: "bold"}}>Chủ Nhật</div>
+                    <div style={{flex: 1}}>
+                      <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[0])} options={workDayOptions} onChange={(e, option) => setWorkDay(0, option && option.id)} />
+                    </div>
+                </div>
+                <div className="footer">
+                    <div className="my-button-cancel">Hủy</div>
+                    <div className="my-button-ok">Lưu</div>
+                </div>
             </div>
-            <div className="field-container">
-              <div>
-                <div className="input-field">
-                  <div className="label">Thứ Hai</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[1])} options={workDayOptions} onChange={(e, option) => setWorkDay(1, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Ba</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[2])} options={workDayOptions} onChange={(e, option) => setWorkDay(2, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Tư</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[3])} options={workDayOptions} onChange={(e, option) => setWorkDay(3, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Năm</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[4])} options={workDayOptions} onChange={(e, option) => setWorkDay(4, option && option.id)} />
-                </div>
-              </div>
-              <div>
-                <div className="input-field">
-                  <div className="label">Thứ Sáu</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[5])} options={workDayOptions} onChange={(e, option) => setWorkDay(5, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Thứ Bảy</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[6])} options={workDayOptions} onChange={(e, option) => setWorkDay(6, option && option.id)} />
-                </div>
-                <div className="input-field">
-                  <div className="label">Chủ Nhật</div>
-                  <Autocomplete value={workDayOptions.find(o => o.id === state.workDays[0])} options={workDayOptions} onChange={(e, option) => setWorkDay(0, option && option.id)} />
-                </div>
-              </div>
-            </div>
-            <div className="footer">
-              <div className="my-button">Hủy</div>
-              <div className="my-button active-btn">Lưu</div>
-            </div>
-          </div>
         </CenteredModal>
       </div>
     );

@@ -1,18 +1,18 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-// import Select from '@material-ui/core/Select';
-// import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import apiService from '../../service/api.service';
 import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
+import Loading from '../../components/Loading';
 import './style.less';
 
 class StaffEditPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countActive: 0,
       userName: '',
       email: '',
       active: true,
@@ -20,9 +20,10 @@ class StaffEditPage extends React.Component {
       errors: {},
       departments: null,
       departmentList: [],
-      contract: null,
+      contract: {},
       emailLists: null,
-      idUser: null
+      contracts: null,
+      loading: true
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -30,7 +31,6 @@ class StaffEditPage extends React.Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleContractChange = this.handleContractChange.bind(this);
     this.handleRoleChange = this.handleRoleChange.bind(this);
-    this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
@@ -38,56 +38,72 @@ class StaffEditPage extends React.Component {
 
   componentDidMount() {
     //load department
-    this.clear();
+    // this.clear();
+    let user = this.props.history.location.state.user || {};
+    console.log(user);
+    this.setState({
+      userName: user.name,
+      email: user.email,
+      role: user.role,
+      acitve: user.active,
+      departmentList: user.departments.map((v)=>(v.id)),
+      contract: user.idContract,
+      idUser: user.id,
+      loading: true
+    })
     this.load();
   }
 
-  clear() {
+  async load() {
+    let promises = [];
+    promises.push(this.loadEmailList());
+    promises.push(this.loadDepartments());
+    promises.push(this.loadContracts());
+    await Promise.all(promises);
     this.setState({
-      countActive: 0,
-      userName: '',
-      email: '',
-      active: true,
-      role: '',
-      errors: {},
-      departments: null,
-      contracts: null,
-      departmentList: [],
-      contract: null,
-      emailLists: null,
-      idUser: null
+      loading: false
     })
   }
 
-  load() {
-    this.loadEmailList();
-    this.loadDepartments();
-    this.loadContracts();
-  }
-
-  async loadEmailList() {
-    let rs = [];
-    try {
-      rs = await apiService.listEmails();
-    } catch(e) {
-      console.log(e);
-    }
-    this.setState({
-      emailLists: rs
+  loadEmailList() {
+    return new Promise(async (res, rej)=>{
+      let rs = [];
+      try {
+        rs = await apiService.listEmails();
+      } catch(e) {
+        rej(e);
+      }
+      this.setState({
+        emailLists: rs
+      }, (rs)=>res(true));
     });
   }
 
-  async loadDepartments() {
-    let rs = await apiService.listDepartment();
-    this.setState({
-      departments: rs
+  loadDepartments() {
+    return new Promise(async (res, rej)=>{
+      let rs = [];
+      try {
+        rs = await apiService.listDepartment();
+      } catch(e) {
+        rej(e);
+      }
+      this.setState({
+        departments: rs
+      }, (rs)=>res(true));
     });
   }
 
-  async loadContracts() {
-    let rs = await apiService.getContracts();
-    this.setState({
-      contracts: rs
+  loadContracts() {
+    return new Promise(async (res, rej)=>{
+      let rs = [];
+      try {
+        rs = await apiService.getContracts();
+      } catch(e) {
+        rej(e);
+      }
+      this.setState({
+        contracts: rs
+      }, (rs)=>res(true));
     });
   }
 
@@ -144,10 +160,6 @@ class StaffEditPage extends React.Component {
     this.setState({ contract: evt.target.value })
   }
 
-  handleDepartmentChange() {
-
-  }
-
   handleRoleChange(evt) {
     this.setState({ role: evt.target.value });
   }
@@ -161,98 +173,103 @@ class StaffEditPage extends React.Component {
   }
 
   render() {
+    if (this.state.loading) return <Loading />
     return (
       <div className="StaffEdit">
-        <h1 style={{ marginBottom: "10px" }}>Nhân viên / Mới</h1>
-        <div style={{ display: "flex" }}>
-          <button className="my-button active-btn" onClick={this.handleSave}>Lưu</button>
-          <button className="my-button" onClick={this.handleCancel}>Hủy</button>
+        <div className="title-vs-btn">
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="title">Nhân viên / Mới</div>
         </div>
         <BorderedContainer>
-          <h3>Tên nhân viên</h3>
-          <BorderBottomInput placeholder="Tên nhân viên" value={this.state.userName} onChange={this.handleNameChange} />
-          <span className="error">{this.state.errors["name"]}</span>
-          <div className="input-field">
-            <div className="label" >Email</div>
-            <Autocomplete
-              filterSelectedOptions
-              loading={this.state.emailLists === null}
-              style={{ flex: 1 }}
-              options={this.state.emailLists}
-              keyProp='id'
-              labelProp='primaryEmail'
-              onChange={(event, value) => {
-                this.setState({ email: value.primaryEmail, idUser: value.id });
+          <div className="item-wrap">
+            <span>Tên nhân viên</span>
+            <div>
+              <BorderBottomInput placeholder="Tên nhân viên" value={this.state.userName} onChange={this.handleNameChange} />
+            </div>
+            <div className="error">{this.state.errors["name"]}</div>
+          </div>
+          <div className="item-wrap">
+            <span>Hợp đồng</span>
+            <div>
+              {/* <Autocomplete
+                filterSelectedOptions
+                loading={this.state.contracts === null}
+                style={{ flex: 1 }}
+                options={this.state.contracts}
+                value={(this.state.contracts || []).find(o => o.id === this.state.contract.id)}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, value) => {
+                  this.setState({ contract: value.id });
+                }}
+              /> */}
+              <Select onChange={(e) => {
+                  this.setState({ contract: e.target.value });
+                }}
+                value = {this.state.contract}
+                style={{ flex: 1 }}
+                outlined
+              >
+                {
+                  this.state.contracts.map((e)=>
+                    <MenuItem value={e.id}>{e.name}</MenuItem>
+                  )
+                }
+              </Select>
+            </div>
+          </div>
+          <div className="item-wrap">
+            <span>Bộ phận</span>
+            <div>
+              <Autocomplete
+                multiple
+                filterSelectedOptions
+                loading={this.state.departments === null}
+                style={{ flex: 1 }}
+                options={this.state.departments}
+                value={(this.state.departments || []).filter(o => this.state.departmentList.includes(o.id))}
+                keyProp='id'
+                labelProp='name'
+                onChange={(event, values) => {
+                  this.setState({ departmentList: values.map(v => v.id) });
+                }}/>
+            </div>
+          </div>
+          <div className="item-wrap" style={{width: "80px"}}>
+            <span>Hoạt động</span>
+            <div>
+              <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
+            </div>
+          </div>
+          <div className="item-wrap">
+            <span>Vai trò</span>
+            <div>
+            <Select onChange={(e) => {
+                this.setState({ role: e.target.value });
               }}
-            />
-            {/* <span className="error">{this.state.errors['email']}</span> */}
-          </div>
-          <div className="input-field">
-            <div className="label" ></div>
-            <span className="error">{this.state.errors['email']}</span>
-          </div>
-          <div className="input-field">
-            <div className="label">Hợp đồng</div>
-            <Autocomplete
-              filterSelectedOptions
-              loading={this.state.contracts === null}
+              value = {this.state.role}
               style={{ flex: 1 }}
-              options={this.state.contracts}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, value) => {
-                this.setState({ contract: value.id });
-              }}
-            />
-          </div>
-          <div className="input-field">
-            <div className="label">Bộ phận</div>
-            <Autocomplete
-              multiple
-              filterSelectedOptions
-              loading={this.state.departments === null}
-              style={{ flex: 1 }}
-              options={this.state.departments}
-              keyProp='id'
-              labelProp='name'
-              onChange={(event, values) => {
-                this.setState({ departmentList: values.map(v => v.id) });
-              }}
-            />
-          </div>
-          <div className="input-field">
-            <div className="label">Hoạt động</div>
-            <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
-          </div>
-          <div className="input-field">
-            <div className="label">Vai trò</div>
-            {/* <select className="input" defaultValue='' onChange={this.handleRoleChange}>
-              <option value="" disabled hidden>Choose here</option>
-              <option value="user">Nhân viên</option>
-              <option value="manager">Back Office</option>
-              <option value="admin">Admin</option>
-            </select> */}
-            <Autocomplete
-              filterSelectedOptions
-              //loading={this.state.contracts === null}
-              style={{ flex: 1 }}
-              options={[
-                { value: "user", name: "Nhân viên" },
-                { value: "manager", name: "Back Office" },
-                { value: "admin", name: "Admin" }
-              ]}
-              keyProp='value'
-              labelProp='name'
-              onChange={(event, value) => {
-                //console.log(value);
-                this.setState({ role: value.value });
-              }}
-            />
+              outlined
+            >
+              {
+                optionsForRole.map((e)=>
+                  <MenuItem value={e.value}>{e.name}</MenuItem>
+                )
+              }
+            </Select>
+            </div>
           </div>
         </BorderedContainer>
       </div>
     );
   }
 }
+
+let optionsForRole = [
+  { value: "user", name: "Nhân viên" },
+  { value: "manager", name: "Back Office" },
+  { value: "admin", name: "Admin" }
+];
 
 export default withRouter(StaffEditPage);

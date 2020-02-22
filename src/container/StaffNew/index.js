@@ -12,7 +12,6 @@ class StaffNewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countActive: 0,
       userName: '',
       email: '',
       active: true,
@@ -30,7 +29,6 @@ class StaffNewPage extends React.Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleContractChange = this.handleContractChange.bind(this);
     this.handleRoleChange = this.handleRoleChange.bind(this);
-    this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
@@ -44,7 +42,6 @@ class StaffNewPage extends React.Component {
 
   clear() {
     this.setState({
-      countActive: 0,
       userName: '',
       email: '',
       active: true,
@@ -56,7 +53,7 @@ class StaffNewPage extends React.Component {
       contract: null,
       emailLists: null,
       idUser: null
-    })
+    });
   }
 
   load() {
@@ -142,10 +139,6 @@ class StaffNewPage extends React.Component {
 
   handleContractChange(evt) {
     this.setState({ contract: evt.target.value })
-  }
-
-  handleDepartmentChange() {
-
   }
 
   handleRoleChange(evt) {

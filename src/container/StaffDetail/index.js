@@ -15,16 +15,31 @@ class StaffDetailPage extends React.Component {
 
   componentDidMount() {
     this.setState({
-      user: this.props.history.location.state.user
+      user: this.props.history.location.state.user || {}
     })
+  }
+
+
+  goBack() {
+    this.props.history.push({
+      pathname: '/staffs'
+    });
+  }
+
+  goToEdit() {
+    this.props.history.push({
+      pathname: '/staffs/edit/' + this.state.user.id,
+      state: {user: this.state.user}
+    });
   }
 
   render() {
     return (
         <div className="StaffDetail">
           <div className="title-vs-btn">
+            <div className="my-button active-btn ti ti-pencil" onClick={()=>{this.goToEdit();}}></div>
             <div className="my-button active-btn ti ti-check" style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
-            <div className="my-button ti ti-close"  style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+            <div className="my-button ti ti-close" onClick={()=>{this.goBack();}}  style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
             <div className="title">Nhân viên / {this.state.user.name || "Loading..."}</div>
           </div>
         <BorderedContainer>

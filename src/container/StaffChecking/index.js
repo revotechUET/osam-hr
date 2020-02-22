@@ -59,7 +59,7 @@ class StaffChecking extends React.Component {
             <DataTable
             noHeader
             fixedHeader
-            fixedHeaderScrollHeight="50vh"
+            fixedHeaderScrollHeight="calc(100vh - 333px)"
             pagination
             noDataComponent='Loading'
             progressPending={this.state.loading}

@@ -58,7 +58,11 @@ function loadUserById(id, {full, loadDepartments, loadContracts}) {
 }
 
 function deleteUserById(id) {
-  
+  return db.from<User>('user').delete(id);
+}
+
+function updateUserById(id, info) {
+  return db.from<User>('user').update(id, info);
 }
 
 function appendUser(data) {

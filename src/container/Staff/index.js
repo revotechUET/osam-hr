@@ -18,7 +18,7 @@ const columns = [
   },
   {
     name: 'Bộ phận',
-    selector: user => user.departments.map(d => d.name),
+    selector: user => user.departments.map(d => d.name).join(", "),
     sortable: true
   },
   {
@@ -57,7 +57,7 @@ class StaffPage extends React.Component {
 
   async loadUsers() {
     let users = await apiService.listUsers({ full: true });
-    this.setState({ data: users, loading: true });
+    this.setState({ data: users, loading: false });
   }
 
   goToUserDetail(user) {
@@ -70,7 +70,7 @@ class StaffPage extends React.Component {
 
   render() {
     const { data, loading } = this.state;
-    return (<div style={{marginTop: "40px", borderRadius: "20px", padding: "10px 20px", background: "#fff"}}>
+    return (<div style={{marginTop: "40px", borderRadius: "20px", padding: "10px 20px", borderRadius: "20px", background: "#fff"}}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => { this.props.history.push("/staffs/new") }}></div>
         <div className="title">Nhân viên</div>
@@ -78,7 +78,7 @@ class StaffPage extends React.Component {
       <DataTable
         noHeader
         fixedHeader
-        fixedHeaderScrollHeight="50vh"
+        fixedHeaderScrollHeight="calc(100vh - 333px)"
         persistTableHead
         pagination
         noDataComponent='Không có nhân viên'
