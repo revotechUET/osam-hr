@@ -9,7 +9,7 @@ function gscriptrun(fnName, ...args) {
   })
 }
 
-function makeCancelable(promise, isThrow) {
+function makeCancelable(promise) {
   let isCanceled = false;
   const wrappedPromise = new Promise((resolve, reject) => {
     promise
@@ -101,7 +101,6 @@ class ApiService {
   deleteDepartment(id){
     return gscriptrun('deleteDepartment', id);
   }
-  
   //#endregion
 
   //#region leave
@@ -132,10 +131,15 @@ class ApiService {
   verifyCheckingDate(date) {
     return gscriptrun('verifyCheckingDate', date);
   }
-  checkingDetail(payload){
-    return gscriptrun('checkingDetail',payload);
+  checkingDetail(payload) {
+    return gscriptrun('checkingDetail', payload);
   }
   //#endregion
+
+  // payroll
+  getPayroll(...args) {
+    return gscriptrun('getPayroll', ...args);
+  }
 
   //#region setting
   getSetting() {

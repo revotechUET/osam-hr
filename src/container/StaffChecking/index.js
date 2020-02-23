@@ -8,9 +8,8 @@ import './style.less';
 
 const columns = [
     {
-        name: 'Mã',
-        selector: 'id',
-        style: { textTransform: 'uppercase' },
+        name: 'Ngày',
+        selector: row => dateFormat(row.date),
       },
       {
         name: 'Nhân viên',

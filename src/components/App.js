@@ -1,7 +1,7 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Container } from '@material-ui/core';
 import { amber, deepOrange, green } from '@material-ui/core/colors';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, styled, ThemeProvider } from '@material-ui/core/styles';
 import { Close } from '@material-ui/icons';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { SnackbarProvider } from 'notistack';
@@ -22,7 +22,24 @@ const theme = createMuiTheme({
     success: green,
     danger: deepOrange,
   },
+  overrides: {
+    MuiOutlinedInput: {
+      input: {
+        padding: '10.5px 14px',
+      }
+    }
+  }
 });
+
+const MainContainer = styled(Container)({
+  width: "100%",
+  padding: "120px 40px 0 40px",
+  background: "transparent",
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  overflow: 'auto',
+})
 
 const notistackRef = React.createRef();
 const onClickDismiss = key => () => {
@@ -40,6 +57,7 @@ class App extends React.Component {
           <BrowserRouter>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <SnackbarProvider
+                autoHideDuration={5000}
                 ref={notistackRef}
                 dense preventDuplicate
                 action={(key) => (
@@ -55,7 +73,7 @@ class App extends React.Component {
                 <div style={{ minWidth: "300px", maxWidth: "300px" }}>
                   <SideBar />
                 </div>
-                <div style={{ width: "100%", padding: "40px", background: "transparent", position: "relative", display: "flex", flexDirection: "column" }}>
+                <MainContainer>
                   <TopBar />
                   <Suspense fallback={<div>Loading...</div>}>
                     <Switch>
@@ -63,7 +81,7 @@ class App extends React.Component {
                       <Redirect to="/staffs" />
                     </Switch>
                   </Suspense>
-                </div>
+                </MainContainer>
               </SnackbarProvider>
             </MuiPickersUtilsProvider>
           </BrowserRouter>

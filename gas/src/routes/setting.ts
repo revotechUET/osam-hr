@@ -2,7 +2,7 @@ import { db } from "../db";
 
 const defaultSetting = {
   id: 0,
-  welcomeMessage: '',
+  welcomeMessage: 'Chúc bạn ngày mới vui vẻ',
   monthEnd: 1,
   yearEnd: 0,
   morningStart: '1970-01-01T01:00:00.000Z',
@@ -14,10 +14,11 @@ const defaultSetting = {
   // 0: off | 1: morning only, 2: afternoon only, 3: all-day
   // start from sunday
   workDays: [0, 3, 3, 3, 3, 3, 1],
+  leavesPerYear: 12,
 }
 
 global.getSetting = getSetting;
-function getSetting() {
+export function getSetting() {
   const setting = db.from('setting').getDataJSON()[0];
   if (!setting) {
     db.from('setting').insert(defaultSetting);
@@ -29,5 +30,5 @@ function getSetting() {
 
 global.updateSetting = updateSetting;
 function updateSetting(setting) {
-  db.from('setting').update('0', setting);
+  return db.from('setting').update(0, setting);
 }

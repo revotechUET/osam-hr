@@ -25,7 +25,7 @@ function leaveList({ id, startTime, endTime, status }) {
 
 global.leaveDetail = leaveDetail;
 function leaveDetail({ id }) {
-  return db.join<Leave, User>('leave', 'user', 'idRequester', 'requester').sWhere('id', id).toJSON()[0];
+  return db.join<Leave, User>('leave', 'user', 'idRequester', 'requester').sWhere('id', id).toJSON(1)[0];
 }
 
 global.leaveApprove = leaveApprove;
@@ -37,6 +37,13 @@ function leaveApprove({ id, status }) {
 
 global.leaveNew = leaveNew;
 function leaveNew({ idRequester, startTime, endTime, reason, description }) {
+  const leavesQuery = db.from<Leave>('leave').query;
+  leavesQuery.raw(
+    `SELECT * WHERE ${leavesQuery.getColId('idRequester')} ='${idRequester}' AND
+     ((B >='${startTime}' AND B <='${endTime}') OR (C >= '${startTime}' AND C <='${endTime}'))`
+  )
+  const leaves = leavesQuery.toJSON();
+  if (leaves.length) throw 'Đã có yêu cầu nghỉ trong thời gian này';
   const leave: Leave = {
     id: uuid('lr-'),
     idRequester,
