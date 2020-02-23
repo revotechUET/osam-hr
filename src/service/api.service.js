@@ -97,6 +97,10 @@ class ApiService {
     return gscriptrun('departmentDetail', id);
 
   }
+
+  deleteDepartment(id){
+    return gscriptrun('deleteDepartment', id);
+  }
   
   //#endregion
 

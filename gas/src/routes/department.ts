@@ -6,6 +6,7 @@ import { uuid } from '../utils';
 global.addNewDepartment = addNewDepartment;
 global.listDepartment = listDepartment;
 global.departmentDetail = departmentDetail;
+global.deleteDepartment = deleteDepartment;
 
 function addNewDepartment(data) {
   return db.from<Department>('department').insert({ id: uuid(), ...data });
@@ -29,4 +30,8 @@ function departmentDetail({id}){
     departmentQuery.sWhere('id', id);
   }
   return departmentQuery.toJSON(); 
+}
+
+function deleteDepartment(id) {
+  return db.from<Department>('department').delete(id);
 }
