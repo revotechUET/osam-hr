@@ -31,7 +31,7 @@ const theme = createMuiTheme({
   }
 });
 
-const MainContainer = styled(Container)({
+const MainContainer = styled(({ children, ...props }) => <div {...props}>{children}</div>)({
   width: "100%",
   padding: "120px 40px 0 40px",
   background: "transparent",
