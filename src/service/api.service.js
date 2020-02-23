@@ -89,8 +89,8 @@ class ApiService {
     return gscriptrun('addNewDepartment', data);
   }
 
-  listDepartment(idRequester) {
-    return gscriptrun('listDepartment', idRequester);
+  listDepartment(obj) {
+    return gscriptrun('listDepartment', obj || {});
   }
 
   departmentDetail(id){

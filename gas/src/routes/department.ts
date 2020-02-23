@@ -13,14 +13,14 @@ function addNewDepartment(data) {
 
 function listDepartment({idManager, idApprovers}) {
   const departmentQuery = db.join<Department, User>('department', 'user','idManager','manager');
-    if (idManager) {
-      departmentQuery.sWhere('idManager', idManager);
-    }
-    const approversQuery = db.join<Department, User>('department', 'user','idApprovers','approvers');
-    if(idApprovers){
-      approversQuery.sWhere('idApprovers', idApprovers);
-    }  
-    return departmentQuery.toJSON();
+  if (idManager) {
+    departmentQuery.sWhere('idManager', idManager);
+  }
+  const approversQuery = db.join<Department, User>('department', 'user','idApprovers','approvers');
+  if(idApprovers){
+    approversQuery.sWhere('idApprovers', idApprovers);
+  }  
+  return departmentQuery.toJSON();
 }
 
 function departmentDetail({id}){
