@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Checkbox, MenuItem, Select } from '@material-ui/core';
 import apiService from '../../service/api.service';
 import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
