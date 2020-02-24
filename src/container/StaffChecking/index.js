@@ -50,7 +50,7 @@ class StaffChecking extends React.Component {
     }
     render() {
         let {staffChecking} = this.state;
-        return (<div style={{marginTop: "40px", borderRadius: "20px", padding: "10px 20px", background: "#fff"}}>
+        return (<div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
             <div className="title-vs-btn">
               <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/checking/new")}></div>
               <div className="title">Chấm công</div>

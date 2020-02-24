@@ -55,7 +55,7 @@ a {
 }
 .title-vs-btn {
   position: fixed;
-  top: 66px;
+  top: 65px;
   left: 370px;
   display: flex;
   align-items: center;
@@ -214,7 +214,7 @@ button {
   background: #fff;
   margin-right: 40px;
   margin-bottom: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   // box-shadow: 0px 12px 20px #0000000f;
   animation: showing-zoom 0.3s ease;
   &>span {
@@ -264,13 +264,27 @@ button {
 .MuiPaper-rounded {
   border-radius: 10px !important;
 }
+.MuiInput-underline:before {
+  border-bottom: none !important;
+}
+
+.MuiCollapse-wrapper {
+  margin-bottom: 40px !important;
+}
+.MuiSnackbarContent-root {
+  padding: 20px !important;
+  border-radius: 10px !important;
+  background-color: #FF9800 !important;
+  box-shadow: 0px 12px 20px #0000000f !important;
+
+}
 // -----------
 
 .item-detail {
   min-width: 350px;
   display: flex;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 30px;
   overflow: hidden;
   position: relative;

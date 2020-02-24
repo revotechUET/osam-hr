@@ -66,53 +66,46 @@ function PayrollPage({ history }) {
   return (
     <div className="Payroll">
       <div className="title-vs-btn">
-        <div className="button-text my-button active-btn">Tải về</div>
-        <div className="title">Tính công</div>
-      </div>
-      <div className="count-setting">
-        <div style={{ display: "flex", alignContent: "center", justifyContent: "center" }}>
-          <div className="field-member">
-            <div>
-              Chọn thời gian tính công
-            </div>
-            <DatePicker
-              value={state.startDate}
-              onChange={(date) => setState({ startDate: date })}
-              format="dd/MM/yyyy"
-              variant="inline"
-            />
-            <span>đến</span>
-            <DatePicker
-              value={state.endDate}
-              onChange={(date) => setState({ endDate: date })}
-              format="dd/MM/yyyy"
-              variant="inline"
-              maxDate={new Date()}
-            />
-          </div>
-          <div className="field-member">
-            <div>
-              Chọn bộ phận
-            </div>
-            <div>
-              <Autocomplete
-                style={{ flex: 1 }}
-                filterSelectedOptions
-                loading={state.loadingDepartments}
-                options={state.departments}
-                keyProp='id'
-                labelProp='name'
-                onChange={(event, value) => {
-                  setState({ idDepartment: value && value.id || null });
-                }}
-              />
-            </div>
-          </div>
+        {/* <div className="button-text my-button active-btn">Tải về</div> */}
+        <div className="title">Bộ phận</div>
+        <div style={{marginLeft: "20px"}}>
+          <Autocomplete
+            style={{ flex: 1 }}
+            filterSelectedOptions
+            loading={state.loadingDepartments}
+            options={state.departments}
+            keyProp='id'
+            labelProp='name'
+            onChange={(event, value) => {
+              setState({ idDepartment: value && value.id || null });
+            }}
+          />
         </div>
-        <div style={{ marginTop: "50px", textAlign: "center" }}>
-          <button className="my-button-ok" onClick={() => proceed()} disabled={!state.startDate || !state.endDate}>Tính công</button>
+        <div className="border-spacing"></div>
+        <div className="title">Thời gian</div>
+        <div style={{margin: "0 20px", width: "80px"}}>
+          <DatePicker
+                value={state.startDate}
+                onChange={(date) => setState({ startDate: date })}
+                format="dd/MM/yyyy"
+                variant="inline"
+          />
         </div>
+        <span className=" ti ti-arrow-right"></span>
+        <div style={{marginLeft: "20px", width: "80px"}}>
+          <DatePicker
+            value={state.endDate}
+            onChange={(date) => setState({ endDate: date })}
+            format="dd/MM/yyyy"
+            variant="inline"
+            maxDate={new Date()}
+          />
+        </div>
+        <div className="border-spacing"></div>
+        <div className="button-text my-button active-btn" onClick={() => proceed()} disabled={!state.startDate || !state.endDate}>Tính công</div>
       </div>
+      <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: false ? "#00000000" : "#fff"}}>
+      {/* <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: this.state.loading ? "#00000000" : "#fff"}}> */}
       {
         state.proceeded &&
         <DataTable
@@ -128,6 +121,7 @@ function PayrollPage({ history }) {
           pagination
         />
       }
+      </div>
     </div>
   )
 }

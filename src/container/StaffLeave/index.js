@@ -55,7 +55,7 @@ function StaffLeavePage({ history }) {
   });
   const { list, loading } = state;
   return (
-    <div style={{marginTop: "40px", borderRadius: "20px", padding: "10px 20px", background: "#fff"}}>
+    <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => history.push("/leaves/new")}></div>
         <div className="title">Yêu cầu nghỉ</div>
