@@ -1,6 +1,6 @@
-import { dateString, isValid, uuid } from "../utils";
+import { Contract } from "../@types/contract";
 import { db } from "../db";
-import { Contract, ContractType } from "../@types/contract";
+import { uuid } from "../utils";
 
 
 function getContracts() {

@@ -1,9 +1,9 @@
-import { GoogleUser, User, UserRole } from "../@types/user";
-import { db } from "../db";
-import { isValid, uuid } from "../utils";
-import { User_Department } from "../@types/user_department";
-import { Department } from "../@types/department";
 import { Contract } from "../@types/contract";
+import { Department } from "../@types/department";
+import { User } from "../@types/user";
+import { User_Department } from "../@types/user_department";
+import { db } from "../db";
+import {uuid} from '../utils';
 
 global.listUsersDomain = listUsersDomain;
 global.listUsers = listUsers;

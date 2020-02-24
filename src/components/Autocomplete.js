@@ -32,14 +32,14 @@ export default function HrAutocomplete(props) {
 
   return (
     <Autocomplete
-    debug
+      disableClearable
       onOpen={() => {
         getOptions && setLoading(true);
       }}
       onClose={() => {
         getOptions && setLoading(false);
       }}
-      getOptionSelected={(option, value) => option[keyProp] === value[keyProp]}
+      getOptionSelected={(option, value) => value && option[keyProp] === value[keyProp]}
       getOptionLabel={option => option[labelProp] || option}
       options={options || _options}
       loading={loading}

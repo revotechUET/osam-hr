@@ -1,6 +1,6 @@
 import { UserRole } from "./@types/contract";
 import { db } from "./db";
-import { googleUser, isValid, userInfo } from "./utils";
+import { googleUser, userInfo } from "./utils";
 
 function noPermission() {
   return ContentService.createTextOutput('Access Denied');

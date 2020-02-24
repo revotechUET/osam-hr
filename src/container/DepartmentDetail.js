@@ -35,7 +35,7 @@ class DepartmentDetailPage extends React.Component {
             staff    : []
         }
         this.edit = this.edit.bind(this);
-        this.response = this.response.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     async componentDidMount() {
@@ -73,8 +73,9 @@ class DepartmentDetailPage extends React.Component {
         this.props.history.push('/departments/new');
     }
 
-    response() {
-        this.props.history.push('/notifies/new');
+    async delete() {
+        await apiService.deleteDepartment(this.state.departmentDetail.id);
+        this.props.history.push('/departments');
     }
     render() {
         if (this.state.loading) {
@@ -84,7 +85,7 @@ class DepartmentDetailPage extends React.Component {
             <div className="StaffDetail">
                 <div className="title-vs-btn">
                     <div className="my-button active-btn ti ti-pencil" onClick={this.edit}></div>
-                    <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={this.response}></div>
+                    <div className="my-button ti ti-close" style={{background: "#ddd", boxShadow: "none", color: "#888"}} onClick={this.delete}></div>
                     <div className="title">Bộ phận / <span>{this.state.departmentDetail.name}</span></div>
                 </div>
                 <BorderedContainer>
