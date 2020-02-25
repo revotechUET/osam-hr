@@ -139,21 +139,58 @@ button {
 }
 .rbc-calendar {
   height: 100%;
+  overflow: hidden;
+}
+.rbc-month-view {
+  height: 100%;
   overflow: auto;
+}
+.rbc-time-content {
+  display: flex;
+  &>div {
+    flex: 1;
+  }
+  .rbc-time-gutter {
+    flex-basis: 100px;
+}
 }
 .rbc-date-cell {
   padding: 20px 5px;
   margin: 10px;
   &>* {
-    color: rgb(36, 36, 36) !important;
+    color: rgb(36, 36, 36);
   }
+}
+.rbc-current {
+  background: linear-gradient(120deg, #ffa907, #FF9800);
+  border-radius: 5px;
+  &>a {
+    color: #fff;
+  }
+}
+.rbc-header {
+  margin: 0 10px;
+  padding: 0 5px;
+}
+.rbc-time-header-cell {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  padding: 10px 0 25px 0;
+  border-bottom: 2px solid #f7f7f7;
+  font-weight: bold;
+  &>div>a {
+    color: #111;
+  }
+}
+.rbc-time-content {
+  display: flex;
 }
 .rbc-month-header {
   position: sticky;
   top: 0;
   background: #ffffff;
-  padding: 10px 15px 25px 15px;
-  margin-bottom: 30px;
+  padding: 10px 0 25px 0;
   border-bottom: 2px solid #f7f7f7;
   font-weight: bold;
 }
@@ -197,7 +234,7 @@ button {
       font-weight: bold;
       color: #4a4a4a94;
       transition: all ease-in 0.2s;
-      .rbc-active {
+      &.rbc-active {
         background: #FF9800;
         cursor: pointer;
         border-radius: 3px;
