@@ -58,7 +58,7 @@ class DepartmentNewPage extends React.Component {
 
   async componentDidMount() {
     let users = await apiService.listUsers();
-    console.log(users);
+    console.log("From users DepartmentNew");
     this.setState({ manager: users, approvers: users });
   }
   render() {
@@ -67,7 +67,7 @@ class DepartmentNewPage extends React.Component {
         <div className="title-vs-btn">
           <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
           <div className="my-button ti ti-close" onClick={this.handleCancel} style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
-          <div className="title">Bộ Phận / Edit</div>
+          <div className="title">Bộ Phận / New</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">

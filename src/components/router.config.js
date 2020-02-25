@@ -65,7 +65,7 @@ export default [
     component: DepartmentDetailPage
   },
   {
-    path: "/leaves/:id/edit",
+    path: "/departments/:id/edit",
     exact: true,
     component: DepartmentEdit
   },

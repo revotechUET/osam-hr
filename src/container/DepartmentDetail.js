@@ -70,7 +70,8 @@ class DepartmentDetailPage extends React.Component {
     }
 
     edit() {
-        this.props.history.push('/departments/new');
+        let departmentId = this.props.match.params.id;
+        this.props.history.push(`/departments/${departmentId}/edit`);
     }
 
     async delete() {

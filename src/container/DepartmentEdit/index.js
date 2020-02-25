@@ -28,15 +28,18 @@ class DepartmentEdit extends React.Component {
   }
 
   async handleSave() {
-    let data = {
-      name: this.state.departmentName,
-      idManager: this.state.idRequester,
-      idApprovers: this.state.idApprovers,
-      active: this.state.active
-    };
-    let addNewDepartment = await apiService.addNewDepartment(data);
-    if (addNewDepartment) {
+    let id  = this.props.match.params.id; 
+    let name = this.state.departmentName;
+    let idManager = this.state.idRequester;
+    let idApprovers = this.state.idApprovers;
+    let active = this.state.active;
+    console.log(id, name, idManager, idApprovers, active);
+    let edit = await apiService.editDepartment({id, name, idManager, idApprovers, active});
+    if (edit) {
       this.props.history.push('/departments');
+    }
+    else{
+      console.log("Toang rồi");
     }
   }
 
@@ -58,7 +61,6 @@ class DepartmentEdit extends React.Component {
 
   async componentDidMount() {
     let users = await apiService.listUsers();
-    console.log(users);
     this.setState({ manager: users, approvers: users });
   }
   render() {
