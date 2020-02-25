@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Checkbox, MenuItem, Select } from '@material-ui/core';
 import apiService from '../../service/api.service';
 import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
@@ -40,7 +39,7 @@ class StaffEditPage extends React.Component {
     //load department
     // this.clear();
     let user = this.props.history.location.state.user || {};
-    console.log(user);
+    //console.log(user);
     this.setState({
       userName: user.name,
       email: user.email,
@@ -49,20 +48,24 @@ class StaffEditPage extends React.Component {
       departmentList: user.departments.map((v)=>(v.id)),
       contract: user.idContract,
       idUser: user.id,
-      loading: true
+      loading: true,
+      departments: [],
+      idUser: user.id
     })
     this.load();
   }
 
   async load() {
     let promises = [];
+    console.log('run');
     promises.push(this.loadEmailList());
     promises.push(this.loadDepartments());
     promises.push(this.loadContracts());
     await Promise.all(promises);
+    console.log('done');
     this.setState({
       loading: false
-    })
+    });
   }
 
   loadEmailList() {
@@ -83,13 +86,14 @@ class StaffEditPage extends React.Component {
     return new Promise(async (res, rej)=>{
       let rs = [];
       try {
-        rs = await apiService.listDepartment();
+        rs = await apiService.listDepartment({});
+        //res(true);
       } catch(e) {
         rej(e);
       }
       this.setState({
         departments: rs
-      }, (rs)=>res(true));
+      }, (rs) => res(true));
     });
   }
 
@@ -115,14 +119,12 @@ class StaffEditPage extends React.Component {
     if (this.handleValidation()) {
       let data = {
         "name": this.state.userName,
-        "email": this.state.email,
-        "id": this.state.idUser,
         "active": this.state.active,
         "idContract": this.state.contract,
         "role": this.state.role,
         "departments": this.state.departmentList
       }
-      await apiService.appendUser(data);
+      await apiService.updateUserById(this.state.idUser, data);
       this.props.history.push('/staffs'); 
     }
     else {
@@ -209,11 +211,11 @@ class StaffEditPage extends React.Component {
                 }}
                 value = {this.state.contract}
                 style={{ flex: 1 }}
-                outlined
+                outlined="true"
               >
                 {
-                  this.state.contracts.map((e)=>
-                    <MenuItem value={e.id}>{e.name}</MenuItem>
+                  this.state.contracts.map((e, idx)=>
+                    <MenuItem key={idx} value={e.id}>{e.name}</MenuItem>
                   )
                 }
               </Select>
@@ -250,11 +252,11 @@ class StaffEditPage extends React.Component {
               }}
               value = {this.state.role}
               style={{ flex: 1 }}
-              outlined
+              outlined="true"
             >
               {
-                optionsForRole.map((e)=>
-                  <MenuItem value={e.value}>{e.name}</MenuItem>
+                optionsForRole.map((e,idx)=>
+                  <MenuItem key={idx} value={e.value}>{e.name}</MenuItem>
                 )
               }
             </Select>

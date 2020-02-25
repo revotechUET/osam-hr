@@ -3,11 +3,13 @@ import { Department } from "../@types/department";
 import { User } from "../@types/user";
 import { User_Department } from "../@types/user_department";
 import { db } from "../db";
+import {uuid} from '../utils';
 
 global.listUsersDomain = listUsersDomain;
 global.listUsers = listUsers;
 global.appendUser = appendUser;
-
+global.deleteUserById = deleteUserById;
+global.updateUserById = updateUserById;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
@@ -57,16 +59,27 @@ function loadUserById(id, {full, loadDepartments, loadContracts}) {
 }
 
 function deleteUserById(id) {
+  let user_department = db.from<User_Department>('user_department').query.where('idUser', id).toJSON();
+  for (let i = 0; i < user_department.length; i++) {
+    db.from<User_Department>('user_department').delete(user_department[i].id);
+  }
   return db.from<User>('user').delete(id);
 }
 
 function updateUserById(id, info) {
+  let user_department = db.from<User_Department>('user_department').query.where('idUser', id).toJSON();
+  for (let i = 0; i < user_department.length; i++) {
+    db.from<User_Department>('user_department').delete(user_department[i].id);
+  }
+  for (let i = 0; i < info.departments.length; i++) {
+    db.from<User_Department>('user_department').insert({id:  uuid(),idUser: id, idDepartment: info.departments[i] });
+  }
   return db.from<User>('user').update(id, info);
 }
 
 function appendUser(data) {
   for (let i = 0; i < data.departments.length; i++) {
-    db.from<User_Department>('user_department').insert({ idUser: data.id, idDepartment: data.departments[i] });
+    db.from<User_Department>('user_department').insert({id:  uuid(),idUser: data.id, idDepartment: data.departments[i] });
   }
   return db.from<User>('user').insert(data);
 }

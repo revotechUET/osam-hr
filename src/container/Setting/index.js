@@ -201,7 +201,7 @@ function SettingPage({ history }) {
             </span>
           </div>
           <div className="item-inline" style={{ marginTop: "10px" }}>
-            <div className="reset-salary-svg"></div>
+            <div className="free-time-year-svg"></div>
             <div style={{ flexBasis: "170px" }}>Số ngày phép 1 năm</div>
             <span>
               <InputBase fullWidth value={state.leavesPerYear} onChange={(e) => setState({ leavesPerYear: e.target.value })} />
