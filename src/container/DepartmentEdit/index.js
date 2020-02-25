@@ -6,7 +6,7 @@ import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
 
-class DepartmentNewPage extends React.Component {
+class DepartmentEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,4 +121,4 @@ class DepartmentNewPage extends React.Component {
   }
 }
 
-export default withRouter(DepartmentNewPage);
+export default withRouter(DepartmentEdit);
