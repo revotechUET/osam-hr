@@ -1,2 +1,3 @@
 # osam-hr
-## npm run start:dev
+## webpack -w
+## cd gas > npm start

@@ -104,7 +104,110 @@ a {
 button {
   border: none;
 }
+.DayOffSetting {
+  margin-top: 40px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  height: calc(100vh - 260px);
+  overflow: hidden;
+  &>* {
+      font-size: 12px !important;
+  }
+}
+.rbc-event-content {
+  background: #ff980021;
+  color: #FF9800;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  margin: 0 10px 10px 10px;
+}
+.rbc-header {
+  // text-align: center;
+}
+.rbc-show-more {
+  margin-left: 10px;
+  color: #bdbdbd;
+  margin-bottom: 10px;
+}
+.rbc-month-row {
+  border-bottom: 2px solid #f7f7f7;
+}
+.rbc-calendar {
+  height: 100%;
+  overflow: auto;
+}
+.rbc-date-cell {
+  padding: 20px 5px;
+  margin: 10px;
+  &>* {
+    color: rgb(36, 36, 36) !important;
+  }
+}
+.rbc-month-header {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  padding: 10px 15px 25px 15px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f7f7f7;
+  font-weight: bold;
+}
+.rbc-toolbar {
+  position: fixed;
+  top: 62px;
+  z-index: 2;
+  left: 365px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100vw - 570px);
+}
+.rbc-toolbar-label {
+  font-weight: bold;
+}
+.rbc-row{
+  display: flex;
+  &>div {
+    flex: 1;
+  }
+}
+.rbc-btn-group {
+  background: #f3f3f3;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  justify-content: space-between;
+  border-radius: 5px;
+  &>button {
+      border: none;
+      background: transparent;
+      height: 29px;
+      padding: 0 15px;
+      font-weight: bold;
+      color: #4a4a4a94;
+      transition: all ease-in 0.2s;
+      .rbc-active {
+        background: #FF9800;
+        cursor: pointer;
+        border-radius: 3px;
+        color: #ffffff;
+      }
 
+      &:focus {
+          outline: none;
+      }
+      &:hover {
+          background: #e8e8e8;
+          cursor: pointer;
+          border-radius: 3px;
+          color: #2f2f2f;
+          transition: all ease-in 0.2s;
+      }
+  }
+}
 // .my-button {
 //   position: absolute;
 //   top: 66px;
