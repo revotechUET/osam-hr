@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const webpackConfigure = {
   entry: "./src/index.js",
   output: {
-    path: path.join(__dirname, "gas", "dist"),
+    path: path.join(__dirname, "dist"),
     filename: "app.bundle.js"
   },
   module: {
@@ -42,7 +42,7 @@ const webpackConfigure = {
     new HtmlWebpackInlineSourcePlugin(),
     new RemovePlugin({
       after: {
-        include: ['./gas/dist/app.bundle.js'],
+        include: ['./dist/app.bundle.js'],
         log: false,
         trash: false,
       }

@@ -63,4 +63,8 @@ typings/
 dist
 package-lock.json
 
-.clasp.json
+.clasp*.json
+!.clasp-default.json
+
+config/**/*
+!config/default.js

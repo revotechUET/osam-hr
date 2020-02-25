@@ -1,4 +1,4 @@
-import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, endOfMonth, isSameDay, startOfMonth } from 'date-fns';
+import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, isSameDay } from 'date-fns';
 import { Leave } from "../@types/leave";
 import { db } from "../db";
 import { getSetting } from './setting';
@@ -6,8 +6,6 @@ import { getSetting } from './setting';
 global.getPayroll = getPayroll;
 function getPayroll(startDate, endDate, idDepartment = null) {
   if (!startDate || !endDate) throw 'Không có khoảng thời gian tính công';
-  // if (!startDate) startDate = startOfMonth(new Date()).toISOString();
-  // if (!endDate) endDate = new Date().toISOString();
   endDate = endOfDay(new Date(endDate)).toISOString();
   let checkingQuery;
   if (idDepartment) {
@@ -76,7 +74,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     ret.setFullYear(y, m, d);
     return ret;
   });
-  let late = 0, early = 0, total = 0, totalLeave = 0;
+  let late = 0, early = 0, total = 0, totalLeave = 0, ratio = 1;
   if (leave) {
     leave = {
       startTime: new Date(leave.startTime),
@@ -97,6 +95,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
       return defaultReturn;
     case 1: // morning only
       total = +morningEnd - +morningStart;
+      ratio = 0.5;
       if (!checking) break;
       late = Math.max(0, +checkin - +morningStart);
       early = Math.max(0, +morningEnd - +checkout);
@@ -110,6 +109,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
       break;
     case 2: // afternoon only
       total = +afternoonEnd - +afternoonStart;
+      ratio = 0.5;
       if (!checking) break;
       late = Math.max(0, +checkin - +afternoonStart);
       early = Math.max(0, +afternoonEnd - +checkout);
@@ -123,6 +123,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
       break;
     case 3: // all-day
       total = (+afternoonEnd - +afternoonStart) + (+morningEnd - +morningStart);
+      ratio = 1;
       if (!checking) break;
       if (checkin < afternoonStart) {
         late = Math.max(0, Math.min(+checkin, +morningEnd) - +morningStart);
@@ -153,7 +154,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     permittedLeave = total;
   }
   unpermittedLeave = Math.max(0, late + early - permittedLeave);
-  point = (total - unpermittedLeave - permittedLeave) / total;
+  point = (total - unpermittedLeave - permittedLeave) / total * ratio;
   permittedLeave = permittedLeave / total;
   unpermittedLeave = unpermittedLeave / total;
   return { point: +point.toFixed(1), lunch, permittedLeave: +permittedLeave.toFixed(1), unpermittedLeave: +unpermittedLeave.toFixed(1) };

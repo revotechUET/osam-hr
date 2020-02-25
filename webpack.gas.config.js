@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './gas/src/index.ts',
   module: {
     rules: [
       {

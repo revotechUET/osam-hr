@@ -63,7 +63,7 @@ class DepartmentDetailPage extends React.Component {
                 this.state.approvers.push(value.name)
             }
         });
-        
+
         console.log(this.state.staff);
 
         this.setState({ loading: false });
@@ -90,7 +90,7 @@ class DepartmentDetailPage extends React.Component {
                     <div className="title">Bộ phận / <span>{this.state.departmentDetail.name}</span></div>
                 </div>
                 <BorderedContainer>
-                    <div className="item-detail">
+                    <div className="item-detail" style={{ flex: 1 }}>
                         <div className="infor-item-detail">
                             <div style={{ display: "flex", flexDirection: "column" }}>
                                 <div style={{ display: "flex", marginBottom: "10px" }}>
@@ -105,7 +105,7 @@ class DepartmentDetailPage extends React.Component {
                                     <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Hoạt động</div>
                                     <div style={{ flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={this.state.departmentDetail.active} /></div>
                                 </div>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
+                                <div style={{ marginBottom: "10px" }}>
                                     <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Danh sách nhân viên</div>
                                     <DataTable
                                         noHeader
