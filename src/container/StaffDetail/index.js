@@ -4,6 +4,7 @@ import apiService from '../../service/api.service';
 import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
+import { Checkbox, MenuItem, Select } from '@material-ui/core';
 
 class StaffDetailPage extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class StaffDetailPage extends React.Component {
   componentDidMount() {
     this.setState({
       user: this.props.history.location.state.user || {}
-    })
+    });
   }
 
 
@@ -72,7 +73,7 @@ class StaffDetailPage extends React.Component {
               </div>
               <div style={{display: "flex", marginBottom: "10px"}}>
                   <div style={{flexBasis: "120px", fontWeight: "bold"}}>Hoạt động</div>
-                  <div style={{flex: 1}}><input className="input checkbox" type="checkbox" defaultChecked={this.state.user.active}  /></div>
+                  <div style={{flex: 1}}><Checkbox defaultChecked value={this.state.user.active ? "checked":""} disabled/></div>
               </div>
             </div>
           </div>

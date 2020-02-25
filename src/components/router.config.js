@@ -2,7 +2,6 @@ import LeaveDetailPage from '../container/LeaveDetaiPage';
 import LeaveEditPage from '../container/LeaveEditPage';
 import TestPage from '../container/TestPage';
 import ContractManagementPage from './../container/ContractManagement';
-import ContractNewPage from './../container/ContractNew';
 import DayOffSettingPage from './../container/DayOffSetting';
 import DepartmentPage from './../container/Department';
 import DepartmentNewPage from './../container/DepartmentNew';
@@ -109,11 +108,6 @@ export default [
     path: "/contracts",
     exact: true,
     component: ContractManagementPage
-  },
-  {
-    path: "/contracts/new",
-    exact: true,
-    component: ContractNewPage
   },
   {
     path: "/notifies",

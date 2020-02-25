@@ -57,12 +57,12 @@ class StaffEditPage extends React.Component {
 
   async load() {
     let promises = [];
-    console.log('run');
+    //console.log('run');
     promises.push(this.loadEmailList());
     promises.push(this.loadDepartments());
     promises.push(this.loadContracts());
     await Promise.all(promises);
-    console.log('done');
+    //console.log('done');
     this.setState({
       loading: false
     });
@@ -118,11 +118,11 @@ class StaffEditPage extends React.Component {
   async handleSave(e) {
     if (this.handleValidation()) {
       let data = {
-        "name": this.state.userName,
-        "active": this.state.active,
-        "idContract": this.state.contract,
-        "role": this.state.role,
-        "departments": this.state.departmentList
+        name: this.state.userName,
+        active: this.state.active,
+        idContract: this.state.contract,
+        role: this.state.role,
+        departments: this.state.departmentList
       }
       await apiService.updateUserById(this.state.idUser, data);
       this.props.history.push('/staffs'); 
@@ -181,7 +181,7 @@ class StaffEditPage extends React.Component {
         <div className="title-vs-btn">
           <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
           <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
-          <div className="title">Nhân viên / Mới</div>
+    <div className="title">Nhân viên / {this.state.email}}</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">
@@ -194,18 +194,6 @@ class StaffEditPage extends React.Component {
           <div className="item-wrap">
             <span>Hợp đồng</span>
             <div>
-              {/* <Autocomplete
-                filterSelectedOptions
-                loading={this.state.contracts === null}
-                style={{ flex: 1 }}
-                options={this.state.contracts}
-                value={(this.state.contracts || []).find(o => o.id === this.state.contract.id)}
-                keyProp='id'
-                labelProp='name'
-                onChange={(event, value) => {
-                  this.setState({ contract: value.id });
-                }}
-              /> */}
               <Select onChange={(e) => {
                   this.setState({ contract: e.target.value });
                 }}
@@ -241,7 +229,7 @@ class StaffEditPage extends React.Component {
           <div className="item-wrap" style={{width: "80px"}}>
             <span>Hoạt động</span>
             <div>
-              <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
+              <Checkbox checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
             </div>
           </div>
           <div className="item-wrap">
