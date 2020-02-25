@@ -151,7 +151,7 @@ function SettingPage({ history }) {
           <div className="freetime-svg"></div>
           <div className="title-setting">Ngày nghỉ trong năm</div>
           <div className="dis-setting">
-            <div className="button-setting" onClick={() => { /* history.push("/setting/day-off"); */ }}>Cài đặt</div>
+            <div className="button-setting" onClick={() => { history.push("/setting/day-off"); }}>Cài đặt</div>
           </div>
         </div>
         <div className="item-setting background-white w350px">
@@ -200,13 +200,13 @@ function SettingPage({ history }) {
               />
             </span>
           </div>
-          <div className="item-inline" style={{ marginTop: "10px" }}>
+          {/* <div className="item-inline" style={{ marginTop: "10px" }}>
             <div className="free-time-year-svg"></div>
             <div style={{ flexBasis: "170px" }}>Số ngày phép 1 năm</div>
             <span>
               <InputBase fullWidth value={state.leavesPerYear} onChange={(e) => setState({ leavesPerYear: e.target.value })} />
             </span>
-          </div>
+          </div> */}
         </div>
         <CenteredModal
           active={state.workDayModal}

@@ -47,6 +47,11 @@ class ApiService {
     this.gscriptrun = gscriptrun;
   }
 
+
+  Store() {
+    
+  }
+
   updateUserById(id, info) {
     return gscriptrun('updateUserById', id, info);
   }
