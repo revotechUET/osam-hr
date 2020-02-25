@@ -7,6 +7,7 @@ global.addNewDepartment = addNewDepartment;
 global.listDepartment = listDepartment;
 global.departmentDetail = departmentDetail;
 global.deleteDepartment = deleteDepartment;
+global.departmentEdit = departmentEdit;
 
 function addNewDepartment(data) {
   return db.from<Department>('department').insert({ id: uuid(), ...data });
@@ -34,4 +35,8 @@ function departmentDetail({ id }) {
 
 function deleteDepartment(id) {
   return db.from<Department>('department').delete(id);
+}
+
+function departmentEdit({ id, name, manager, approvers, active}) {
+  return db.from<Department>('department').update(id, { name,manager, approvers,active});
 }
