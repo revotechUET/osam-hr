@@ -21,7 +21,7 @@ class DayOffSettingPage extends React.Component {
             <Calendar
               events={events}
               views={allViews}
-              step={60}
+              // step={60}
               localizer={localizer}
             />
           </div>

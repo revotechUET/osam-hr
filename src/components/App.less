@@ -111,7 +111,7 @@ button {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  height: calc(100vh - 260px);
+  height: calc(100vh - 240px);
   overflow: hidden;
   &>* {
       font-size: 12px !important;
@@ -150,9 +150,6 @@ button {
   &>div {
     flex: 1;
   }
-  .rbc-time-gutter {
-    flex-basis: 100px;
-}
 }
 .rbc-date-cell {
   padding: 20px 5px;
@@ -176,7 +173,7 @@ button {
   position: sticky;
   top: 0;
   background: #ffffff;
-  padding: 10px 0 25px 0;
+  padding: 10px 0 25px 90px;
   border-bottom: 2px solid #f7f7f7;
   font-weight: bold;
   &>div>a {
@@ -252,6 +249,92 @@ button {
           transition: all ease-in 0.2s;
       }
   }
+}
+.rbc-day-slot {
+  position: relative;
+}
+.rbc-time-view {
+  overflow: auto;
+  height: 100%;
+}
+.rbc-time-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+}
+.rbc-event-label {
+  font-size: 10px;
+  color: orange;
+  margin: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+span.rbc-label {
+  margin: 0 10px;
+  padding: 0 5px;
+}
+.rbc-time-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.rbc-timeslot-group {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #f7f7f7;
+  border-right: 2px solid #f7f7f7;
+}
+.rbc-events-container {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.rbc-time-gutter {
+  font-weight: bold;
+  flex-basis: 100px;
+  flex: unset !important;
+}
+.rbc-allday-cell {
+  border-bottom: 2px solid #f7f7f7;
+  margin-top: 10px;
+  padding-left: 90px;
+}
+.rbc-day-slot {
+  .rbc-event {
+    position: absolute;
+    background: #ff980021;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-left: -1px;
+    // color: #fff;
+    .rbc-event-content {
+      background: transparent;
+      // color: #fff;
+      margin: unset;
+    }
+  }
+}
+.rbc-agenda-table {
+  border-bottom: 1px solid #f7f7f7;
+  width: 100%;
+}
+td.rbc-agenda-date-cell {
+  padding: 10px;
+  border-right: 2px solid #e6e6e6;
+  width: 100px;
+}
+td.rbc-agenda-time-cell {
+  width: 150px;
+  padding: 10px;
+  border-right: 2px solid #e2e2e2;
+}
+td.rbc-agenda-event-cell {
+  padding: 10px;
 }
 // .my-button {
 //   position: absolute;

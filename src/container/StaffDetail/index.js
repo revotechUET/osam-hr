@@ -43,9 +43,9 @@ class StaffDetailPage extends React.Component {
     return (
         <div className="StaffDetail">
           <div className="title-vs-btn">
+            <div className="my-button ti ti-arrow-left" onClick={()=>{this.goBack();}}  style={{background: "transparent", boxShadow: "none", color: "#888", fontSize: "20px"}}></div>
             <div className="my-button active-btn ti ti-pencil" onClick={()=>{this.goToEdit();}}></div>
             <div className="my-button active-btn ti ti-check" style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
-            <div className="my-button ti ti-close" onClick={()=>{this.goBack();}}  style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
             <div className="my-button ti ti-trash" onClick={()=>{this.deleteUser();}}></div>
             <div className="title">Nhân viên / {this.state.user.name || "Loading..."}</div>
           </div>
