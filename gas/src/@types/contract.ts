@@ -8,10 +8,10 @@ export enum ContractType {
     fulltime = 'fulltime',
     parttime = 'parttime'
 }
-  
+
 export interface Contract {
     id: string,
     type: ContractType,
     lunch: boolean,
-    sabbatical: boolean
+    leaveRequest: boolean
 }

@@ -1,8 +1,7 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
-import StyledPaginationTable from '../../components/StyledPaginationTable';
-
+import { withRouter } from 'react-router-dom';
 import './style.less';
+
 
 class NotifyPage extends React.Component {
     constructor(props) {
@@ -17,7 +16,7 @@ class NotifyPage extends React.Component {
                 <div className="title">Thông báo</div>
             </div>
             <div>
-               
+
             </div>
         </div>)
     }

@@ -1,6 +1,11 @@
+import StaffCheckingEditPage from '../container/CheckingEdit';
+import DepartmentDetailPage from '../container/DepartmentDetail';
+import DepartmentEdit from '../container/DepartmentEdit';
+import HomePage from '../container/HomePage';
 import LeaveDetailPage from '../container/LeaveDetaiPage';
 import LeaveEditPage from '../container/LeaveEditPage';
 import TestPage from '../container/TestPage';
+import CheckingDetailPage from './../container/ChekingDetail';
 import ContractManagementPage from './../container/ContractManagement';
 import DayOffSettingPage from './../container/DayOffSetting';
 import DepartmentPage from './../container/Department';
@@ -14,21 +19,17 @@ import SettingPage from './../container/Setting';
 import StaffPage from './../container/Staff';
 import StaffCheckingPage from './../container/StaffChecking';
 import StaffCheckingNewPage from './../container/StaffCheckingNew';
+import StaffDetailPage from './../container/StaffDetail';
 import StaffEditPage from './../container/StaffEdit';
 import StaffLeavePage from './../container/StaffLeave';
 import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
-import StaffDetailPage from './../container/StaffDetail';
-import CheckingDetailPage from './../container/ChekingDetail';
-import DepartmentDetailPage from '../container/DepartmentDetail';
-import DepartmentEdit from '../container/DepartmentEdit';
-import StaffCheckingEditPage from '../container/CheckingEdit';  
-import CheckingEdit from '../container/CheckingEdit';
+
 
 export default [
   {
     path: "/",
-    component: StaffPage,
+    component: HomePage,
   },
   {
     path: "/staffs",
@@ -88,7 +89,7 @@ export default [
   {
     path: "/checking/:id",
     exact: true,
-    component:CheckingDetailPage
+    component: CheckingDetailPage
   },
   {
     path: "/leaves",
@@ -105,7 +106,6 @@ export default [
     exact: true,
     component: LeaveDetailPage
   },
-  
   {
     path: "/leaves/:id/edit",
     exact: true,

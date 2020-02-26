@@ -1,37 +1,48 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
-import FullSizeCalendar from './../../components/FullSizeCalendar';
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
+import { Calendar, Views } from 'react-big-calendar'
+import dateFnsLocalizer from 'react-big-calendar/lib/localizers/date-fns';
 
-const localizer = momentLocalizer(moment);
+import { format, parse, startOfWeek, getDay, } from 'date-fns';
+const locales = {
+  'en-US': require('date-fns/locale/en-US'),
+  'vi': require('date-fns/locale/vi'),
+}
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 let allViews = Object.keys(Views).map(k => Views[k]);
 
 //import './style.less';
 
 class DayOffSettingPage extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    render() {
-        return (
-          <div className="DayOffSetting">
-            <Calendar
-              events={events}
-              views={allViews}
-              // step={60}
-              localizer={localizer}
-            />
-          </div>
-        );
-    }
+  render() {
+    return (
+      <div className="DayOffSetting">
+        <Calendar
+          events={events}
+          views={allViews}
+          // step={60}
+          localizer={localizer}
+        />
+      </div>
+    );
+  }
 }
 
 const now = new Date()
 
-let events  = [
+let events = [
   {
     id: 0,
     title: 'All Day Event very long title',

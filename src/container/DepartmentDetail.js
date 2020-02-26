@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import apiService from '../service/api.service';
 import Loading from '../components/Loading';
-import { dateFormat } from '../utils/date';
+
 import BorderedContainer from '../components/BorderedContainer';
 import DataTable from 'react-data-table-component';
 
@@ -50,7 +50,7 @@ class DepartmentDetailPage extends React.Component {
         users.forEach((value, index) => {
             if (value.id.includes(this.state.departmentDetail.idManager)) {
                 this.setState({ manager: value })
-            };
+            }
             value.departments.forEach((val, indx) => {
                 if(val.name === this.state.departmentDetail.name){
                     this.state.staff.push(value);

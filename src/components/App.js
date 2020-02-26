@@ -1,5 +1,5 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { IconButton, Container } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { amber, deepOrange, green } from '@material-ui/core/colors';
 import { createMuiTheme, styled, ThemeProvider } from '@material-ui/core/styles';
 import { Close } from '@material-ui/icons';
@@ -78,7 +78,7 @@ class App extends React.Component {
                   <Suspense fallback={<div>Loading...</div>}>
                     <Switch>
                       {getRouter(routerConfig)}
-                      <Redirect to="/staffs" />
+                      <Redirect to="/" />
                     </Switch>
                   </Suspense>
                 </MainContainer>

@@ -5,7 +5,7 @@ import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
-import { TablePagination } from "@material-ui/core";
+
 
 class DepartmentNewPage extends React.Component {
   constructor(props) {

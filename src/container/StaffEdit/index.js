@@ -50,7 +50,6 @@ class StaffEditPage extends React.Component {
       idUser: user.id,
       loading: true,
       departments: [],
-      idUser: user.id
     })
     this.load();
   }
@@ -68,47 +67,19 @@ class StaffEditPage extends React.Component {
     });
   }
 
-  loadEmailList() {
-    return new Promise(async (res, rej)=>{
-      let rs = [];
-      try {
-        rs = await apiService.listEmails();
-      } catch(e) {
-        rej(e);
-      }
-      this.setState({
-        emailLists: rs
-      }, (rs)=>res(true));
-    });
+  async loadEmailList() {
+    let rs = await apiService.listEmails();
+    this.setState({ emailLists: rs });
   }
 
-  loadDepartments() {
-    return new Promise(async (res, rej)=>{
-      let rs = [];
-      try {
-        rs = await apiService.listDepartment({});
-        //res(true);
-      } catch(e) {
-        rej(e);
-      }
-      this.setState({
-        departments: rs
-      }, (rs) => res(true));
-    });
+  async loadDepartments() {
+    let rs = await apiService.listDepartment({});
+    this.setState({ departments: rs });
   }
 
-  loadContracts() {
-    return new Promise(async (res, rej)=>{
-      let rs = [];
-      try {
-        rs = await apiService.getContracts();
-      } catch(e) {
-        rej(e);
-      }
-      this.setState({
-        contracts: rs
-      }, (rs)=>res(true));
-    });
+  async loadContracts() {
+    let rs = await apiService.getContracts();
+    this.setState({ contracts: rs });
   }
 
   handleNameChange(evt) {
@@ -125,7 +96,7 @@ class StaffEditPage extends React.Component {
         departments: this.state.departmentList
       }
       await apiService.updateUserById(this.state.idUser, data);
-      this.props.history.push('/staffs'); 
+      this.props.history.push('/staffs');
     }
     else {
       console.log(this.state.errors);
@@ -181,7 +152,7 @@ class StaffEditPage extends React.Component {
         <div className="title-vs-btn">
           <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
           <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
-    <div className="title">Nhân viên / {this.state.email}}</div>
+    <div className="title">Nhân viên / {this.state.email}</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">

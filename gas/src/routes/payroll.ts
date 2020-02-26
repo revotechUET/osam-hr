@@ -1,5 +1,5 @@
 import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, isSameDay } from 'date-fns';
-import { Leave } from "../@types/leave";
+import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
 import { db } from "../db";
 import { getSetting } from './setting';
 
@@ -22,6 +22,7 @@ function getPayroll(startDate, endDate, idDepartment = null) {
   const setting = getSetting();
   const users = db.from('user').query.where('active', true).toJSON();
   const leaves = db.from<Leave>('leave').query.where('status', 'approved')
+    .where('status', LeaveStatus.Approved)
     .where('startTime', '>=', startDate)
     .where('endTime', '>=', endDate)
     .toJSON()
@@ -56,8 +57,8 @@ function getSummaries({ startDate, endDate, checkings, leaves, setting }) {
 
 function getDateSummaries(date: Date, checking, leave, setting) {
   let point = 0, lunch = 0, permittedLeave = 0, unpermittedLeave = 0;
-  const defaultReturn = { point, lunch, permittedLeave, unpermittedLeave };
-  if (!checking && !leave) return defaultReturn;
+  const workDay = setting.workDays[date.getDay()];
+  if (workDay === 0 || !checking && !leave) return { point, lunch, permittedLeave, unpermittedLeave };
   const [y, m, d] = [date.getFullYear(), date.getMonth(), date.getDate()];
   const [
     morningStart,
@@ -74,7 +75,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     ret.setFullYear(y, m, d);
     return ret;
   });
-  let late = 0, early = 0, total = 0, totalLeave = 0, ratio = 1;
+  let totalLeave = 0;
   if (leave) {
     leave = {
       startTime: new Date(leave.startTime),
@@ -89,73 +90,74 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     checkout = new Date(checking.checkoutTime);
     checkout.setFullYear(y, m, d);
   }
-  const dayOfWeek = date.getDay();
-  switch (setting.workDays[dayOfWeek]) {
-    case 0: // off
-      return defaultReturn;
-    case 1: // morning only
-      total = +morningEnd - +morningStart;
-      ratio = 0.5;
-      if (!checking) break;
-      late = Math.max(0, +checkin - +morningStart);
-      early = Math.max(0, +morningEnd - +checkout);
-      if (leave) {
-        if (leave.endTime >= checkin && leave.endTime <= checkout) {
-          permittedLeave = Math.min(totalLeave, leave.endTime - + morningStart);
-        } else {
-          permittedLeave = Math.min(total, +morningEnd - leave.startTime);
-        }
-      }
-      break;
-    case 2: // afternoon only
-      total = +afternoonEnd - +afternoonStart;
-      ratio = 0.5;
-      if (!checking) break;
-      late = Math.max(0, +checkin - +afternoonStart);
-      early = Math.max(0, +afternoonEnd - +checkout);
-      if (leave) {
-        if (leave.endTime >= checkin && leave.endTime <= checkout) {
-          permittedLeave = Math.min(totalLeave, leave.endTime - + afternoonStart);
-        } else {
-          permittedLeave = Math.min(total, +afternoonEnd - leave.startTime);
-        }
-      }
-      break;
-    case 3: // all-day
-      total = (+afternoonEnd - +afternoonStart) + (+morningEnd - +morningStart);
-      ratio = 1;
-      if (!checking) break;
-      if (checkin < afternoonStart) {
-        late = Math.max(0, Math.min(+checkin, +morningEnd) - +morningStart);
+
+  let late1 = 0, early1 = 0, total1 = 0, permittedLeave1 = 0, unpermittedLeave1 = 0, point1 = 0;
+  let late2 = 0, early2 = 0, total2 = 0, permittedLeave2 = 0, unpermittedLeave2 = 0, point2 = 0;
+  const ratio = setting.contractType === 'parttime' ? 1 : 0.5;
+  if (workDay === 1 || workDay === 3) {
+    total1 = +morningEnd - +morningStart;
+    let leaveValid = false, checkingValid = false;
+    if (leave && areIntervalsOverlapping({ start: leave.startTime, end: leave.endTime }, { start: morningStart, end: morningEnd })) {
+      leaveValid = true;
+    }
+    if (checking && areIntervalsOverlapping({ start: checkin, end: checkout }, { start: morningStart, end: morningEnd })) {
+      checkingValid = true;
+      late1 = Math.max(0, +checkin - +morningStart);
+      early1 = Math.max(0, +morningEnd - +checkout);
+    }
+    if (leaveValid) {
+      if (leave.endTime >= checkin && leave.endTime <= checkout) {
+        permittedLeave1 = Math.min(totalLeave, leave.endTime - + morningStart);
       } else {
-        late = (+checkin - +afternoonStart) + (+morningEnd - +morningStart);
+        permittedLeave1 = Math.min(total1, Math.min(+leave.endTime, +morningEnd) - leave.startTime);
       }
-      if (checkout > morningEnd) {
-        early = Math.max(0, +afternoonEnd - Math.max(+checkout, + afternoonStart));
+    }
+    if (checkingValid || leaveValid) {
+      unpermittedLeave1 = Math.max(0, late1 + early1 - permittedLeave1);
+    } else {
+      unpermittedLeave1 = total1;
+    }
+    point1 = (total1 - unpermittedLeave1 - permittedLeave1) / total1 * ratio;
+    permittedLeave1 = permittedLeave1 / total1 * ratio;
+    unpermittedLeave1 = unpermittedLeave1 / total1 * ratio;
+  }
+  if (workDay === 2 || workDay === 3) {
+    let leaveValid = false, checkingValid = false;
+    total2 = +afternoonEnd - +afternoonStart;
+    if (leave && areIntervalsOverlapping({ start: leave.startTime, end: leave.endTime }, { start: afternoonStart, end: afternoonEnd })) {
+      leaveValid = true;
+    }
+    if (checking && areIntervalsOverlapping({ start: checkin, end: checkout }, { start: afternoonStart, end: afternoonEnd })) {
+      checkingValid = true;
+      late2 = Math.max(0, +checkin - +afternoonStart);
+      early2 = Math.max(0, +afternoonEnd - +checkout);
+    }
+    if (leaveValid) {
+      if (leave.endTime >= checkin && leave.endTime <= checkout) {
+        permittedLeave2 = Math.min(totalLeave, leave.endTime - + afternoonStart);
       } else {
-        early = (+checkout - +morningEnd) + (+afternoonEnd - +afternoonStart);
+        permittedLeave2 = Math.min(total2, +afternoonEnd - leave.startTime);
       }
-      if (leave) {
-        if (leave.endTime >= checkin && leave.endTime <= checkout) {
-          permittedLeave = Math.min(totalLeave, leave.endTime - + morningStart);
-        } else {
-          permittedLeave = Math.min(total, Math.min(+leave.endTime, +afternoonEnd) - leave.startTime);
-        }
-      }
-      const lunchStart = new Date(setting.lunchStart);
-      lunchStart.setFullYear(y, m, d);
-      const lunchEnd = new Date(setting.lunchEnd);
-      lunchEnd.setFullYear(y, m, d);
-      if (checkin < lunchStart && checkout > lunchEnd) lunch = 1;
-      if (leave && leave.startTime <= lunchStart && leave.endTime >= lunchEnd) lunch = 0;
-      break;
+    }
+    if (checkingValid || leaveValid) {
+      unpermittedLeave2 = Math.max(0, late2 + early2 - permittedLeave2);
+    } else {
+      unpermittedLeave2 = total2;
+    }
+    point2 = (total2 - unpermittedLeave2 - permittedLeave2) / total2 * ratio;
+    permittedLeave2 = permittedLeave2 / total2 * ratio;
+    unpermittedLeave2 = unpermittedLeave2 / total2 * ratio;
   }
-  if (!checking) {
-    permittedLeave = total;
+  if (workDay === 3 && setting.haveLunch) {
+    const lunchStart = new Date(setting.lunchStart);
+    lunchStart.setFullYear(y, m, d);
+    const lunchEnd = new Date(setting.lunchEnd);
+    lunchEnd.setFullYear(y, m, d);
+    if (checkin < lunchStart && checkout > lunchEnd) lunch = 1;
+    if (leave && leave.startTime <= lunchStart && leave.endTime >= lunchEnd) lunch = 0;
   }
-  unpermittedLeave = Math.max(0, late + early - permittedLeave);
-  point = (total - unpermittedLeave - permittedLeave) / total * ratio;
-  permittedLeave = permittedLeave / total;
-  unpermittedLeave = unpermittedLeave / total;
-  return { point: +point.toFixed(1), lunch, permittedLeave: +permittedLeave.toFixed(1), unpermittedLeave: +unpermittedLeave.toFixed(1) };
+  point = point1 + point2;
+  permittedLeave = permittedLeave1 + permittedLeave2;
+  unpermittedLeave = unpermittedLeave1 + unpermittedLeave2;
+  return { point: +point.toFixed(2), lunch, permittedLeave: +permittedLeave.toFixed(2), unpermittedLeave: +unpermittedLeave.toFixed(2) };
 }

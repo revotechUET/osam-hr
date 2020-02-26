@@ -11,6 +11,7 @@
     "@babel/preset-react"
   ],
   "plugins": [
+    "@babel/plugin-proposal-class-properties",
     [
       "babel-plugin-import",
       {
@@ -19,7 +20,8 @@
         "camel2DashComponentName": false
       },
       "muicore"
-    ],[
+    ],
+    [
       "babel-plugin-import",
       {
         "libraryName": "@material-ui/lab",
@@ -45,6 +47,15 @@
         "camel2DashComponentName": false
       },
       "date-fns"
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "react-big-calendar",
+        "libraryDirectory": "lib",
+        "camel2DashComponentName": false
+      },
+      "react-big-calendar"
     ]
   ]
 }

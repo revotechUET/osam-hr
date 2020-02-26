@@ -1,4 +1,4 @@
-import React,{ useReducer, useEffect, useCallback } from 'react';
+import React from 'react';
 import {withRouter} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { dateFormat } from '../../utils/date';
@@ -10,10 +10,12 @@ const columns = [
     {
         name: 'Ngày',
         selector: row => dateFormat(row.date),
+        sortable: true,
       },
       {
         name: 'Nhân viên',
         selector: 'requester.name',
+        sortable: true,
       },
       {
         name: "Giờ check in",
