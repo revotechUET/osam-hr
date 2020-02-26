@@ -5,6 +5,7 @@ import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
+import { TablePagination } from "@material-ui/core";
 
 class DepartmentNewPage extends React.Component {
   constructor(props) {
@@ -29,23 +30,23 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave() {
-    console.log(this.state.idRequester, this.state.departments);
-    if(!isInDepartment){
-      this.state.idRequester.departments.push()
-    }
-  
+    let id = await apiService.generateDepartmentId();
+    console.log(id, typeof(id));
     let data = {
+      id : id,
       name: this.state.departmentName,
-      idManager: this.state.idRequester.id,
+      idManager: this.state.idManager.id,
       idApprovers: this.state.idApprovers,
       active: this.state.active
     };
     let addNewDepartment = await apiService.addNewDepartment(data);
-    
+    let updateDepartment = {
+      departments : [id]
+    }
+    await apiService.updateUserById(this.state.idManager.id, updateDepartment );
     if (addNewDepartment) {
       this.props.history.push('/departments');
     }
-
   }
 
   handleCancel() {
@@ -66,7 +67,7 @@ class DepartmentNewPage extends React.Component {
 
   async componentDidMount() {
     let users = await apiService.listUsers({full : true});
-    let department = await apiService.listDepartment({});
+    let department = await apiService.listDepartment({full:true});
     this.setState({ manager: users, approvers: users , departments : department});
   }
   render() {
@@ -94,7 +95,7 @@ class DepartmentNewPage extends React.Component {
                 keyProp='id'
                 labelProp='name'
                 onChange={(event, value) => {
-                  this.setState({ idRequester: value});
+                  this.setState({ idManager: value});
                 }}
               />
             </div>
