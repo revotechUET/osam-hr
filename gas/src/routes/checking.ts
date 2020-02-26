@@ -6,8 +6,8 @@ import { dateString , uuid } from '../utils';
 
 global.listCheck = listCheck;
 global.checkingNew = checkingNew;
-global.verifyCheckingDate = verifyCheckingDate;
 global.checkingDetail = checkingDetail;
+global.checkingEdit = checkingEdit;
 
 function listCheck({ idUser}){
     const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
@@ -22,14 +22,14 @@ function checkingNew(data : Checking){
     return db.from<Checking>('checking').insert(data);
 }
 
-function verifyCheckingDate(date){
-  let dateChecked = db.from<Checking>('checking').query.where('date', date).toJSON();
-  if(dateChecked[0]['date'] == ""){
-    return true;
-  }else{
-    return false;
-  }
-}
+// function verifyCheckingDate(date){
+//   let dateChecked = db.from<Checking>('checking').query.where('date', date).toJSON();
+//   if(dateChecked[0]['date'] == ""){
+//     return true;
+//   }else{
+//     return false;
+//   }
+// }
 
 function checkingDetail({idUser}){
   const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
@@ -37,4 +37,8 @@ function checkingDetail({idUser}){
     checkingQuery.sWhere('idUser', idUser);
   }
   return checkingQuery.toJSON(); 
+}
+
+function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note}){
+  return db.from<Checking>('checking').update(id, { date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note});
 }

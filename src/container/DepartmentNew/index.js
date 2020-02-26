@@ -18,6 +18,7 @@ class DepartmentNewPage extends React.Component {
       approvers: null,
       idApprovers: null,
       loading: false,
+      departments : []
 
     };
     this.handleManagerChange = this.handleManagerChange.bind(this);
@@ -28,16 +29,23 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave() {
+    console.log(this.state.idRequester, this.state.departments);
+    if(!isInDepartment){
+      this.state.idRequester.departments.push()
+    }
+  
     let data = {
       name: this.state.departmentName,
-      idManager: this.state.idRequester,
+      idManager: this.state.idRequester.id,
       idApprovers: this.state.idApprovers,
       active: this.state.active
     };
     let addNewDepartment = await apiService.addNewDepartment(data);
+    
     if (addNewDepartment) {
       this.props.history.push('/departments');
     }
+
   }
 
   handleCancel() {
@@ -57,9 +65,9 @@ class DepartmentNewPage extends React.Component {
   }
 
   async componentDidMount() {
-    let users = await apiService.listUsers();
-    console.log("From users DepartmentNew");
-    this.setState({ manager: users, approvers: users });
+    let users = await apiService.listUsers({full : true});
+    let department = await apiService.listDepartment({});
+    this.setState({ manager: users, approvers: users , departments : department});
   }
   render() {
     return (
@@ -86,8 +94,7 @@ class DepartmentNewPage extends React.Component {
                 keyProp='id'
                 labelProp='name'
                 onChange={(event, value) => {
-                  this.setState({ idRequester: value && value.id });
-                  console.log(typeof (this.state.idRequester));
+                  this.setState({ idRequester: value});
                 }}
               />
             </div>

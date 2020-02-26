@@ -22,6 +22,8 @@ import StaffDetailPage from './../container/StaffDetail';
 import CheckingDetailPage from './../container/ChekingDetail';
 import DepartmentDetailPage from '../container/DepartmentDetail';
 import DepartmentEdit from '../container/DepartmentEdit';
+import StaffCheckingEditPage from '../container/CheckingEdit';  
+import CheckingEdit from '../container/CheckingEdit';
 
 export default [
   {
@@ -72,6 +74,11 @@ export default [
     path: "/checking",
     exact: true,
     component: StaffCheckingPage
+  },
+  {
+    path: "/checking/:id/edit",
+    exact: true,
+    component: StaffCheckingEditPage
   },
   {
     path: "/checking/new",

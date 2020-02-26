@@ -31,7 +31,8 @@ class StaffDetailPage extends React.Component {
     }
 
     edit(){
-        this.props.history.push('/checking/new');
+        let id = this.props.match.params.id;
+        this.props.history.push(`checking/${id}/edit`);
     }
 
     response(){
