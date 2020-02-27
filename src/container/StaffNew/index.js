@@ -103,8 +103,12 @@ class StaffNewPage extends React.Component {
         "role": this.state.role,
         "departments": this.state.departmentList
       }
-      await apiService.appendUser(data);
-      this.props.history.push('/staffs'); 
+      try {
+        await apiService.appendUser(data);
+        this.props.history.push('/staffs'); 
+      } catch (e) {
+        
+      }
     }
     else {
       console.log(this.state.errors);
@@ -115,7 +119,9 @@ class StaffNewPage extends React.Component {
   handleValidation() {
     let formIsValid = true;
     let e = {};
-
+    this.setState({
+      errors: e
+    });
     // name
     if (this.state.userName === '') {
       formIsValid = false;
@@ -127,6 +133,18 @@ class StaffNewPage extends React.Component {
       formIsValid = false;
       e["email"] = "Cannot be empty";
     }
+
+    //contract:
+    if (!this.state.contract || this.state.contract.length < 1) {
+      formIsValid = false;
+      e["contract"] = "Can not be empty"
+    }
+
+    if (!this.state.role || this.state.role < 1) {
+      formIsValid = false;
+      e["role"] = "Can not be empty"
+    }
+
     this.setState({
       errors: e
     });
@@ -183,6 +201,7 @@ class StaffNewPage extends React.Component {
                   this.setState({ email: value.primaryEmail, idUser: value.id });
                 }}
               />
+              <div className="error">{this.state.errors["email"]}</div>
             </div>
           </div>
           <div className="item-wrap">
@@ -199,6 +218,7 @@ class StaffNewPage extends React.Component {
                   this.setState({ contract: value.id });
                 }}
               />
+              <div className="error">{this.state.errors["contract"]}</div>
             </div>
           </div>
           <div className="item-wrap">
@@ -242,6 +262,7 @@ class StaffNewPage extends React.Component {
                 this.setState({ role: value.value });
               }}
             />
+            <div className="error">{this.state.errors["role"]}</div>
             </div>
           </div>
         </BorderedContainer>

@@ -6,9 +6,7 @@ import moment from 'moment';
 
 const localizer = momentLocalizer(moment);
 
-let allViews = Object.keys(Views).map(k => Views[k]);
 
-//import './style.less';
 
 class DayOffSettingPage extends React.Component {
     constructor(props) {
@@ -20,7 +18,7 @@ class DayOffSettingPage extends React.Component {
           <div className="DayOffSetting">
             <Calendar
               events={events}
-              views={allViews}
+              views={Views.MONTH}
               // step={60}
               localizer={localizer}
             />

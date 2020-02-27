@@ -74,6 +74,7 @@ function updateUserById(id, info) {
   for (let i = 0; i < info.departments.length; i++) {
     db.from<User_Department>('user_department').insert({id:  uuid(),idUser: id, idDepartment: info.departments[i] });
   }
+  delete info.departments
   return db.from<User>('user').update(id, info);
 }
 

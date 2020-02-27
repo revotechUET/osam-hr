@@ -14,6 +14,7 @@ const CLASP_CONFIGS = [
 async function start() {
   for (const filePath of CONFIGS) {
     try {
+      
       await fs.access(filePath);
       await fs.copyFile(filePath, CONFIG_PATH);
       break;
@@ -22,9 +23,13 @@ async function start() {
   for (const filePath of CLASP_CONFIGS) {
     try {
       await fs.access(filePath);
+      console.log('---------');
       await fs.copyFile(filePath, CLASP_PATH);
       break;
-    } catch (e) { }
+    } catch (e) {
+      console.log(e);
+      
+    }
   }
   runAll(["build-app"], {
     stdin: process.stdin,
