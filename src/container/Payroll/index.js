@@ -41,7 +41,7 @@ function PayrollPage({ history }) {
   useEffect(() => {
     (async () => {
       const departments = await cancellable(apiService.listDepartment());
-      setState({ departments, loadingDepartments: false });
+      setState({ departments: [{ name: 'Tất cả' }, ...departments], loadingDepartments: false });
     })()
   }, []);
 
@@ -68,7 +68,7 @@ function PayrollPage({ history }) {
       <div className="title-vs-btn">
         {/* <div className="button-text my-button active-btn">Tải về</div> */}
         <div className="title">Bộ phận</div>
-        <div style={{marginLeft: "20px"}}>
+        <div style={{ marginLeft: "20px" }}>
           <Autocomplete
             style={{ flex: 1 }}
             filterSelectedOptions
@@ -83,16 +83,16 @@ function PayrollPage({ history }) {
         </div>
         <div className="border-spacing"></div>
         <div className="title">Thời gian</div>
-        <div style={{margin: "0 20px", width: "80px"}}>
+        <div style={{ margin: "0 20px", width: "80px" }}>
           <DatePicker
-                value={state.startDate}
-                onChange={(date) => setState({ startDate: date })}
-                format="dd/MM/yyyy"
-                variant="inline"
+            value={state.startDate}
+            onChange={(date) => setState({ startDate: date })}
+            format="dd/MM/yyyy"
+            variant="inline"
           />
         </div>
         <span className=" ti ti-arrow-right"></span>
-        <div style={{marginLeft: "20px", width: "80px"}}>
+        <div style={{ marginLeft: "20px", width: "80px" }}>
           <DatePicker
             value={state.endDate}
             onChange={(date) => setState({ endDate: date })}
@@ -104,23 +104,22 @@ function PayrollPage({ history }) {
         <div className="border-spacing"></div>
         <div className="button-text my-button active-btn" onClick={() => proceed()} disabled={!state.startDate || !state.endDate}>Tính công</div>
       </div>
-      <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: false ? "#00000000" : "#fff"}}>
-      {/* <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: this.state.loading ? "#00000000" : "#fff"}}> */}
-      {
-        state.proceeded &&
-        <DataTable
-          noHeader
-          fixedHeader
-          fixedHeaderScrollHeight="calc(100vh - 333px)"
-          noDataComponent='Không có dữ liệu'
-          progressPending={state.loading}
-          progressComponent={<Loading />}
-          persistTableHead
-          columns={columns}
-          data={state.data}
-          pagination
-        />
-      }
+      <div style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: state.loading ? "#00000000" : "#fff" }}>
+        {
+          state.proceeded &&
+          <DataTable
+            noHeader
+            fixedHeader
+            fixedHeaderScrollHeight="calc(100vh - 333px)"
+            noDataComponent='Không có dữ liệu'
+            progressPending={state.loading}
+            progressComponent={<Loading />}
+            persistTableHead
+            columns={columns}
+            data={state.data}
+            pagination
+          />
+        }
       </div>
     </div>
   )

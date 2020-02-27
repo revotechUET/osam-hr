@@ -1,6 +1,5 @@
 import React from "react";
 import "./style.less";
-import Draggable from "react-draggable";
 
 export default class CenteredModal extends React.Component {
   constructor(props) {

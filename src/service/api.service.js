@@ -110,6 +110,10 @@ class ApiService {
   editDepartment(payload){
     return gscriptrun('departmentEdit', payload);
   }
+
+  generateDepartmentId(){
+    return gscriptrun('generateDepartmentId');
+  }
   //#endregion
 
   //#region leave
@@ -143,6 +147,10 @@ class ApiService {
   checkingDetail(payload) {
     return gscriptrun('checkingDetail', payload);
   }
+  checkingEdit(payload){
+    return gscriptrun('checkingEdit', payload);
+  }
+
   //#endregion
 
   // payroll

@@ -3,7 +3,7 @@ import { db } from "./db";
 import { googleUser, userInfo } from "./utils";
 
 function noPermission() {
-  return ContentService.createTextOutput('Access Denied');
+  return ContentService.createTextOutput('Tài khoản không có quyền truy cập');
 }
 
 function initAdmin({ id, email, name }) {

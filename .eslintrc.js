@@ -22,7 +22,8 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "unused-imports",
   ],
   "settings": {
     "react": {
@@ -34,6 +35,7 @@ module.exports = {
     "react/prop-types": 0,
     "no-unused-vars": 0,
     "no-empty": "off",
+    "unused-imports/no-unused-imports": 1,
   },
-  "ignorePatterns": ["node_modules/", "gas"],
+  "ignorePatterns": ["node_modules/", "gas", "dist"],
 };

@@ -1,10 +1,10 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import apiService from '../../service/api.service';
-import Autocomplete from './../../components/Autocomplete';
-import BorderBottomInput from "./../../components/BorderBottomInput";
+
+
 import BorderedContainer from "./../../components/BorderedContainer";
-import { Checkbox, MenuItem, Select } from '@material-ui/core';
+import { Checkbox } from '@material-ui/core';
 
 class StaffDetailPage extends React.Component {
   constructor(props) {

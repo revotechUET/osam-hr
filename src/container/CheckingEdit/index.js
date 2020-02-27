@@ -8,7 +8,7 @@ import Autocomplete from "../../components/Autocomplete";
 
 import './style.less'
 
-class StaffCheckingNewPage extends React.Component {
+class StaffCheckingEditPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,25 +31,19 @@ class StaffCheckingNewPage extends React.Component {
   }
 
   async handleSave() {
-    this.state.date.setHours(0, 0, 0, 0, 0, 0);
-    let data = {
-      date: this.state.date.toISOString(),
-      checkinTime: new Date(this.state.checkIn).toISOString(),
-      checkoutTime: new Date(this.state.checkOut).toISOString(),
-      reportContent: "toDo",
-      responseContent: "toDo",
-      reportStatus: "toDo",
-      idUser: this.state.idRequester,
-      note: this.state.note
-    }
-
-    let success = await apiService.checkingNew(data);
-    if (success) {
-      this.props.history.push('/checking');
-    }
-
-    else {
-      this.props.history.push('/checking');
+      let id = this.props.match.params.id;
+      this.state.date.setHours(0, 0, 0, 0, 0, 0);
+      let date= this.state.date.toISOString();
+      let checkinTime= new Date(this.state.checkIn).toISOString();
+      let checkoutTime= new Date(this.state.checkOut).toISOString();
+      let idUser= this.state.idRequester;
+      let note= this.state.note;
+      let success = await apiService.checkingEdit({id, date,checkinTime, checkoutTime, idUser, note});
+      if (success) {
+        this.props.history.push('/checking');
+      }
+    else{
+        console.log("Ôi hỏng ! <:()>");
     }
   }
   handleCheckInChange(val) {
@@ -84,9 +78,9 @@ class StaffCheckingNewPage extends React.Component {
     return (
       <div className="StaffCheckingNew">
         <div className="title-vs-btn">
-          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
-          <div className="my-button ti ti-close" onClick={this.handleCancle} style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
-          <div className="title">Chấm công / Mới</div>
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancle} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="title">Chấm công / Edit</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">
@@ -105,36 +99,36 @@ class StaffCheckingNewPage extends React.Component {
               />
             </div>
           </div>
-          <div className="item-wrap" style={{ width: "100px" }}>
+          <div className="item-wrap" style={{width: "100px"}}>
             <span>Ngày</span>
             <div>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DatePicker value={this.state.date} onChange={this.handleDateChange} />
-              </MuiPickersUtilsProvider>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker value={this.state.date} onChange={this.handleDateChange} />
+            </MuiPickersUtilsProvider>
             </div>
           </div>
-          <div className="item-wrap" style={{ width: "100px" }}>
+          <div className="item-wrap" style={{width: "100px"}}>
             <span>Check in</span>
             <div>
-              <TimePicker
-                clearable
-                ampm={false}
-                label="24 hours"
-                value={this.state.checkIn}
-                onChange={this.handleCheckInChange}
-              />
+            <TimePicker
+              clearable
+              ampm={false}
+              label="24 hours"
+              value={this.state.checkIn}
+              onChange={this.handleCheckInChange}
+            />
             </div>
           </div>
-          <div className="item-wrap" style={{ width: "100px" }}>
+          <div className="item-wrap" style={{width: "100px"}}>
             <span>Check out</span>
             <div>
-              <TimePicker
-                clearable
-                ampm={false}
-                label="24 hours"
-                value={this.state.checkOut}
-                onChange={this.handleCheckOutChange}
-              />
+            <TimePicker
+              clearable
+              ampm={false}
+              label="24 hours"
+              value={this.state.checkOut}
+              onChange={this.handleCheckOutChange}
+            />
             </div>
           </div>
           <div className="item-wrap">
@@ -149,4 +143,4 @@ class StaffCheckingNewPage extends React.Component {
   }
 }
 
-export default withRouter(StaffCheckingNewPage);
+export default withRouter(StaffCheckingEditPage);

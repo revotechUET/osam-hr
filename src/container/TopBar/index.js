@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import './style.less';
 
-import userImg from './../../assets/images/17004.svg';
+
 
 class TopBar extends React.Component {
 

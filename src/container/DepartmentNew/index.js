@@ -6,6 +6,7 @@ import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
 
+
 class DepartmentNewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +19,9 @@ class DepartmentNewPage extends React.Component {
       approvers: null,
       idApprovers: null,
       loading: false,
+      departments : [],
+      nameDepartmentExist : false,
+      errors : {}
 
     };
     this.handleManagerChange = this.handleManagerChange.bind(this);
@@ -25,19 +29,47 @@ class DepartmentNewPage extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
   }
 
   async handleSave() {
-    let data = {
-      name: this.state.departmentName,
-      idManager: this.state.idRequester,
-      idApprovers: this.state.idApprovers,
-      active: this.state.active
-    };
-    let addNewDepartment = await apiService.addNewDepartment(data);
-    if (addNewDepartment) {
-      this.props.history.push('/departments');
+    if(this.handleValidation()){
+      let id = await apiService.generateDepartmentId();
+      let data = {
+        id : id,
+        name: this.state.departmentName,
+        idManager: this.state.idManager.id,
+        idApprovers: this.state.idApprovers,
+        active: this.state.active
+      };
+      let addNewDepartment = await apiService.addNewDepartment(data);
+      let updateDepartment = {
+        departments : [id]
+      }
+      await apiService.updateUserById(this.state.idManager.id, updateDepartment );
+      if (addNewDepartment) {
+        this.props.history.push('/departments');
+      }
     }
+    else{
+      console.log(this.state.errors);
+    }
+  }
+
+  handleValidation(){
+    let formIsValid = true;
+    let e = {};
+    // name
+    this.state.departments.forEach((val, index) => {
+      if(val.name === this.state.departmentName){
+        formIsValid = false;
+        e["name"] = "Đã tồn tại";
+      }
+    });
+    this.setState({
+      errors: e
+    });
+    return formIsValid;
   }
 
   handleCancel() {
@@ -49,6 +81,11 @@ class DepartmentNewPage extends React.Component {
   }
 
   handleDepartmentChange(event) {
+    this.state.departments.forEach((val, index) => {
+      if(val.name === event.target.value){
+        this.setState({nameDepartmentExist : true});
+      }
+    })
     this.setState({ departmentName: event.target.value });
   }
 
@@ -57,9 +94,9 @@ class DepartmentNewPage extends React.Component {
   }
 
   async componentDidMount() {
-    let users = await apiService.listUsers();
-    console.log("From users DepartmentNew");
-    this.setState({ manager: users, approvers: users });
+    let users = await apiService.listUsers({full : true});
+    let department = await apiService.listDepartment({full:true});
+    this.setState({ manager: users, approvers: users , departments : department});
   }
   render() {
     return (
@@ -75,6 +112,7 @@ class DepartmentNewPage extends React.Component {
             <div>
               <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
             </div>
+            <div className="error">{this.state.errors["name"]}</div>
           </div>
           <div className="item-wrap">
             <span>Người quản lý</span>
@@ -86,8 +124,7 @@ class DepartmentNewPage extends React.Component {
                 keyProp='id'
                 labelProp='name'
                 onChange={(event, value) => {
-                  this.setState({ idRequester: value && value.id });
-                  console.log(typeof (this.state.idRequester));
+                  this.setState({ idManager: value});
                 }}
               />
             </div>

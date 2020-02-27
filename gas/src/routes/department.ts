@@ -8,9 +8,10 @@ global.listDepartment = listDepartment;
 global.departmentDetail = departmentDetail;
 global.deleteDepartment = deleteDepartment;
 global.departmentEdit = departmentEdit;
+global.generateDepartmentId = generateDepartmentId;
 
 function addNewDepartment(data) {
-  return db.from<Department>('department').insert({ id: uuid(), ...data });
+  return db.from<Department>('department').insert({...data});
 }
 
 function listDepartment({ idManager = null, idApprovers = null } = {}) {
@@ -37,6 +38,10 @@ function deleteDepartment(id) {
   return db.from<Department>('department').delete(id);
 }
 
-function departmentEdit({ id, name, manager, approvers, active}) {
-  return db.from<Department>('department').update(id, { name,manager, approvers,active});
+function departmentEdit({ id, name, idManager, idApprovers, active}) {
+  return db.from<Department>('department').update(id, { name,idManager, idApprovers,active});
+}
+function generateDepartmentId(){
+  let id = uuid();
+  return id;
 }

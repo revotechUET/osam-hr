@@ -1,3 +1,10 @@
-import { init } from './db';
-init();
-import './bootstrap';
+import './db'
+import './webApp'
+import './routes/test'
+import './routes/user'
+import './routes/checking'
+import './routes/leave'
+import './routes/department'
+import './routes/contract'
+import './routes/setting'
+import './routes/payroll'

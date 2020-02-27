@@ -1,17 +1,28 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
-import FullSizeCalendar from './../../components/FullSizeCalendar';
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
-import moment from 'moment';
+import { withRouter } from 'react-router-dom';
+import { Calendar, Views } from 'react-big-calendar'
+import dateFnsLocalizer from 'react-big-calendar/lib/localizers/date-fns';
 
-const localizer = momentLocalizer(moment);
+import { format, parse, startOfWeek, getDay, } from 'date-fns';
+const locales = {
+  'en-US': require('date-fns/locale/en-US'),
+  'vi': require('date-fns/locale/vi'),
+}
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 
 
 class DayOffSettingPage extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
     render() {
         return (
@@ -29,7 +40,7 @@ class DayOffSettingPage extends React.Component {
 
 const now = new Date()
 
-let events  = [
+let events = [
   {
     id: 0,
     title: 'All Day Event very long title',
