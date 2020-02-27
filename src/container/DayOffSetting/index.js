@@ -1,22 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Calendar, Views } from 'react-big-calendar'
-import dateFnsLocalizer from 'react-big-calendar/lib/localizers/date-fns';
-
-import { format, parse, startOfWeek, getDay, } from 'date-fns';
-const locales = {
-  'en-US': require('date-fns/locale/en-US'),
-  'vi': require('date-fns/locale/vi'),
-}
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
 
 
 class DayOffSettingPage extends React.Component {
@@ -27,12 +10,12 @@ class DayOffSettingPage extends React.Component {
     render() {
         return (
           <div className="DayOffSetting">
-            <Calendar
+            {/* <Calendar
               events={events}
               views={Views.MONTH}
               // step={60}
               localizer={localizer}
-            />
+            /> */}
           </div>
         );
     }
