@@ -21,7 +21,6 @@
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-import": "^1.13.0",
-    "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.18.3",
@@ -53,11 +52,7 @@
     "babel-polyfill": "^6.26.0",
     "date-fns": "^2.9.0",
     "date-format": "^3.0.0",
-    "file-loader": "^4.2.0",
-    "font-awesome": "^4.7.0",
-    "fs": "0.0.1-security",
     "gsheetdb": "github:revotechUET/gsheetdb#0b8c238",
-    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "material-ui-pickers": "^2.2.4",
     "notistack": "^0.9.7",
@@ -70,8 +65,7 @@
     "rxjs": "^6.5.3",
     "styled-components": "^5.0.1",
     "themify-icons": "^1.0.0",
-    "uniqid": "^5.2.0",
-    "url-loader": "^2.2.0"
+    "uniqid": "^5.2.0"
   },
   "sideEffects": false
 }
