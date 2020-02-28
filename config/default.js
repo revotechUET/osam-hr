@@ -1,6 +1,6 @@
 const sheetUrl = 'https://docs.google.com/spreadsheets/d/1uEYFEuYKH8gYHicVcTCDiICCQwyw0cvQ5ND64GMds8A/edit';
 export default {
-  sheetUrl,
+  sheetUrl, calendarIds: ["rvtcompany.page_fqbe7o1ko3qu7m1fs1njfefi2o@group.calendar.google.com", "rvtcompany.page_fqbe7o1ko3qu7m1fs1njfefi2o@group.calendar.google.com"],
   spreadsheet: {
     source_url: sheetUrl,
     sheetSpecs: {
