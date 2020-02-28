@@ -6,8 +6,8 @@ let CalendarBigTable = require('react-big-calendar');
 let momentLocalizer = CalendarBigTable.momentLocalizer;
 let Calendar = CalendarBigTable.Calendar;
 let Views = CalendarBigTable.Views;
-import moment from 'moment';;
-const localizer = momentLocalizer(moment);
+// import moment from 'moment';;
+// const localizer = momentLocalizer(moment);
 let allViews = Object.keys(Views).map(k => Views[k]);
 
 
