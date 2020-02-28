@@ -26,7 +26,10 @@ const webpackConfigure = {
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: [{
+          loader: 'style-loader',
+          options: { injectType: 'singletonStyleTag' }
+        }, 'css-loader', 'less-loader']
       },
       {
         test: /\.svg$/,

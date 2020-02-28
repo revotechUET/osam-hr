@@ -11,19 +11,11 @@ global.departmentEdit = departmentEdit;
 global.generateDepartmentId = generateDepartmentId;
 
 function addNewDepartment(data) {
-  return db.from<Department>('department').insert({...data});
+  return db.from<Department>('department').insert({ ...data });
 }
 
-function listDepartment({ idManager = null, idApprovers = null } = {}) {
-  const departmentQuery = db.join<Department, User>('department', 'user', 'idManager', 'manager');
-  if (idManager) {
-    departmentQuery.sWhere('idManager', idManager);
-  }
-  const approversQuery = db.join<Department, User>('department', 'user', 'idApprovers', 'approvers');
-  if (idApprovers) {
-    approversQuery.sWhere('idApprovers', idApprovers);
-  }
-  return departmentQuery.toJSON();
+function listDepartment() {
+  return db.from<Department>('department').query.toJSON();
 }
 
 function departmentDetail({ id }) {
@@ -38,10 +30,10 @@ function deleteDepartment(id) {
   return db.from<Department>('department').delete(id);
 }
 
-function departmentEdit({ id, name, idManager, idApprovers, active}) {
-  return db.from<Department>('department').update(id, { name,idManager, idApprovers,active});
+function departmentEdit({ id, name, idManager, idApprovers, active }) {
+  return db.from<Department>('department').update(id, { name, idManager, idApprovers, active });
 }
-function generateDepartmentId(){
+function generateDepartmentId() {
   let id = uuid();
   return id;
 }

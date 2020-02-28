@@ -59,28 +59,31 @@ function loadUserById(id, {full, loadDepartments, loadContracts}) {
 }
 
 function deleteUserById(id) {
-  let user_department = db.from<User_Department>('user_department').query.where('idUser', id).toJSON();
+  const table = db.from<User_Department>('user_department');
+  let user_department = table.query.where('idUser', id).toJSON();
   for (let i = 0; i < user_department.length; i++) {
-    db.from<User_Department>('user_department').delete(user_department[i].id);
+    table.delete(user_department[i].id);
   }
   return db.from<User>('user').delete(id);
 }
 
 function updateUserById(id, info) {
-  let user_department = db.from<User_Department>('user_department').query.where('idUser', id).toJSON();
+  const table = db.from<User_Department>('user_department');
+  let user_department = table.query.where('idUser', id).toJSON();
   for (let i = 0; i < user_department.length; i++) {
-    db.from<User_Department>('user_department').delete(user_department[i].id);
+    table.delete(user_department[i].id);
   }
   for (let i = 0; i < info.departments.length; i++) {
-    db.from<User_Department>('user_department').insert({id:  uuid(),idUser: id, idDepartment: info.departments[i] });
+    table.insert({id:  uuid(),idUser: id, idDepartment: info.departments[i] });
   }
   delete info.departments
   return db.from<User>('user').update(id, info);
 }
 
 function appendUser(data) {
+  const table = db.from<User_Department>('user_department');
   for (let i = 0; i < data.departments.length; i++) {
-    db.from<User_Department>('user_department').insert({id:  uuid(),idUser: data.id, idDepartment: data.departments[i] });
+    table.insert({id:  uuid(),idUser: data.id, idDepartment: data.departments[i] });
   }
   return db.from<User>('user').insert(data);
 }

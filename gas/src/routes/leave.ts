@@ -1,7 +1,10 @@
-import { Leave, LeaveStatus } from "../@types/leave";
+import { format } from "date-fns";
+import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
 import { User } from "../@types/user";
 import { db } from "../db";
-import { uuid } from "../utils";
+import template from '../email-templates/new-leave-request.html';
+import { userInfo, uuid } from "../utils";
+
 
 global.leaveList = leaveList;
 function leaveList({ id, startTime, endTime, status }) {
@@ -30,14 +33,15 @@ function leaveDetail({ id }) {
 
 global.leaveApprove = leaveApprove;
 function leaveApprove({ id, status }) {
-  const user = { id: null };
+  const user = userInfo();
   const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Approved, idApprover: user.id });
   return ok;
 }
 
 global.leaveNew = leaveNew;
-function leaveNew({ idRequester, startTime, endTime, reason, description }) {
-  const leavesQuery = db.from<Leave>('leave').query;
+function leaveNew({ idRequester, startTime, endTime, reason, description, notifyList = [] }) {
+  const leaveTable = db.from<Leave>('leave');
+  const leavesQuery = leaveTable.query
   leavesQuery.raw(
     `SELECT * WHERE ${leavesQuery.getColId('idRequester')} ='${idRequester}' AND
      ((B >='${startTime}' AND B <='${endTime}') OR (C >= '${startTime}' AND C <='${endTime}'))`
@@ -53,7 +57,25 @@ function leaveNew({ idRequester, startTime, endTime, reason, description }) {
     description,
     status: LeaveStatus.Waiting,
   }
-  db.from<Leave>('leave').insert(leave);
+  const ok = leaveTable.insert(leave);
+  if (!ok) return ok;
+  if (notifyList.length) {
+    console.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());
+    const requester = db.from<User>('user').query.where('id', idRequester).toJSON(1)[0];
+    const htmlTemplate = HtmlService.createTemplate(template);
+    htmlTemplate.requester = requester.name;
+    htmlTemplate.startTime = format(new Date(startTime), 'HH:mm dd/MM/yyyy');
+    htmlTemplate.endTime = format(new Date(endTime), 'HH:mm dd/MM/yyyy');
+    htmlTemplate.reason = LeaveReason[reason];
+    htmlTemplate.description = description;
+    const htmlBody = htmlTemplate.evaluate().getContent();
+    MailApp.sendEmail({
+      to: notifyList.join(','),
+      subject: `${requester.name} đã gửi yêu cầu nghỉ`,
+      htmlBody,
+      noReply: true,
+    })
+  }
   return leave;
 }
 

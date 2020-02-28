@@ -1,12 +1,13 @@
-import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, isSameDay } from 'date-fns';
+import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, isSameDay, startOfDay, min, lastDayOfMonth, subMonths, getDaysInMonth } from 'date-fns';
 import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
 import { db } from "../db";
 import { getSetting } from './setting';
 
 global.getPayroll = getPayroll;
-function getPayroll(startDate, endDate, idDepartment = null) {
+function getPayroll({ startDate, endDate, idDepartment = null }) {
   if (!startDate || !endDate) throw 'Không có khoảng thời gian tính công';
-  endDate = endOfDay(new Date(endDate)).toISOString();
+  startDate = startOfDay(new Date(startDate)).toISOString();
+  endDate = endOfDay(min([new Date(endDate), new Date()])).toISOString();
   let checkingQuery;
   if (idDepartment) {
     checkingQuery = db.join('checking', 'user_department', 'idUser', 'user_department').setType("inner").sWhere('checkoutTime', null, null, 'is not null').dWhere('idDepartment', idDepartment);
@@ -21,12 +22,13 @@ function getPayroll(startDate, endDate, idDepartment = null) {
   if (!checkings.length) return [];
   const setting = getSetting();
   const users = db.from('user').query.where('active', true).toJSON();
-  const leaves = db.from<Leave>('leave').query.where('status', 'approved')
-    .where('status', LeaveStatus.Approved)
-    .where('startTime', '>=', startDate)
-    .where('endTime', '>=', endDate)
-    .toJSON()
-    .map(l => ({ idRequester: l.idRequester, startTime: new Date(l.startTime), endTime: new Date(l.endTime) }));
+  const leavesQuery = db.from<Leave>('leave').query
+  const [statusCol, startTimeCol, endTimeCol] = ['status', 'startTime', 'endTime'].map(leavesQuery.getColId.bind(leavesQuery));
+  leavesQuery.raw(
+    `SELECT * WHERE ${statusCol} ='${LeaveStatus.Approved}' AND
+     ((${startTimeCol} >='${startDate}' AND ${startTimeCol} <='${endDate}') OR (${endTimeCol} >= '${startDate}' AND ${endTimeCol} <='${endDate}'))`
+  )
+  const leaves = leavesQuery.toJSON().map(l => ({ idRequester: l.idRequester, startTime: new Date(l.startTime), endTime: new Date(l.endTime) }));
   for (const user of users) {
     const userCheckings = checkings.filter(c => c.idUser === user.id);
     const userLeaves = leaves.filter(l => l.idRequester === user.id);
@@ -37,6 +39,30 @@ function getPayroll(startDate, endDate, idDepartment = null) {
     user.unpermittedLeaves = unpermittedLeaves;
   }
   return users;
+}
+
+global.getPayrollThisMonth = getPayrollThisMonth;
+function getPayrollThisMonth({ dateInMonth = null } = {}) {
+  dateInMonth = new Date(dateInMonth || new Date());
+  const setting = getSetting();
+  const startDate = new Date(dateInMonth);
+  startDate.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
+  const endDate = new Date(dateInMonth);
+  endDate.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
+  const date = dateInMonth.getDate();
+  const maxDay = getDaysInMonth(dateInMonth);
+  if (date <= setting.monthEnd) {
+    const prevMonth = subMonths(dateInMonth, 1);
+    const prevMonthMaxDay = getDaysInMonth(prevMonth);
+    startDate.setMonth(prevMonth.getMonth(), Math.min(prevMonthMaxDay, setting.monthEnd) + 1);
+    endDate.setDate(Math.min(maxDay, setting.monthEnd));
+  } else {
+    const nextMonth = subMonths(dateInMonth, 1);
+    const nextMonthMaxDay = getDaysInMonth(nextMonth);
+    startDate.setDate(Math.min(maxDay, setting.monthEnd) + 1);
+    endDate.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));
+  }
+  return getPayroll({ startDate: startDate.toISOString(), endDate: endDate.toISOString() });
 }
 
 function getSummaries({ startDate, endDate, checkings, leaves, setting }) {

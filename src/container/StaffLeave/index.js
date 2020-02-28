@@ -12,6 +12,7 @@ const columns = [
     name: 'Mã',
     selector: 'id',
     style: { textTransform: 'uppercase' },
+    sortable: true,
   },
   {
     name: 'Nhân viên',
@@ -20,18 +21,22 @@ const columns = [
   {
     name: 'Lý do nghỉ',
     selector: row => leaveReason[row.reason],
+    sortable: true,
   },
   {
     name: 'Thời gian bắt đầu',
     selector: row => dateFormat(row.startTime, 'dd/MM/yyyy hh:mm'),
+    sortable: true,
   },
   {
     name: 'Thời gian kết thúc',
     selector: row => dateFormat(row.endTime, 'dd/MM/yyyy hh:mm'),
+    sortable: true,
   },
   {
     name: 'Trạng thái',
     selector: row => leaveStatus[row.status],
+    sortable: true,
   },
 ]
 

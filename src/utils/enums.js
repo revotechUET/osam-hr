@@ -7,7 +7,7 @@ export const leaveStatus = {
 }
 export const leaveReason = {
   all: ['0', '1', '2'],
-  '0': 'Lý do cá nhân',
+  '0': 'Lý do khác',
   '1': 'Đi công vụ',
   '2': 'Đi công tác',
 }
