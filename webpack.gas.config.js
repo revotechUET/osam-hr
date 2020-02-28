@@ -13,6 +13,10 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
     ],
   },
   resolve: {
@@ -22,10 +26,9 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          warnings: false,
-          mangle: false,
+          mangle: isProduction,
           compress: {
-            drop_console: false,
+            drop_console: isProduction,
             drop_debugger: isProduction
           },
           output: {

@@ -25,6 +25,7 @@ import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
 import StaffCheckingEditPage from './../container/CheckingEdit';
 
+import TungTestPage from '../container/TungTestPage';
 
 export default [
   {
@@ -155,5 +156,10 @@ export default [
     path: "/staffs/:idUser",
     exact: true,
     component: StaffDetailPage
+  },
+  {
+    path: "/tungtest",
+    exact: true,
+    component: TungTestPage
   }
 ];

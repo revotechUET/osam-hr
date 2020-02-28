@@ -96,7 +96,7 @@ class DepartmentNewPage extends React.Component {
 
   async componentDidMount() {
     let users = await apiService.listUsers({full : true});
-    let department = await apiService.listDepartment({full:true});
+    let department = await apiService.listDepartment();
     this.setState({ manager: users, approvers: users , departments : department});
   }
   render() {

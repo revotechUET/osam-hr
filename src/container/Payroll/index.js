@@ -51,7 +51,7 @@ function PayrollPage({ history }) {
       if (!startDate || !endDate) return;
       setState({ proceeded: true, loading: true });
       try {
-        const data = await cancellable(apiService.getPayroll(startDate.toISOString(), endDate.toISOString(), idDepartment));
+        const data = await cancellable(apiService.getPayroll({startDate, endDate, idDepartment}));
         setState({ data });
       } catch (error) {
         enqueueSnackbar(error.message || 'Lỗi không xác định', { variant: 'error' });

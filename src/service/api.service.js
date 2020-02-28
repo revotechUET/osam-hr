@@ -2,11 +2,25 @@ import { useEffect, useRef } from "react";
 
 function gscriptrun(fnName, ...args) {
   if (args.length === 1 && args[0] === undefined) args.length = 0;
+  visitObject(args, (obj, key) => {
+    if (obj[key] instanceof Date) {
+      obj[key] = obj[key].toISOString();
+    }
+  })
   return new Promise((resolve, reject) => {
     google.script.run
       .withSuccessHandler(resolve)
       .withFailureHandler(reject)[fnName](...args);
   })
+}
+
+function visitObject(object, fn) {
+  if (typeof object !== 'object') return;
+  for (const key in object) {
+    const ret = fn(object, key);
+    if (ret) return;
+    visitObject(object[key], fn);
+  }
 }
 
 function makeCancelable(promise) {
@@ -169,6 +183,19 @@ class ApiService {
     return gscriptrun('updateSetting', setting)
   }
   //#endregion
+
+  getEventsOfThisMonth(args) {
+    return gscriptrun('getEventsOfThisMonth', { calendarIdx: 0 });
+  }
+  getHolidayOfThisMonth() {
+    return gscriptrun('getEventsOfThisMonth', { calendarIdx: 1});
+  }
+  createHoliday(summary, description, start, end, emails) {
+    return gscriptrun("createEvent", {calendarIdx: 1, summary, description, start, end, emails});
+  }
+  createEvent(summary, description, start, end, emails) {
+    return gscriptrun("createEvent", {calendarIdx: 0, summary, description, start, end, emails});
+  }
 }
 
 export default new ApiService();
