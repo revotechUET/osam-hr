@@ -19,6 +19,8 @@ const calendarIds = config.calendarIds;
 
 global.getEventsOfThisMonth = getEventsOfThisMonth;
 global.createEvent = createEvent;
+global.updateEvent = updateEvent;
+global.deleteEvent = deleteEvent;
 function _getCalendarEvents(calendarId, from, to) {
     return Calendar.Events.list(calendarId, {
         timeMin: from.toISOString(),
@@ -29,6 +31,12 @@ function _getCalendarEvents(calendarId, from, to) {
 }
 function _createEvent(calendarId, eventInfo) {
     return Calendar.Events.insert( eventInfo, calendarId);
+}
+function _updateEvent(calendarId, eventId, eventInfo) {
+  return Calendar.Events.update(eventInfo, calendarId, eventId);
+}
+function _deleteEvent(calendarId, eventId) {
+  return Calendar.Events.remove(calendarId, eventId);
 }
 function _loadEvents(calendarIdx, from, to) {
     var calendarId = calendarIds[calendarIdx];
@@ -84,3 +92,17 @@ function createEvent({calendarIdx = 0, summary, description, start, end, emails 
     return event;
 }
 
+function updateEvent({calendarIdx = 0, eventId, summary, description, start, end, emails = []}) {
+  var calendarId = calendarIds[calendarIdx];
+  var event = _updateEvent(calendarId, eventId, {
+    summary, description, start: {dateTime:start}, end: {dateTime:end},
+    attendees: emails.map(email => ({email}))
+  });
+
+  return event;
+}
+
+function deleteEvent({calendarIdx = 0, eventId}) {
+  var calendarId = calendarIds[calendarIdx];
+  return _deleteEvent(calendarId, eventId);
+}

@@ -6,7 +6,8 @@ import { withSnackbar } from 'notistack';
 import apis from '../../service/api.service';
 import CenteredModal from '../../components/CenteredModal';
 import "react-big-calendar/lib/css/react-big-calendar.css";
-
+import ConfirmDialog from '../../dialogs/ConfirmDialog';
+import "./style.less";
 let CalendarBigTable = require('react-big-calendar');
 
 import { format, getDay, parse, startOfWeek } from 'date-fns';
@@ -24,8 +25,17 @@ const localizer = dateFnsLocalizer({
 });
 let Calendar = CalendarBigTable.Calendar;
 let Views = CalendarBigTable.Views;
-let allViews = Object.keys(Views).map(k => Views[k]);
+//let allViews = Object.keys(Views).map(k => Views[k]);
+let allViews = ["month"];
 
+let mock = {
+  events: [{
+    id: "Hello1",
+    summary: "Hello1",
+    start: new Date().toISOString(),
+    end: new Date().toISOString()
+  }]
+}
 
 class DayOffSettingPage extends React.Component {
   constructor(props) {
@@ -34,10 +44,14 @@ class DayOffSettingPage extends React.Component {
     this.state = {
       events: [],
       modalActive: false,
+      detailedActive: false,
       startTime:new Date(),
       endTime: new Date(),
       holidayName: "",
-      holidayDesc: ""
+      holidayDesc: "",
+      inThePast: false,
+      confirmActive: false,
+      confirmMessage: ""
     }
   }
 
@@ -50,15 +64,29 @@ class DayOffSettingPage extends React.Component {
       modalActive: false
     });
   }
+  deleteHoliday(eventId) {
+    return apis.deleteHoliday(eventId);
+  }
+  updateHoliday(eventId, summary, description, startTimeStr, endTimeStr, []) {
+    if (summary && summary.length)
+      return apis.updateHoliday(eventId, summary, description, startTimeStr, endTimeStr, []);
 
+    return new Promise((resolve, reject) => {
+      reject(new Error("Không có lý do nghỉ"));
+    });
+  }
   createHoliday(summary, description, start, end, emails) {
-    return apis.createHoliday(summary, description, start, end, email);
+    if (summary && summary.length)
+      return apis.createHoliday(summary, description, start, end, emails);
+    return new Promise((resolve, reject) => {
+      reject(new Error("Không có lý do nghỉ"));
+    });
   }
   doGet() {
     apis.getHolidayOfThisMonth().then(calEventsObj => {
       this.setState({
         events: calEventsObj.events.map((e, idx)=>({
-          id: idx,
+          id: e.id,
           start: e.start,
           end: e.end,
           title: e.summary,
@@ -71,7 +99,7 @@ class DayOffSettingPage extends React.Component {
     /*
     this.setState({
       events: mock.events.map((e, idx)=>({
-        id: idx,
+        id: e.id,
         start: e.start,
         end: e.end,
         title: e.summary,
@@ -88,33 +116,130 @@ class DayOffSettingPage extends React.Component {
     });
   }
 
+  selectSlotHandler(slotObj) {
+    console.log("slot:", slotObj);
+    this.setState({
+      modalActive:true, 
+      detailedActive:false, 
+      startTime: slotObj.start, 
+      holidayName: "", 
+      holidayDesc: "", 
+      endTime: slotObj.end
+    });
+  }
+  selectEventHandler(event) {
+    console.log("selected:" , event);
+    this.setState({
+      detailedActive:true, 
+      modalActive:false, 
+      holidayName: event.title, 
+      holidayDesc: event.description, 
+      startTime:event.start, 
+      endTime:event.end,
+      eventId: event.id
+    })
+  }
+  confirmIt(confirmMessage) {
+    return new Promise((resolve, reject) => {
+      this._resolve = resolve;
+      this._reject = reject;
+      this.setState({confirmActive:true, confirmMessage});
+    });
+  }
+  confirmHandler(res) {
+    this.setState({confirmActive:false, confirmMessage: ""});
+    if (res) {
+      this._resolve && this._resolve();
+    }
+    else {
+      this._reject && this._reject();
+    }
+  }
   render() {
     return (
       <div className="DayOffSetting">
         <Calendar events={this.state.events}
           defaultView={Views.MONTH}
           views = {allViews}
-          // step={60}
           selectable
           localizer={localizer}
-          onSelectEvent={event=>console.log("selected:" , event)}
-          onSelectSlot = {(slotObj) => {
-            console.log("slot:", slotObj);
-            this.setState({modalActive:true, startTime: slotObj.start, endTime: slotObj.end});
-          }}
+          onSelectEvent={event => this.selectEventHandler(event)}
+          onSelectSlot = {(slot) => this.selectSlotHandler(slot)}
         />
 
+        <CenteredModal active={this.state.detailedActive} onCancel={() => { this.setState({detailedActive:false}) }}>
+          <div className="contract-svg"></div>
+          <div className="content-modal">
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Lý do nghỉ</div>
+            </div>
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "60%" }}>
+                <input className="input" placeholder="Lý do nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
+              </div>
+            </div>
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Mô tả</div>
+            </div>
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "60%" }}>
+                <input className="input" placeholder="Mô tả" name="holidayDesc" value={this.state.holidayDesc} onChange={(e) => this.handleChange(e)} />
+              </div>
+            </div>
+            <div>
+              <h4>{this.state.startTime.toLocaleString()}</h4>
+              <h4>{this.state.endTime.toLocaleString()}</h4>
+            </div>
+            <div className="footer">
+              <button className="my-button-cancel" onClick={() => { this.setState({ detailedActive:false }) }}>Hủy</button>
+              <div className={"my-button-ok" + (this.state.inThePast?" button-disabled":"")} style={{marginRight:"20px"}} onClick={(evt) => {
+                  this.confirmIt("Ban chắc chắn không?").then(() => {
+                    let key = this.props.enqueueSnackbar("Đang xoá ngày nghỉ");
+                    this.deleteHoliday(this.state.eventId).then((res) => {
+                      this.props.closeSnackbar(key);
+                      this.props.enqueueSnackbar("Thành công !", {variant: "success"});
+                      this.setState({detailedActive:false});
+                      this.doGet();
+                    }).catch((err) => {
+                      this.props.closeSnackbar(key);
+                      console.error(err);
+                      this.props.enqueueSnackbar(err.message, {variant:"error"});
+                    });
+                  }).catch(() => {});
+              }}>Xoá</div>
+              <div className={"my-button-ok" + (this.state.inThePast?" button-disabled":"")} onClick={(evt) => {
+                  let key = this.props.enqueueSnackbar("Đang cập nhật ngày nghỉ");
+                  this.updateHoliday(
+                    this.state.eventId,
+                    this.state.holidayName, 
+                    this.state.holidayDesc, 
+                    this.state.startTime, 
+                    this.state.endTime, 
+                    []
+                  ).then((res) => {
+                    this.props.closeSnackbar(key);
+                    this.props.enqueueSnackbar("Thành công !", {variant: "success"});
+                    this.setState({detailedActive:false});
+                    this.doGet();
+                  }).catch((err) => {
+                    this.props.closeSnackbar(key);
+                    this.props.enqueueSnackbar(err.message, {variant:"error"});
+                  });
+              }}>Lưu</div>
+            </div>
+          </div>
+        </CenteredModal>
 
 
         <CenteredModal active={this.state.modalActive} onCancel={() => { this.close() }}>
           <div className="contract-svg"></div>
           <div className="content-modal">
             <div style={{ display: "flex", marginBottom: "20px" }}>
-              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Tên ngày nghỉ</div>
+              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Lý do nghỉ</div>
             </div>
             <div style={{ display: "flex", marginBottom: "20px" }}>
               <div style={{ flexBasis: "60%" }}>
-                <input className="input" placeholder="Nhập tên ngày nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
+                <input className="input" placeholder="Lý do nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
               </div>
             </div>
             <div style={{ display: "flex", marginBottom: "20px" }}>
@@ -133,22 +258,26 @@ class DayOffSettingPage extends React.Component {
               <div className="my-button-cancel" onClick={() => { this.closeModal() }}>Hủy</div>
               <div className="my-button-ok" onClick={(evt) => {
                   let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
-                  this.createHoliday(this.state.holidayName, this.state.holidayDesc, this.state.startTime.toISOString(), this.state.endTime.toISOString(), [])
-                  .then((res) => {
+                  this.createHoliday(
+                    this.state.holidayName, 
+                    this.state.holidayDesc, 
+                    this.state.startTime.toISOString(), 
+                    this.state.endTime.toISOString(), 
+                    []
+                  ).then((res) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar("Thành công !", {variant: "success"});
                     this.closeModal();
-                  })
-                  .catch((err) => {
+                    this.doGet();
+                  }).catch((err) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar(err.message, {variant:"error"});
-                    this.closeModal();
                   });
               }}>Lưu</div>
             </div>
           </div>
         </CenteredModal>
-
+        <ConfirmDialog onClose={(res) => this.confirmHandler(res)} active={this.state.confirmActive} message={this.state.confirmMessage}/>
       </div>
     );
   }

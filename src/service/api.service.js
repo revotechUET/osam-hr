@@ -189,6 +189,12 @@ class ApiService {
   createHoliday(summary, description, start, end, emails) {
     return gscriptrun("createEvent", {calendarIdx: 1, summary, description, start, end, emails});
   }
+  updateHoliday(eventId, summary, description, start, end, emails) {
+    return gscriptrun("updateEvent", {calendarIdx: 1, eventId, summary, description, start, end, emails});
+  }
+  deleteHoliday(eventId) {
+    return gscriptrun('deleteEvent', {calendarIdx: 1, eventId});
+  }
   createEvent(summary, description, start, end, emails) {
     return gscriptrun("createEvent", {calendarIdx: 0, summary, description, start, end, emails});
   }

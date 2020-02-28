@@ -160,6 +160,6 @@ export default [
   {
     path: "/tungtest",
     exact: true,
-    component: TungTestPage
+    component: DayOffSettingPage
   }
 ];
