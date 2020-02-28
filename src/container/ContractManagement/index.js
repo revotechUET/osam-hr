@@ -118,7 +118,6 @@ class ContractManagementPage extends React.Component {
     return (<div className="ContractManagement" style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => this.setState({ modalActive: true })}></div>
-        <div className="my-button active-btn ti ti-pencil" onClick={() => this.setState({ modalActive: true })}></div>
         <div className="title">Hợp đồng</div>
       </div>
       <DataTable
@@ -127,11 +126,18 @@ class ContractManagementPage extends React.Component {
         fixedHeaderScrollHeight="calc(100vh - 333px)"
         persistTableHead
         pagination
+        pointerOnHover
+        highlightOnHover
         noDataComponent='Không có hợp đồng'
         progressPending={this.state.loading}
         progressComponent={<Loading />}
         columns={displays}
         data={this.state.contracts}
+        onRowClicked = {() => {
+          this.setState({modalActive : true});
+          console.log(this.state.newContractName, this.state.newContractLunch);    
+        }
+      }
       />
       <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
         <div className="contract-svg"></div>

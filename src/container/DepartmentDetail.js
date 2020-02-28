@@ -69,7 +69,11 @@ class DepartmentDetailPage extends React.Component {
 
     edit() {
         let departmentId = this.props.match.params.id;
-        this.props.history.push(`/departments/${departmentId}/edit`);
+        this.props.history.push(
+            {
+                pathname : `/departments/${departmentId}/edit`,
+                state: {department: this.state.departmentDetail}
+            });
     }
 
     async delete() {

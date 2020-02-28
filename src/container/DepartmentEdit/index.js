@@ -30,10 +30,9 @@ class DepartmentEdit extends React.Component {
   async handleSave() {
     let id  = this.props.match.params.id; 
     let name = this.state.departmentName;
-    let idManager = this.state.idRequester;
+    let idManager = this.state.idManager;
     let idApprovers = this.state.idApprovers;
     let active = this.state.active;
-    console.log(id, name, idManager, idApprovers, active);
     let edit = await apiService.editDepartment({id, name, idManager, idApprovers, active});
     if (edit) {
       this.props.history.push('/departments');
@@ -60,6 +59,13 @@ class DepartmentEdit extends React.Component {
   }
 
   async componentDidMount() {
+    let department = this.props.history.location.state.department || {};
+    this.setState({
+      departmentName : department.name,
+      idManager : department.idManager,
+      active : department.active
+
+    })
     let users = await apiService.listUsers();
     this.setState({ manager: users, approvers: users });
   }
@@ -88,8 +94,7 @@ class DepartmentEdit extends React.Component {
                 keyProp='id'
                 labelProp='name'
                 onChange={(event, value) => {
-                  this.setState({ idRequester: value && value.id });
-                  console.log(typeof (this.state.idRequester));
+                  this.setState({ idManager: value && value.id});
                 }}
               />
             </div>
