@@ -179,6 +179,19 @@ class ApiService {
     return gscriptrun('updateSetting', setting)
   }
   //#endregion
+
+  getEventsOfThisMonth(args) {
+    return gscriptrun('getEventsOfThisMonth', { calendarIdx: 0 });
+  }
+  getHolidayOfThisMonth() {
+    return gscriptrun('getEventsOfThisMonth', { calendarIdx: 1});
+  }
+  createHoliday(summary, description, start, end, emails) {
+    return gscriptrun("createEvent", {calendarIdx: 1, summary, description, start, end, emails});
+  }
+  createEvent(summary, description, start, end, emails) {
+    return gscriptrun("createEvent", {calendarIdx: 0, summary, description, start, end, emails});
+  }
 }
 
 export default new ApiService();
