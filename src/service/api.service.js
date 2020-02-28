@@ -48,7 +48,7 @@ class ApiService {
   }
 
   getCalendarEvents(from, to) {
-    return gscriptrun('getCalendarEvents', id, info);
+    return gscriptrun('getCalendarEvents', from, to);
   }
 
   updateUserById(id, info) {
