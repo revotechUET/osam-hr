@@ -127,6 +127,10 @@ class ApiService {
   generateDepartmentId(){
     return gscriptrun('generateDepartmentId');
   }
+
+  createGroup(){
+    return gscriptrun('createGroup');
+  }
   //#endregion
 
   //#region leave
