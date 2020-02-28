@@ -41,6 +41,7 @@ function _loadEvents(calendarIdx, from, to) {
                 var startDate = item.start.date || item.start.dateTime; 
                 var endDate = item.end.date || item.end.dateTime || startDate;
                 return {
+                    id: item.id,
                     summary: item.summary,
                     description: item.description,
                     start: new Date(startDate).toISOString(),

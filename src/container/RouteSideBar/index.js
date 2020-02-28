@@ -15,6 +15,7 @@ export default function SideBar(props) {
                 <NavLink className = "link-element" activeClassName='active' to = '/notifies'><div className="nav-bell"></div>Thông báo</NavLink>
                 <NavLink className = "link-element" activeClassName='active' to='/setting'><div className="nav-setting"></div>Cài đặt</NavLink>
                 <NavLink className = "link-element" activeClassName='active' to='/test'><div className="nav-setting"></div>Test</NavLink>
+                <NavLink className = "link-element" activeClassName='active' to='/tungtest'><div className="nav-setting"></div>Tung Test</NavLink>
         </div>
     )
 }

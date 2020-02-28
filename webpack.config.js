@@ -48,7 +48,7 @@ const webpackConfigure = {
       }
     })
   ],
-  mode: isProduction ? 'production' : 'none',
+  mode: isProduction ? 'production' : 'development',
 };
 
 module.exports = webpackConfigure;

@@ -1,9 +1,14 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
+
+import { withSnackbar } from 'notistack';
+
 import apis from '../service/api.service';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 //import FullSizeCalendar from './../../components/FullSizeCalendar';
 let CalendarBigTable = require('react-big-calendar');
 let momentLocalizer = CalendarBigTable.momentLocalizer;
+import CenteredModal from './../components/CenteredModal';
 let Calendar = CalendarBigTable.Calendar;
 let Views = CalendarBigTable.Views;
 import moment from 'moment';;
@@ -235,7 +240,12 @@ class TestPage extends React.Component {
         super(props);
 
         this.state = {
-          events: []
+            events: [],
+            modalActive: false,
+            startTime:new Date(),
+            endTime: new Date(),
+            holidayName: "",
+            holidayDesc: ""
         }
     }
 
@@ -243,6 +253,20 @@ class TestPage extends React.Component {
       this.doGet();
     }
 
+    clearModal() {
+        this.setState({
+            modalActive: false
+        });
+    }
+
+    createEvent(summary, description, start, end, emails) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() =>{
+                reject({message: "Nooix roi"});
+            }, 1000);
+        });
+        //return apis.gscriptrun("createEvent", {summary, description, start, end, emails});
+    }
     async doGet() {
       try {
         // let date = new Date();
@@ -253,13 +277,34 @@ class TestPage extends React.Component {
             id: idx,
             start: e.start,
             end: e.end,
-            title: summary,
+            title: e.summary,
             description: "bla blo"
           }))
         })
       } catch (e) {
         console.log(e);
       }
+    }
+
+    handleChange(evt) {
+        let name = evt.target.name;
+        this.setState({
+            [name]: evt.target.value
+        });
+        /*
+        switch(evt.target.name) {
+        case "holidayName":
+            this.setState({
+                holidayName: evt.target.value
+            })
+            break;
+        case "holidayDesc":
+            break;
+            this.setState({
+                holidayName: evt.target.value
+            })
+        }
+        */
     }
 
     render() {
@@ -272,15 +317,60 @@ class TestPage extends React.Component {
               // step={60}
               selectable
               localizer={localizer}
-              onSelectEvent={event=>console.log(event)}
-              onSelectSlot = {(e)=>{console.log(e)}}
+              onSelectEvent={event=>console.log("selected:" , event)}
+              onSelectSlot = {(slotObj) => {
+                 console.log("slot:", slotObj);
+                 this.setState({modalActive:true, startTime: slotObj.start, endTime: slotObj.end});
+              }}
             />
-            {/* <iframe 
-            src="https://calendar.google.com/calendar/b/4/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=Asia%2FHo_Chi_Minh&amp;src=cXVhbmdsbkBydnRjb21wYW55LnBhZ2U&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;src=cnZ0Y29tcGFueS5wYWdlX2ZxYmU3bzFrbzNxdTdtMWZzMW5qZmVmaTJvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&amp;src=ZW4udmlldG5hbWVzZSNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%23039BE5&amp;color=%2333B679&amp;color=%23F6BF26&amp;color=%230B8043" 
-            scrolling="no" style={{border: "solid 1px #777", frameBorder: "0"}} width="800" height="600"></iframe> */}
+
+
+
+      <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
+        <div className="contract-svg"></div>
+        <div className="content-modal">
+          <div style={{ display: "flex", marginBottom: "20px" }}>
+            <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Tên ngày nghỉ</div>
+          </div>
+          <div style={{ display: "flex", marginBottom: "20px" }}>
+            <div style={{ flexBasis: "60%" }}>
+              <input className="input" placeholder="Nhập tên ngày nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
+            </div>
+          </div>
+          <div style={{ display: "flex", marginBottom: "20px" }}>
+            <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Mô tả</div>
+          </div>
+          <div style={{ display: "flex", marginBottom: "20px" }}>
+            <div style={{ flexBasis: "60%" }}>
+              <input className="input" placeholder="Mô tả" name="holidayDesc" value={this.state.holidayDesc} onChange={(e) => this.handleChange(e)} />
+            </div>
+          </div>
+          <div>
+            <h4>{this.state.startTime.toLocaleString()}</h4>
+            <h4>{this.state.endTime.toLocaleString()}</h4>
+          </div>
+          <div className="footer">
+            <div className="my-button-cancel" onClick={() => { this.clearModal() }}>Hủy</div>
+            <div className="my-button-ok" onClick={(evt) => {
+                let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
+                this.createEvent(this.state.holidayName, this.state.holidayDesc, this.state.startTime.toISOString(), this.state.endTime.toISOString(), [])
+                    .then((res) => {
+                        this.props.closeSnackbar(key);
+                        this.props.enqueueSnackbar("Thành công !", {variant: "success"});
+                    })
+                    .catch((err) => {
+                        this.props.closeSnackbar(key);
+                        this.props.enqueueSnackbar(err.message, {variant:"error"});
+                    });
+            }}>Lưu</div>
+          </div>
+        </div>
+      </CenteredModal>
+
+
           </div>
         );
     }
 }
 
-export default withRouter(TestPage);
+export default withSnackbar(withRouter(TestPage));
