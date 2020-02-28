@@ -46,7 +46,7 @@ class StaffDetailPage extends React.Component {
             <div className="StaffDetail">
                 <div className="title-vs-btn">
                     <div className="my-button active-btn ti ti-pencil" onClick = {this.edit}></div>
-                    <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={this.response}></div>
+                    <div className="my-button active-btn ti ti-back-right" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={this.response}></div>
                     <div className="title">Chấm công / <span className="uppercase">{dateFormat(this.state.checkDetail.date, 'dd/MM/yyyy')}</span></div>
                 </div>
 

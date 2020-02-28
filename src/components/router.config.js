@@ -1,4 +1,3 @@
-import StaffCheckingEditPage from '../container/CheckingEdit';
 import DepartmentDetailPage from '../container/DepartmentDetail';
 import DepartmentEdit from '../container/DepartmentEdit';
 import HomePage from '../container/HomePage';
@@ -24,6 +23,7 @@ import StaffEditPage from './../container/StaffEdit';
 import StaffLeavePage from './../container/StaffLeave';
 import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
+import StaffCheckingEditPage from './../container/CheckingEdit';
 
 
 export default [

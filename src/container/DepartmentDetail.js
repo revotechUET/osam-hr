@@ -36,6 +36,7 @@ class DepartmentDetailPage extends React.Component {
         }
         this.edit = this.edit.bind(this);
         this.delete = this.delete.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     async componentDidMount() {
@@ -63,9 +64,6 @@ class DepartmentDetailPage extends React.Component {
                 this.state.approvers.push(value.name)
             }
         });
-
-        console.log(this.state.staff);
-
         this.setState({ loading: false });
     }
 
@@ -78,6 +76,10 @@ class DepartmentDetailPage extends React.Component {
         await apiService.deleteDepartment(this.state.departmentDetail.id);
         this.props.history.push('/departments');
     }
+
+    goBack(){
+        this.props.history.push('/departments');
+    }
     render() {
         if (this.state.loading) {
             return (<Loading />)
@@ -85,8 +87,10 @@ class DepartmentDetailPage extends React.Component {
         return (
             <div className="StaffDetail">
                 <div className="title-vs-btn">
+                    <div className="my-button ti ti-arrow-left" onClick={this.goBack}  style={{background: "transparent", boxShadow: "none", color: "#888", fontSize: "20px"}}></div>
                     <div className="my-button active-btn ti ti-pencil" onClick={this.edit}></div>
-                    <div className="my-button ti ti-close" style={{background: "#ddd", boxShadow: "none", color: "#888"}} onClick={this.delete}></div>
+                    <div className="my-button ti ti-trash" style={{background: "#ddd", boxShadow: "none", color: "#888"}} onClick={this.delete}></div>
+
                     <div className="title">Bộ phận / <span>{this.state.departmentDetail.name}</span></div>
                 </div>
                 <BorderedContainer>
