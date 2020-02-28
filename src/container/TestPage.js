@@ -1,18 +1,25 @@
-import React from 'react';
-import {withRouter} from 'react-router-dom';
-
+import { format, getDay, parse, startOfWeek } from 'date-fns';
 import { withSnackbar } from 'notistack';
-
-import apis from '../service/api.service';
+import React from 'react';
 import "react-big-calendar/lib/css/react-big-calendar.css";
-//import FullSizeCalendar from './../../components/FullSizeCalendar';
-let CalendarBigTable = require('react-big-calendar');
-let momentLocalizer = CalendarBigTable.momentLocalizer;
+import dateFnsLocalizer from 'react-big-calendar/lib/localizers/date-fns';
+import { withRouter } from 'react-router-dom';
 import CenteredModal from './../components/CenteredModal';
-let Calendar = CalendarBigTable.Calendar;
-let Views = CalendarBigTable.Views;
-// import moment from 'moment';;
-// const localizer = momentLocalizer(moment);
+import { Calendar, Views } from 'react-big-calendar'
+
+const locales = {
+  'en-US': require('date-fns/locale/en-US'),
+  'vi': require('date-fns/locale/vi'),
+}
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
+
 let allViews = Object.keys(Views).map(k => Views[k]);
 
 
@@ -236,141 +243,140 @@ let mock = {
 }
 
 class TestPage extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            events: [],
-            modalActive: false,
-            startTime:new Date(),
-            endTime: new Date(),
-            holidayName: "",
-            holidayDesc: ""
-        }
+    this.state = {
+      events: [],
+      modalActive: false,
+      startTime: new Date(),
+      endTime: new Date(),
+      holidayName: "",
+      holidayDesc: ""
     }
+  }
 
-    componentDidMount() {
-      this.doGet();
+  componentDidMount() {
+    this.doGet();
+  }
+
+  clearModal() {
+    this.setState({
+      modalActive: false
+    });
+  }
+
+  createEvent(summary, description, start, end, emails) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject({ message: "Nooix roi" });
+      }, 1000);
+    });
+    //return apis.gscriptrun("createEvent", {summary, description, start, end, emails});
+  }
+  async doGet() {
+    try {
+      // let date = new Date();
+      // let events = await apis.getCalendarEvents(date - 60*24*60*60*1000, new Date().toString());
+      // console.log(events);
+      this.setState({
+        events: mock.events.map((e, idx) => ({
+          id: idx,
+          start: e.start,
+          end: e.end,
+          title: e.summary,
+          description: "bla blo"
+        }))
+      })
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    clearModal() {
+  handleChange(evt) {
+    let name = evt.target.name;
+    this.setState({
+      [name]: evt.target.value
+    });
+    /*
+    switch(evt.target.name) {
+    case "holidayName":
         this.setState({
-            modalActive: false
-        });
-    }
-
-    createEvent(summary, description, start, end, emails) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() =>{
-                reject({message: "Nooix roi"});
-            }, 1000);
-        });
-        //return apis.gscriptrun("createEvent", {summary, description, start, end, emails});
-    }
-    async doGet() {
-      try {
-        // let date = new Date();
-        // let events = await apis.getCalendarEvents(date - 60*24*60*60*1000, new Date().toString());
-        // console.log(events);
-        this.setState({
-          events: mock.events.map((e, idx)=>({
-            id: idx,
-            start: e.start,
-            end: e.end,
-            title: e.summary,
-            description: "bla blo"
-          }))
+            holidayName: evt.target.value
         })
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    handleChange(evt) {
-        let name = evt.target.name;
+        break;
+    case "holidayDesc":
+        break;
         this.setState({
-            [name]: evt.target.value
-        });
-        /*
-        switch(evt.target.name) {
-        case "holidayName":
-            this.setState({
-                holidayName: evt.target.value
-            })
-            break;
-        case "holidayDesc":
-            break;
-            this.setState({
-                holidayName: evt.target.value
-            })
-        }
-        */
+            holidayName: evt.target.value
+        })
     }
+    */
+  }
 
-    render() {
-        return (
-          <div className="DayOffSetting">
-            <Calendar
-              events={this.state.events}
-              defaultView={Views.MONTH}
-              views = {allViews}
-              // step={60}
-              selectable
-              localizer={localizer}
-              onSelectEvent={event=>console.log("selected:" , event)}
-              onSelectSlot = {(slotObj) => {
-                 console.log("slot:", slotObj);
-                 this.setState({modalActive:true, startTime: slotObj.start, endTime: slotObj.end});
-              }}
-            />
+  render() {
+    return (
+      <div className="DayOffSetting">
+        <Calendar
+          events={this.state.events}
+          // views={allViews}
+          // step={60}
+          selectable
+          localizer={localizer}
+          onSelectEvent={event => console.log("selected:", event)}
+          onSelectSlot={(slotObj) => {
+            console.log("slot:", slotObj);
+            this.setState({ modalActive: true, startTime: slotObj.start, endTime: slotObj.end });
+          }}
+        />
 
 
 
-      <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
-        <div className="contract-svg"></div>
-        <div className="content-modal">
-          <div style={{ display: "flex", marginBottom: "20px" }}>
-            <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Tên ngày nghỉ</div>
-          </div>
-          <div style={{ display: "flex", marginBottom: "20px" }}>
-            <div style={{ flexBasis: "60%" }}>
-              <input className="input" placeholder="Nhập tên ngày nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
+        <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
+          <div className="contract-svg"></div>
+          <div className="content-modal">
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Tên ngày nghỉ</div>
             </div>
-          </div>
-          <div style={{ display: "flex", marginBottom: "20px" }}>
-            <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Mô tả</div>
-          </div>
-          <div style={{ display: "flex", marginBottom: "20px" }}>
-            <div style={{ flexBasis: "60%" }}>
-              <input className="input" placeholder="Mô tả" name="holidayDesc" value={this.state.holidayDesc} onChange={(e) => this.handleChange(e)} />
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "60%" }}>
+                <input className="input" placeholder="Nhập tên ngày nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
+              </div>
             </div>
-          </div>
-          <div>
-            <h4>{this.state.startTime.toLocaleString()}</h4>
-            <h4>{this.state.endTime.toLocaleString()}</h4>
-          </div>
-          <div className="footer">
-            <div className="my-button-cancel" onClick={() => { this.clearModal() }}>Hủy</div>
-            <div className="my-button-ok" onClick={(evt) => {
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Mô tả</div>
+            </div>
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div style={{ flexBasis: "60%" }}>
+                <input className="input" placeholder="Mô tả" name="holidayDesc" value={this.state.holidayDesc} onChange={(e) => this.handleChange(e)} />
+              </div>
+            </div>
+            <div>
+              <h4>{this.state.startTime.toLocaleString()}</h4>
+              <h4>{this.state.endTime.toLocaleString()}</h4>
+            </div>
+            <div className="footer">
+              <div className="my-button-cancel" onClick={() => { this.clearModal() }}>Hủy</div>
+              <div className="my-button-ok" onClick={(evt) => {
                 let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
                 this.createEvent(this.state.holidayName, this.state.holidayDesc, this.state.startTime.toISOString(), this.state.endTime.toISOString(), [])
-                    .then((res) => {
-                        this.props.closeSnackbar(key);
-                        this.props.enqueueSnackbar("Thành công !", {variant: "success"});
-                    })
-                    .catch((err) => {
-                        this.props.closeSnackbar(key);
-                        this.props.enqueueSnackbar(err.message, {variant:"error"});
-                    });
-            }}>Lưu</div>
+                  .then((res) => {
+                    this.props.closeSnackbar(key);
+                    this.props.enqueueSnackbar("Thành công !", { variant: "success" });
+                  })
+                  .catch((err) => {
+                    this.props.closeSnackbar(key);
+                    this.props.enqueueSnackbar(err.message, { variant: "error" });
+                  });
+              }}>Lưu</div>
+            </div>
           </div>
-        </div>
-      </CenteredModal>
+        </CenteredModal>
 
 
-          </div>
-        );
-    }
+      </div>
+    );
+  }
 }
 
 export default withSnackbar(withRouter(TestPage));
