@@ -118,6 +118,7 @@ class ContractManagementPage extends React.Component {
     return (<div className="ContractManagement" style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => this.setState({ modalActive: true })}></div>
+        <div className="my-button active-btn ti ti-pencil" onClick={() => this.setState({ modalActive: true })}></div>
         <div className="title">Hợp đồng</div>
       </div>
       <DataTable
