@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const RemovePlugin = require('remove-files-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -35,6 +36,22 @@ const webpackConfigure = {
         test: /\.svg$/,
         loader: 'svg-inline-loader?classPrefix'
       },
+    ]
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          mangle: isProduction,
+          compress: {
+            drop_console: isProduction,
+            drop_debugger: isProduction
+          },
+          output: {
+            beautify: false
+          }
+        }
+      })
     ]
   },
   plugins: [

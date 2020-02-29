@@ -67,6 +67,7 @@ function _loadEvents(calendarIdx, from, to) {
     }
 }
 export const getEvents = _loadEvents;
+global.getEvents = _loadEvents;
 
 function getEventsOfThisMonth({ calendarIdx = 0,  startDate = 1 }) {
     var now = new Date();
