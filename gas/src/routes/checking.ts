@@ -10,11 +10,11 @@ global.checkingDetail = checkingDetail;
 global.checkingEdit = checkingEdit;
 
 function listCheck({ idUser}){
-    const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
+    const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester').setType('inner');
     if (idUser) {
         checkingQuery.sWhere('idUser', idUser);
       }
-    return checkingQuery.toJSON(); 
+    return checkingQuery.toJSON();
 }
 
 function checkingNew(data : Checking){
@@ -32,11 +32,11 @@ function checkingNew(data : Checking){
 // }
 
 function checkingDetail({idUser}){
-  const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester');
+  const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester').setType('inner');
   if (idUser) {
     checkingQuery.sWhere('idUser', idUser);
   }
-  return checkingQuery.toJSON(); 
+  return checkingQuery.toJSON();
 }
 
 function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note}){

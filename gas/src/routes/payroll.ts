@@ -1,10 +1,12 @@
-import { areIntervalsOverlapping, eachDayOfInterval, endOfDay, isSameDay, startOfDay, min, lastDayOfMonth, subMonths, getDaysInMonth } from 'date-fns';
-import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
+import { areIntervalsOverlapping, eachDayOfInterval, eachMonthOfInterval, endOfDay, getDaysInMonth, isSameDay, min, startOfDay, subMonths } from 'date-fns';
+import { Leave, LeaveStatus, LeaveReason } from "../@types/leave";
 import { db } from "../db";
+import { getEvents } from './calendar';
 import { getSetting } from './setting';
+import { listUsers } from './user';
 
 global.getPayroll = getPayroll;
-function getPayroll({ startDate, endDate, idDepartment = null }) {
+function getPayroll(startDate: string, endDate: string, idDepartment?) {
   if (!startDate || !endDate) throw 'Không có khoảng thời gian tính công';
   startDate = startOfDay(new Date(startDate)).toISOString();
   endDate = endOfDay(min([new Date(endDate), new Date()])).toISOString();
@@ -21,22 +23,53 @@ function getPayroll({ startDate, endDate, idDepartment = null }) {
   const checkings = checkingQuery.toJSON().map(c => ({ ...c, date: new Date(c.date), checkinTime: new Date(c.checkinTime), checkoutTime: new Date(c.checkoutTime) }));
   if (!checkings.length) return [];
   const setting = getSetting();
-  const users = db.from('user').query.where('active', true).toJSON();
+  const users = listUsers({ loadContracts: true });
   const leavesQuery = db.from<Leave>('leave').query
   const [statusCol, startTimeCol, endTimeCol] = ['status', 'startTime', 'endTime'].map(leavesQuery.getColId.bind(leavesQuery));
   leavesQuery.raw(
     `SELECT * WHERE ${statusCol} ='${LeaveStatus.Approved}' AND
      ((${startTimeCol} >='${startDate}' AND ${startTimeCol} <='${endDate}') OR (${endTimeCol} >= '${startDate}' AND ${endTimeCol} <='${endDate}'))`
   )
-  const leaves = leavesQuery.toJSON().map(l => ({ idRequester: l.idRequester, startTime: new Date(l.startTime), endTime: new Date(l.endTime) }));
+  const leaves = leavesQuery.toJSON().map(l => ({ ...l, idRequester: l.idRequester, startTime: new Date(l.startTime), endTime: new Date(l.endTime) }));
+  const events = getEvents(1, new Date(startDate), new Date(endDate)).events;
+  const daysOff = [];
+  for (const event of events) {
+    daysOff.push(...eachDayOfInterval({ start: new Date(event.start), end: new Date(event.end) }));
+  }
+  const { start: yearStart } = _getThisYearInterval(setting);
+  const allLeaves = db.from<Leave>('leave').query
+    .where('status', LeaveStatus.Approved)
+    .where('reason', LeaveReason.Personal)
+    .where('endTime', '>', yearStart.toISOString())
+    .toJSON();
   for (const user of users) {
+    if (!user.contract) throw `User ${user.name} must have a contract`;
     const userCheckings = checkings.filter(c => c.idUser === user.id);
     const userLeaves = leaves.filter(l => l.idRequester === user.id);
-    const { points, lunches, permittedLeaves, unpermittedLeaves } = getSummaries({ checkings: userCheckings, leaves: userLeaves, setting, startDate, endDate });
-    user.points = points;
-    user.lunches = lunches;
-    user.permittedLeaves = permittedLeaves;
-    user.unpermittedLeaves = unpermittedLeaves;
+    const otherLeaves = allLeaves.filter(l => l.idRequester === user.id && !userLeaves.find(l1 => l1.id === l.id));
+    const remainingLeaves = getRemainingLeaves(user.id, otherLeaves);
+    let { points, lunches, permittedLeaves, unpermittedLeaves } = getSummaries({
+      checkings: userCheckings,
+      leaves: remainingLeaves > 0 ? userLeaves : [],
+      startDate,
+      endDate,
+      setting: {
+        ...setting,
+        haveLunch: user.contract.lunch,
+        contractType: user.contract.type,
+        daysOff,
+      },
+    });
+    if (permittedLeaves > remainingLeaves) {
+      permittedLeaves = remainingLeaves;
+      unpermittedLeaves += permittedLeaves - remainingLeaves;
+    }
+    Object.assign(user, {
+      points,
+      lunches,
+      permittedLeaves,
+      unpermittedLeaves,
+    })
   }
   return users;
 }
@@ -62,21 +95,28 @@ function getPayrollThisMonth({ dateInMonth = null } = {}) {
     startDate.setDate(Math.min(maxDay, setting.monthEnd) + 1);
     endDate.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));
   }
-  return getPayroll({ startDate: startDate.toISOString(), endDate: endDate.toISOString() });
+  return getPayroll(startDate.toISOString(), endDate.toISOString());
 }
 
 function getSummaries({ startDate, endDate, checkings, leaves, setting }) {
   const dates = eachDayOfInterval({ start: new Date(startDate), end: new Date(endDate) }).map(d => ({ start: d, end: endOfDay(d) }));
   let points = 0, lunches = 0, permittedLeaves = 0, unpermittedLeaves = 0;
+  const ratio = setting.contractType === 'parttime' ? 2 : 1;
   for (const date of dates) {
+    if (setting.daysOff.find(d => isSameDay(d, date.start))) {
+      const workDay = setting.workDays[date.start.getDay()];
+      if (workDay === 0) continue;
+      else if (workDay === 3) points += 1 * ratio;
+      else points += 0.5 * ratio;
+    }
     const checking = checkings.find(c => isSameDay(c.date, date.start));
     const leave = leaves.find(l => areIntervalsOverlapping({ start: l.startTime, end: l.endTime }, date));
     if (!checking && !leave) continue;
     const { point, lunch, permittedLeave, unpermittedLeave } = getDateSummaries(date.start, checking, leave, setting);
     points += point;
     lunches += lunch;
-    permittedLeaves = permittedLeave;
-    unpermittedLeaves = unpermittedLeave;
+    permittedLeaves += permittedLeave;
+    unpermittedLeaves += unpermittedLeave;
   }
   return { points, lunches, permittedLeaves, unpermittedLeaves };
 }
@@ -101,13 +141,12 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     ret.setFullYear(y, m, d);
     return ret;
   });
-  let totalLeave = 0;
   if (leave) {
     leave = {
+      ...leave,
       startTime: new Date(leave.startTime),
       endTime: new Date(leave.endTime),
     }
-    totalLeave = leave.endTime - leave.startTime;
   }
   let checkin: Date, checkout: Date;
   if (checking) {
@@ -125,18 +164,12 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     let leaveValid = false, checkingValid = false;
     if (leave && areIntervalsOverlapping({ start: leave.startTime, end: leave.endTime }, { start: morningStart, end: morningEnd })) {
       leaveValid = true;
+      permittedLeave1 = Math.min(+morningEnd, +leave.endTime) - Math.max(+morningStart, +leave.startTime);
     }
     if (checking && areIntervalsOverlapping({ start: checkin, end: checkout }, { start: morningStart, end: morningEnd })) {
       checkingValid = true;
       late1 = Math.max(0, +checkin - +morningStart);
       early1 = Math.max(0, +morningEnd - +checkout);
-    }
-    if (leaveValid) {
-      if (leave.endTime >= checkin && leave.endTime <= checkout) {
-        permittedLeave1 = Math.min(totalLeave, leave.endTime - + morningStart);
-      } else {
-        permittedLeave1 = Math.min(total1, Math.min(+leave.endTime, +morningEnd) - leave.startTime);
-      }
     }
     if (checkingValid || leaveValid) {
       unpermittedLeave1 = Math.max(0, late1 + early1 - permittedLeave1);
@@ -152,18 +185,12 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     total2 = +afternoonEnd - +afternoonStart;
     if (leave && areIntervalsOverlapping({ start: leave.startTime, end: leave.endTime }, { start: afternoonStart, end: afternoonEnd })) {
       leaveValid = true;
+      permittedLeave2 = Math.min(+afternoonEnd, +leave.endTime) - Math.max(+afternoonStart, +leave.startTime);
     }
     if (checking && areIntervalsOverlapping({ start: checkin, end: checkout }, { start: afternoonStart, end: afternoonEnd })) {
       checkingValid = true;
       late2 = Math.max(0, +checkin - +afternoonStart);
       early2 = Math.max(0, +afternoonEnd - +checkout);
-    }
-    if (leaveValid) {
-      if (leave.endTime >= checkin && leave.endTime <= checkout) {
-        permittedLeave2 = Math.min(totalLeave, leave.endTime - + afternoonStart);
-      } else {
-        permittedLeave2 = Math.min(total2, +afternoonEnd - leave.startTime);
-      }
     }
     if (checkingValid || leaveValid) {
       unpermittedLeave2 = Math.max(0, late2 + early2 - permittedLeave2);
@@ -185,5 +212,84 @@ function getDateSummaries(date: Date, checking, leave, setting) {
   point = point1 + point2;
   permittedLeave = permittedLeave1 + permittedLeave2;
   unpermittedLeave = unpermittedLeave1 + unpermittedLeave2;
+  if (leave && leave.reason != LeaveReason.Personal) {
+    point += permittedLeave;
+    permittedLeave = 0;
+  }
   return { point: +point.toFixed(2), lunch, permittedLeave: +permittedLeave.toFixed(2), unpermittedLeave: +unpermittedLeave.toFixed(2) };
+}
+
+function getRemainingLeaves(idUser, leaves?) {
+  const setting = getSetting();
+  const { start, end } = _getThisYearInterval(setting);
+  leaves = leaves || db.from<Leave>('leave').query
+    .where('idRequester', idUser)
+    .where('status', LeaveStatus.Approved)
+    .where('reason', LeaveReason.Personal)
+    .where('endTime', '>', start.toISOString())
+    .toJSON();
+  const daysOff = [];
+  const events = getEvents(1, new Date(start), new Date(end)).events;
+  for (const event of events) {
+    daysOff.push(...eachDayOfInterval({ start: new Date(event.start), end: new Date(event.end) }));
+  }
+  return _getTotalPermittedLeaves(setting) - _getPermittedLeaves(leaves, { ...setting, daysOff });
+}
+
+function _getThisYearInterval(setting) {
+  setting = setting || getSetting();
+  const yearEnd = setting.yearEnd;
+  const now = new Date();
+  const currentMonth = new Date().getMonth();
+  const start = new Date();
+  start.setMonth(yearEnd);
+  if (currentMonth <= yearEnd) {
+    start.setFullYear(now.getFullYear() - 1);
+  }
+  const maxDay = getDaysInMonth(start);
+  start.setDate(Math.min(maxDay, setting.monthEnd) + 1);
+  return { start: startOfDay(start), end: now };
+}
+function _getTotalPermittedLeaves(setting) {
+  return eachMonthOfInterval(_getThisYearInterval(setting)).length;
+}
+function _getPermittedLeaves(leaves, setting) {
+  setting = setting || getSetting();
+  let permittedLeaves = 0;
+  for (const leave of leaves) {
+    const startTime = new Date(leave.startTime);
+    const endTime = new Date(leave.endTime);
+    const dates = eachDayOfInterval({ start: startTime, end: endTime });
+    for (const date of dates) {
+      const workDay = setting.workDays[date.getDay()];
+      if (workDay === 0 || setting.daysOff.find(d => isSameDay(d, date))) continue;
+      const [y, m, d] = [date.getFullYear(), date.getMonth(), date.getDate()];
+      const [
+        morningStart,
+        morningEnd,
+        afternoonStart,
+        afternoonEnd
+      ] = [
+        setting.morningStart,
+        setting.morningEnd,
+        setting.afternoonStart,
+        setting.afternoonEnd,
+      ].map(v => {
+        const ret = new Date(v);
+        ret.setFullYear(y, m, d);
+        return ret;
+      });
+      if (workDay === 1 || workDay === 3) {
+        if (areIntervalsOverlapping({ start: startTime, end: endTime }, { start: morningStart, end: morningEnd })) {
+          permittedLeaves += Math.min(+morningEnd, +endTime) - Math.max(+morningStart, +startTime);
+        }
+      }
+      if (workDay === 2 || workDay === 3) {
+        if (areIntervalsOverlapping({ start: startTime, end: endTime }, { start: afternoonStart, end: afternoonEnd })) {
+          permittedLeaves += Math.min(+afternoonEnd, +endTime) - Math.max(+afternoonStart, +startTime);
+        }
+      }
+    }
+  }
+  return permittedLeaves;
 }

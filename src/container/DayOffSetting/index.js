@@ -119,22 +119,22 @@ class DayOffSettingPage extends React.Component {
   selectSlotHandler(slotObj) {
     console.log("slot:", slotObj);
     this.setState({
-      modalActive:true, 
-      detailedActive:false, 
-      startTime: slotObj.start, 
-      holidayName: "", 
-      holidayDesc: "", 
+      modalActive:true,
+      detailedActive:false,
+      startTime: slotObj.start,
+      holidayName: "",
+      holidayDesc: "",
       endTime: slotObj.end
     });
   }
   selectEventHandler(event) {
     console.log("selected:" , event);
     this.setState({
-      detailedActive:true, 
-      modalActive:false, 
-      holidayName: event.title, 
-      holidayDesc: event.description, 
-      startTime:event.start, 
+      detailedActive:true,
+      modalActive:false,
+      holidayName: event.title,
+      holidayDesc: event.description,
+      startTime:event.start,
       endTime:event.end,
       eventId: event.id
     })
@@ -211,10 +211,10 @@ class DayOffSettingPage extends React.Component {
                   let key = this.props.enqueueSnackbar("Đang cập nhật ngày nghỉ");
                   this.updateHoliday(
                     this.state.eventId,
-                    this.state.holidayName, 
-                    this.state.holidayDesc, 
-                    this.state.startTime, 
-                    this.state.endTime, 
+                    this.state.holidayName,
+                    this.state.holidayDesc,
+                    this.state.startTime,
+                    this.state.endTime,
                     []
                   ).then((res) => {
                     this.props.closeSnackbar(key);
@@ -259,10 +259,10 @@ class DayOffSettingPage extends React.Component {
               <div className="my-button-ok" onClick={(evt) => {
                   let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
                   this.createHoliday(
-                    this.state.holidayName, 
-                    this.state.holidayDesc, 
-                    this.state.startTime.toISOString(), 
-                    this.state.endTime.toISOString(), 
+                    this.state.holidayName,
+                    this.state.holidayDesc,
+                    this.state.startTime.toISOString(),
+                    this.state.endTime.toISOString(),
                     []
                   ).then((res) => {
                     this.props.closeSnackbar(key);

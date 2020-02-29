@@ -1,5 +1,5 @@
 import React from 'react';
-import { fromEvent } from 'rxjs';
+// import { fromEvent } from 'rxjs';
 import { withRouter } from 'react-router-dom';
 
 import './style.less';
@@ -23,17 +23,17 @@ class TopBar extends React.Component {
     this.setState({
       openning: false
     });
-    this.clickStream = fromEvent(document, 'click').subscribe((e)=>{
-        if (this.bellRef.current.contains(e.target)) {
-          return;
-        }
-        if (!(this.contentRef).current.contains(e.target)) {
-            if (this.state.opening) 
-              this.setState({
-                  opening: false
-              });
-        }
-    });
+    // this.clickStream = fromEvent(document, 'click').subscribe((e)=>{
+    //     if (this.bellRef.current.contains(e.target)) {
+    //       return;
+    //     }
+    //     if (!(this.contentRef).current.contains(e.target)) {
+    //         if (this.state.opening)
+    //           this.setState({
+    //               opening: false
+    //           });
+    //     }
+    // });
   }
 
   componentWillUnmount() {
@@ -50,7 +50,7 @@ class TopBar extends React.Component {
               <div className="bage"></div>
             </div>
             <div ref={this.contentRef} className="container-drop-down-noti">
-            {opening && 
+            {opening &&
               <div className="drop-down-noti">
                 <div style={{flex: 1, overflow: "auto", margin: "10px"}}>
                     <div className="item-noti">

@@ -15,11 +15,11 @@ function addNewDepartment(data) {
 }
 
 function listDepartment() {
-  return db.from<Department>('department').query.toJSON();
+  return db.join<Department, User>('department', 'user', 'idManager', 'manager').setType('inner').toJSON();
 }
 
 function departmentDetail({ id }) {
-  const departmentQuery = db.join<Department, User>('department', 'user', 'id', 'department');
+  const departmentQuery = db.join<Department, User>('department', 'user', 'id', 'department').setType('inner');
   if (id) {
     departmentQuery.sWhere('id', id);
   }

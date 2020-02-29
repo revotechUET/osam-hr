@@ -15,7 +15,6 @@ async function start() {
   for (const filePath of CONFIGS) {
     try {
       await fs.access(filePath);
-      console.log('lol22');
       await fs.copyFile(filePath, CONFIG_PATH);
       break;
     } catch (e) { }
@@ -39,7 +38,7 @@ async function start() {
       stdout: process.stdout,
       stderr: process.stderr,
     });
-  }, 5000);
+  }, 7000);
 }
 
 start();

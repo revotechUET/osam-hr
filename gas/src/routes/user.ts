@@ -21,8 +21,8 @@ function listUsersDomain(maxResults) {
   return response.users.map((e)=>({primaryEmail: e.primaryEmail, id: e.id, name: {familyName: e.name.familyName, givenName: e.name.givenName, fullName: e.name.fullName}}));
 }
 
-function listUsers({ full = false, loadDepartments = false, loadContracts = false } = {}) {
-  let users;
+export function listUsers({ full = false, loadDepartments = false, loadContracts = false } = {}) {
+  let users: User[];
   if (full || loadContracts) {
     users = db.join<User, Contract>('user', 'contract', 'idContract', 'contract').toJSON();
   } else {

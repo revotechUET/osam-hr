@@ -17,7 +17,7 @@ function getContractById(id) {
     const contracts = JSON.parse(cached);
     return contracts.find(c => c.id === id);
   }
-  return db.from<Contract>('contract').query.where('id', id).toJSON();
+  return db.from<Contract>('contract').query.where('id', id).toJSON(1)[0];
 }
 
 function insertContract(contract: Contract) {

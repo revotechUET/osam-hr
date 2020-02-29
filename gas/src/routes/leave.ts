@@ -8,7 +8,7 @@ import { userInfo, uuid } from "../utils";
 
 global.leaveList = leaveList;
 function leaveList({ id, startTime, endTime, status }) {
-  const leavesQuery = db.join<Leave, User>('leave', 'user', 'idRequester', 'requester');
+  const leavesQuery = db.join<Leave, User>('leave', 'user', 'idRequester', 'requester').setType('inner');
   if (id) {
     leavesQuery.sWhere('id', id);
   }

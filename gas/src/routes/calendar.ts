@@ -46,7 +46,7 @@ function _loadEvents(calendarIdx, from, to) {
             from: from.toISOString(),
             to: to.toISOString(),
             events: events.items.map(item => {
-                var startDate = item.start.date || item.start.dateTime; 
+                var startDate = item.start.date || item.start.dateTime;
                 var endDate = item.end.date || item.end.dateTime || startDate;
                 return {
                     id: item.id,
@@ -66,6 +66,8 @@ function _loadEvents(calendarIdx, from, to) {
         }
     }
 }
+export const getEvents = _loadEvents;
+
 function getEventsOfThisMonth({ calendarIdx = 0,  startDate = 1 }) {
     var now = new Date();
     var start = new Date(now);
@@ -79,7 +81,7 @@ function getEventsOfThisMonth({ calendarIdx = 0,  startDate = 1 }) {
 function createEvent({calendarIdx = 0, summary, description, start, end, emails = []}) {
     var calendarId = calendarIds[calendarIdx];
     var event = _createEvent(calendarId,{
-        summary, description, 
+        summary, description,
         start: {
             dateTime: start
         },
@@ -88,7 +90,7 @@ function createEvent({calendarIdx = 0, summary, description, start, end, emails 
         },
         attendees: emails.map(email => ({email}))
     });
-    
+
     return event;
 }
 

@@ -15,8 +15,20 @@ const columns = [
     selector: 'name',
   },
   {
+    name: 'Công',
+    selector: row => row.points.toFixed(1),
+  },
+  {
+    name: 'Nghỉ có phép',
+    selector: row => row.permittedLeaves.toFixed(1),
+  },
+  {
+    name: 'Nghỉ không phép',
+    selector: row => row.unpermittedLeaves.toFixed(1),
+  },
+  {
     name: 'Tổng công',
-    selector: 'points',
+    selector: row => +(row.points + row.permittedLeaves).toFixed(1),
   },
   {
     name: 'Buổi ăn trưa',
@@ -51,7 +63,7 @@ function PayrollPage({ history }) {
       if (!startDate || !endDate) return;
       setState({ proceeded: true, loading: true });
       try {
-        const data = await cancellable(apiService.getPayroll({startDate, endDate, idDepartment}));
+        const data = await cancellable(apiService.getPayroll(startDate, endDate, idDepartment));
         setState({ data });
       } catch (error) {
         enqueueSnackbar(error.message || 'Lỗi không xác định', { variant: 'error' });
