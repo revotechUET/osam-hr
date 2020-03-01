@@ -84,6 +84,9 @@ class ApiService {
   insertContract(contract) {
     return gscriptrun('insertContract', contract);
   }
+  updateContract(contract){
+    return gscriptrun('updateContract', contract);
+  }
   //#region user
   listUsers(payload) {
     return gscriptrun('listUsers', payload);
@@ -128,8 +131,8 @@ class ApiService {
     return gscriptrun('generateDepartmentId');
   }
 
-  createGroup(){
-    return gscriptrun('createGroup');
+  createGroup(email, name){
+    return gscriptrun('createGroup',email, name);
   }
   //#endregion
 
@@ -166,6 +169,9 @@ class ApiService {
   }
   checkingEdit(payload){
     return gscriptrun('checkingEdit', payload);
+  }
+  checkingResponse(payload){
+    return gscriptrun('checkingResponse', payload);
   }
 
   //#endregion

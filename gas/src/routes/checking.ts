@@ -8,6 +8,7 @@ global.listCheck = listCheck;
 global.checkingNew = checkingNew;
 global.checkingDetail = checkingDetail;
 global.checkingEdit = checkingEdit;
+global.checkingResponse = checkingResponse;
 
 function listCheck({ idUser}){
     const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester').setType('inner');
@@ -41,4 +42,8 @@ function checkingDetail({idUser}){
 
 function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note}){
   return db.from<Checking>('checking').update(id, { date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note});
+}
+
+function checkingResponse({id, responseContent}){
+  return db.from<Checking>('checking').update(id, {responseContent});
 }

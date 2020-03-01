@@ -43,7 +43,7 @@ class DepartmentNewPage extends React.Component {
         active: this.state.active
       };
       let addNewDepartment = await apiService.addNewDepartment(data);
-      await apiService.createGroup();
+      await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
       let updateDepartment = {
         departments : [id]
       }

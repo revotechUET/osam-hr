@@ -24,6 +24,7 @@ import StaffLeavePage from './../container/StaffLeave';
 import StaffLeaveNewPage from './../container/StaffLeaveNew';
 import StaffNewPage from './../container/StaffNew';
 import StaffCheckingEditPage from './../container/CheckingEdit';
+import ContractEditPage from './../container/ContractEdit';
 
 import TungTestPage from '../container/TungTestPage';
 
@@ -116,6 +117,11 @@ export default [
     path: "/contracts",
     exact: true,
     component: ContractManagementPage
+  },
+  {
+    path: "/contracts/:id/edit",
+    exact: true,
+    component: ContractEditPage
   },
   {
     path: "/notifies",

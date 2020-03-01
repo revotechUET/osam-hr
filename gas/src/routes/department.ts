@@ -19,7 +19,7 @@ function listDepartment() {
 }
 
 function departmentDetail({ id }) {
-  const departmentQuery = db.join<Department, User>('department', 'user', 'id', 'department').setType('inner');
+  const departmentQuery = db.join<Department, User>('department', 'user', 'id', 'department');
   if (id) {
     departmentQuery.sWhere('id', id);
   }

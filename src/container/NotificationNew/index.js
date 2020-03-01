@@ -2,8 +2,8 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import BorderedContainer from "./../../components/BorderedContainer";
 
-// import CKEditor from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import './style.less'
 
@@ -51,8 +51,8 @@ class NotificationNewPage extends React.Component {
 
         <div className = "input-field">
             <div className = "label"> Nội dung</div>
-            <div className="input">
-              {/* <CKEditor
+            
+              <CKEditor
                       editor={ ClassicEditor }
                       data="<p>Please input notification content</p>"
                       onInit={ editor => {
@@ -69,8 +69,8 @@ class NotificationNewPage extends React.Component {
                       onFocus={ ( event, editor ) => {
                           console.log( 'Focus.', editor );
                       } }
-                  /> */}
-            </div>
+                  />
+      
         </div>
         </BorderedContainer>
       </div>

@@ -1,14 +1,13 @@
 global.createGroup = createGroup;
-global.create = create;
 global.getService = getService;
 
-function createGroup() {
-    create('group2@rvtcompany.page', 'Testing', 'This is group created by Thinh');
-  }
   
-  function create(email, name ,des) {
+  function createGroup(email, name ) {
     var service = getService();
-    var requestBody = JSON.stringify({email: email, name : name, description : des});
+
+    let groupEmail = name + "@" + email.split('@')[1];
+
+    var requestBody = JSON.stringify({email: groupEmail, name : name});
     if (service.hasAccess()) {
       var url = 'https://www.googleapis.com/admin/directory/v1/groups';
       var response = UrlFetchApp.fetch(url, {
@@ -20,7 +19,6 @@ function createGroup() {
         }
       });
       var result = JSON.parse(response.getContentText());
-      Logger.log(JSON.stringify(result, null, 2));
     } else {
       var authorizationUrl = service.getAuthorizationUrl();
       Logger.log('Open the following URL and re-run the script: %s',
