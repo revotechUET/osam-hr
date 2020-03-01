@@ -177,6 +177,9 @@ class ApiService {
   //#endregion
 
   // payroll
+  getMonthInterval(dateInMonth) {
+    return gscriptrun('getMonthInterval', dateInMonth)
+  }
   getPayroll(...args) {
     return gscriptrun('getPayroll', ...args);
   }
@@ -190,11 +193,19 @@ class ApiService {
   }
   //#endregion
 
-  getEventsOfThisMonth(args) {
-    return gscriptrun('getEventsOfThisMonth', { calendarIdx: 0 });
+  getEventsOfThisMonth(calendarIdx = 0, startDate = 1) {
+    return gscriptrun('getEventsOfThisMonth', { calendarIdx, startDate });
+  }
+  getEventsOfMonth(calendarIdx = 0, startDate = 1, date) {
+    return gscriptrun('getEventsOfMonth', { calendarIdx, startDate, date });
   }
   getHolidayOfThisMonth() {
     return gscriptrun('getEventsOfThisMonth', { calendarIdx: 1});
+  }
+  getHolidayOfMonth(date) {
+    date = date || new Date();
+    console.log(new Date(date).toDateString());
+    return gscriptrun('getEventsOfMonth', { calendarIdx: 1, date, buffer: 1 });
   }
   createHoliday(summary, description, start, end, emails) {
     return gscriptrun("createEvent", {calendarIdx: 1, summary, description, start, end, emails});
@@ -208,104 +219,18 @@ class ApiService {
   createEvent(summary, description, start, end, emails) {
     return gscriptrun("createEvent", {calendarIdx: 0, summary, description, start, end, emails});
   }
+  getNotifications() {
+    return gscriptrun("getNotifications", {});
+  }
+  addNotification(notification) {
+    return gscriptrun("addNotification", notification);
+  }
+  deleteNotification(id) {
+    return gscriptrun("deleteNotification", {id});
+  }
+  updateNotification(notification) {
+    return gscriptrun("updateNotification", notification);
+  }
 }
 
 export default new ApiService();
-/*
-
-let config = require('./../config/config');
-const Axios = require('axios-observable').Axios;
-let Observable = require('rxjs').Observable;
-
-module.exports = {
-  get: get,
-  post: post
-}
-
-function handleGet() {
-  return (observable) => new Observable(observer => {
-    // this function will called each time this
-    // Observable is subscribed to.
-    const subscription = observable.subscribe({
-      next: function(value) {
-        //insert your logic
-        observer.next(value);
-
-      },
-      error: function(err) {
-        //insert your logic
-        observer.error(err);
-      },
-      complete: function() {
-        //insert your logic
-        observer.complete();
-      }
-    });
-    // the return value is the teardown function,
-    // which will be invoked when the new
-    // Observable is unsubscribed from.
-    return () => {
-      subscription.unsubscribe();
-    }
-  });
-}
-
-function handlePost() {
-  return (observable) => new Observable(observer => {
-    // this function will called each time this
-    // Observable is subscribed to.
-    const subscription = observable.subscribe({
-      next: function(value) {
-        //insert your logic
-        observer.next(value);
-
-      },
-      error: function(err) {
-        //insert your logic
-        observer.error(err);
-      },
-      complete: function() {
-        //insert your logic
-        observer.complete();
-      }
-    });
-    // the return value is the teardown function,
-    // which will be invoked when the new
-    // Observable is unsubscribed from.
-    return () => {
-      subscription.unsubscribe();
-    }
-  });
-}
-
-
-
-function get(url) {
-  // let token = null;
-  // let configHeaders = {};
-  // if (token) {
-  //   configHeaders = {
-  //     headers: {
-  //       Authorization: token
-  //     }
-  //   }
-  // }
-  return Axios.get(url, configHeaders)
-    .pipe(handleGet());
-}
-
-function post(url, payload) {
-  // let token = null;
-  // let configHeaders = {};
-  // if (token) {
-  //   configHeaders = {
-  //     headers: {
-  //       Authorization: token
-  //     }
-  //   }
-  // }
-  return Axios.post(url, payload, configHeaders)
-    .pipe(handlePost());
-}
-
-*/

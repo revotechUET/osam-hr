@@ -134,6 +134,11 @@ export default [
     component: NotificationNewPage
   },
   {
+    path: "/notifies/details",
+    exact: true,
+    component: NotificationNewPage
+  },
+  {
     path: "/setting/day-off",
     exact: true,
     component: DayOffSettingPage

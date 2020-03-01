@@ -36,7 +36,7 @@ class DepartmentPage extends React.Component {
   }
 
   async componentDidMount() {
-    let departments = await apiService.listDepartment({});
+    let departments = await apiService.listDepartment({ loadManagers: true });
     const users = await apiService.listUsers();
     columns[2].selector = (dep) => users.filter(u => dep.idApprovers.includes(u.id)).map(u => u.name).join(', ');
     this.setState({ data: departments, loading: false });

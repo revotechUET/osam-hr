@@ -12,7 +12,7 @@ let _db: SpreadSheetDB;
       // init: true,
     });
   } else {
-    throw 'Authorization failed';
+    throw service.getLastError();
   }
 })();
 

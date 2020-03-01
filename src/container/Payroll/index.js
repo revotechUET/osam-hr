@@ -1,12 +1,13 @@
 import { DatePicker } from "@material-ui/pickers";
-import { startOfMonth } from "date-fns";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useReducer } from 'react';
 import DataTable from "react-data-table-component";
 import { withRouter } from 'react-router-dom';
+import XLSX from 'xlsx/dist/xlsx.mini.min';
 import Autocomplete from "../../components/Autocomplete";
 import Loading from "../../components/Loading";
 import apiService from "../../service/api.service";
+import { dateFormat } from "../../utils/date";
 import './style.less';
 
 const columns = [
@@ -39,11 +40,11 @@ const columns = [
 function PayrollPage({ history }) {
   const [state, setState] = useReducer((prevState, newState) => ({ ...prevState, ...newState }),
     {
-      startDate: startOfMonth(new Date()),
+      startDate: new Date(),
       endDate: new Date(),
       idDepartment: null,
       departments: null,
-      loadingDepartments: true,
+      loadingFilter: true,
       proceeded: false,
       loading: false,
       data: [],
@@ -52,8 +53,11 @@ function PayrollPage({ history }) {
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     (async () => {
-      const departments = await cancellable(apiService.listDepartment());
-      setState({ departments: [{ name: 'Tất cả' }, ...departments], loadingDepartments: false });
+      const departmentsPromise = cancellable(apiService.listDepartment());
+      const monthIntervalPromise = cancellable(apiService.getMonthInterval());
+      const departments = await departmentsPromise;
+      const { start } = await monthIntervalPromise;
+      setState({ departments: [{ name: 'Tất cả' }, ...departments], startDate: start, loadingFilter: false });
     })()
   }, []);
 
@@ -74,17 +78,33 @@ function PayrollPage({ history }) {
       console.error(error);
     }
   }
+  const download = () => {
 
+    const name = `tinhcong_${dateFormat(state.startDate, 'yyyyMMdd')}_${dateFormat(state.endDate, 'yyyyMMdd')}.xlsx`;
+    const data = state.data.map(d => ({
+      'Tên nhân viên': d.name,
+      'Email': d.email,
+      'Bộ phận': d.departments.map(dep => dep.name).join(', '),
+      'Công trong tháng': d.points,
+      'Nghỉ có phép': d.permittedLeaves,
+      'Nghỉ không phép': d.unpermittedLeaves,
+      'Tổng công': d.points + d.permittedLeaves,
+      'Buổi ăn trưa': d.lunches,
+    }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), name);
+    XLSX.writeFile(wb, name);
+  }
+
+  if (state.loadingFilter) return <Loading />
   return (
     <div className="Payroll">
       <div className="title-vs-btn">
-        {/* <div className="button-text my-button active-btn">Tải về</div> */}
         <div className="title">Bộ phận</div>
         <div style={{ marginLeft: "20px" }}>
           <Autocomplete
             style={{ flex: 1 }}
             filterSelectedOptions
-            loading={state.loadingDepartments}
             options={state.departments}
             keyProp='id'
             labelProp='name'
@@ -115,6 +135,7 @@ function PayrollPage({ history }) {
         </div>
         <div className="border-spacing"></div>
         <div className="button-text my-button active-btn" onClick={() => proceed()} disabled={!state.startDate || !state.endDate}>Tính công</div>
+        {state.data && state.data.length ? <div className="button-text my-button active-btn" onClick={() => download()}>Tải về</div> : null}
       </div>
       <div style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: state.loading ? "#00000000" : "#fff" }}>
         {

@@ -1,9 +1,9 @@
 import { Contract } from "../@types/contract";
 import { db } from "../db";
 import { uuid } from "../utils";
-import { scriptCache } from "../const";
 
 function getContracts() {
+  const scriptCache = CacheService.getScriptCache();
   const cached = scriptCache.get('CONTRACT');
   if (cached) return JSON.parse(cached);
   const contracts = db.from<Contract>('contract').getDataJSON();
@@ -12,6 +12,7 @@ function getContracts() {
 }
 
 function getContractById(id) {
+  const scriptCache = CacheService.getScriptCache();
   const cached = scriptCache.get('CONTRACT');
   if (cached) {
     const contracts = JSON.parse(cached);
@@ -24,6 +25,7 @@ function insertContract(contract: Contract) {
   contract.id = uuid();
   const ok = db.from<Contract>('contract').insert(contract);
   if (ok) {
+    const scriptCache = CacheService.getScriptCache();
     scriptCache.remove('CONTRACT');
   }
   return ok;

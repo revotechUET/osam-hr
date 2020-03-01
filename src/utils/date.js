@@ -1,11 +1,11 @@
-import DateFormat from 'date-format';
+import { lightFormat } from 'date-fns';
 
 export function dateFormat(date, format = 'dd/MM/yyyy') {
   if (!date) return null;
   if (typeof date !== 'object') {
     date = new Date(date);
   }
-  return DateFormat(format, date)
+  return lightFormat(date, format)
 }
 
 export function getFirstDayOfMonth() {
