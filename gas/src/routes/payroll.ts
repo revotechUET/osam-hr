@@ -23,7 +23,7 @@ function getPayroll(startDate: string, endDate: string, idDepartment?) {
   const checkings = checkingQuery.toJSON().map(c => ({ ...c, date: new Date(c.date), checkinTime: new Date(c.checkinTime), checkoutTime: new Date(c.checkoutTime) }));
   if (!checkings.length) return [];
   const setting = getSetting();
-  const users = listUsers({ loadContracts: true });
+  const users = listUsers({ full: true });
   const leavesQuery = db.from<Leave>('leave').query
   const [statusCol, startTimeCol, endTimeCol] = ['status', 'startTime', 'endTime'].map(leavesQuery.getColId.bind(leavesQuery));
   leavesQuery.raw(
@@ -74,28 +74,28 @@ function getPayroll(startDate: string, endDate: string, idDepartment?) {
   return users;
 }
 
-global.getPayrollThisMonth = getPayrollThisMonth;
-function getPayrollThisMonth({ dateInMonth = null } = {}) {
+global.getMonthInterval = getMonthInterval;
+function getMonthInterval(dateInMonth) {
   dateInMonth = new Date(dateInMonth || new Date());
   const setting = getSetting();
-  const startDate = new Date(dateInMonth);
-  startDate.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
-  const endDate = new Date(dateInMonth);
-  endDate.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
+  const start = new Date(dateInMonth);
+  start.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
+  const end = new Date(dateInMonth);
+  end.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
   const date = dateInMonth.getDate();
   const maxDay = getDaysInMonth(dateInMonth);
   if (date <= setting.monthEnd) {
     const prevMonth = subMonths(dateInMonth, 1);
     const prevMonthMaxDay = getDaysInMonth(prevMonth);
-    startDate.setMonth(prevMonth.getMonth(), Math.min(prevMonthMaxDay, setting.monthEnd) + 1);
-    endDate.setDate(Math.min(maxDay, setting.monthEnd));
+    start.setMonth(prevMonth.getMonth(), Math.min(prevMonthMaxDay, setting.monthEnd) + 1);
+    end.setDate(Math.min(maxDay, setting.monthEnd));
   } else {
     const nextMonth = subMonths(dateInMonth, 1);
     const nextMonthMaxDay = getDaysInMonth(nextMonth);
-    startDate.setDate(Math.min(maxDay, setting.monthEnd) + 1);
-    endDate.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));
+    start.setDate(Math.min(maxDay, setting.monthEnd) + 1);
+    end.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));
   }
-  return getPayroll(startDate.toISOString(), endDate.toISOString());
+  return ({ start: start.toISOString(), end: end.toISOString() });
 }
 
 function getSummaries({ startDate, endDate, checkings, leaves, setting }) {

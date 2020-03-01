@@ -14,8 +14,12 @@ function addNewDepartment(data) {
   return db.from<Department>('department').insert({ ...data });
 }
 
-function listDepartment() {
-  return db.join<Department, User>('department', 'user', 'idManager', 'manager').setType('inner').toJSON();
+function listDepartment({ loadManagers }) {
+  if (loadManagers) {
+    return db.join<Department, User>('department', 'user', 'idManager', 'manager').setType('inner').toJSON();
+  } else {
+    return db.from<Department>('department').query.toJSON();
+  }
 }
 
 function departmentDetail({ id }) {

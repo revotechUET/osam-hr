@@ -174,6 +174,9 @@ class ApiService {
   getPayroll(...args) {
     return gscriptrun('getPayroll', ...args);
   }
+  getMonthInterval(dateInMonth) {
+    return gscriptrun('getMonthInterval', dateInMonth)
+  }
 
   //#region setting
   getSetting() {
