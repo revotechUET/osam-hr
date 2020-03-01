@@ -55,7 +55,7 @@
     "babel-polyfill": "^6.26.0",
     "date-fns": "^2.10.0",
     "date-format": "^3.0.0",
-    "gsheetdb": "https://tunghoang:H30-B4ch@github.com/revotechUET/gsheetdb#70e9f2d",
+    "gsheetdb": "https://tunghoang:H30-B4ch@github.com/revotechUET/gsheetdb#919d27e",
     "lodash": "^4.17.15",
     "material-ui-pickers": "^2.2.4",
     "notistack": "^0.9.7",
