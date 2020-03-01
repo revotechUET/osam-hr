@@ -1,10 +1,11 @@
 import config from '../../config';
 
-export function getService() {
-  return OAuth2.createService("Service Account")
+export function getService(userEmail = '') {
+  return OAuth2.createService("ServiceAccount" + userEmail)
     .setTokenUrl(config.serviceAccount.token_uri)
     .setPrivateKey(config.serviceAccount.private_key)
     .setIssuer(config.serviceAccount.client_email)
+    .setSubject(userEmail)
     .setPropertyStore(PropertiesService.getScriptProperties())
     .setCache(CacheService.getScriptCache())
     .setLock(LockService.getScriptLock())

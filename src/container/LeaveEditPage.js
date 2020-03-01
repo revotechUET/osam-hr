@@ -1,6 +1,6 @@
 import { MenuItem, Select, TextField } from "@material-ui/core";
 import { DateTimePicker } from "@material-ui/pickers";
-import { isSameDay, startOfDay, sub } from "date-fns";
+import { isSameDay } from "date-fns";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useEffect, useReducer } from "react";
 import { useParams, withRouter } from "react-router-dom";
@@ -40,7 +40,6 @@ function LeaveEditPage({ history }) {
       }
     })();
   }, []);
-  const minDate = startOfDay(sub(new Date(), { days: 15 }));
   const save = useCallback(async () => {
     const errors = {};
     console.log(state);
@@ -49,8 +48,6 @@ function LeaveEditPage({ history }) {
     }
     if (!state.startTime) {
       errors.startTime = 'Chọn thời gian bắt đầu';
-    } else if (state.startTime < minDate) {
-      errors.startTime = 'Thời gian bắt đầu không hợp lệ';
     }
     if (!state.endTime) {
       errors.endTime = 'Chọn thời gian kết thúc'
@@ -136,7 +133,6 @@ function LeaveEditPage({ history }) {
               format="yyyy/MM/dd HH:mm"
               value={state.startTime}
               onChange={date => setState({ startTime: date })}
-              minDate={minDate}
             />
           </div>
           <Error error={state.errors.startTime} />
@@ -152,7 +148,7 @@ function LeaveEditPage({ history }) {
               format="yyyy/MM/dd HH:mm"
               value={state.endTime}
               onChange={date => setState({ endTime: date })}
-              minDate={state.startTime || minDate}
+              minDate={state.startTime}
             />
           </div>
           <Error error={state.errors.endTime} />

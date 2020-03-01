@@ -39,7 +39,6 @@ function SettingPage({ history }) {
     lunchStart: null,
     lunchEnd: null,
     workDays: null,
-    leavesPerYear: null,
     loading: true,
     workDayModal: false,
     tempWorkDays: {},
@@ -55,7 +54,7 @@ function SettingPage({ history }) {
   }, []);
   const save = async () => {
     console.log(state);
-    let { welcomeMessage, monthEnd, yearEnd, morningStart, morningEnd, afternoonStart, afternoonEnd, lunchStart, lunchEnd, workDays, leavesPerYear } = state;
+    let { welcomeMessage, monthEnd, yearEnd, morningStart, morningEnd, afternoonStart, afternoonEnd, lunchStart, lunchEnd, workDays } = state;
     morningStart = new Date(morningStart);
     morningEnd = new Date(morningEnd);
     afternoonStart = new Date(afternoonStart);
@@ -81,14 +80,13 @@ function SettingPage({ history }) {
         welcomeMessage,
         monthEnd,
         yearEnd,
-        morningStart: morningStart.toISOString(),
-        morningEnd: morningEnd.toISOString(),
-        afternoonStart: afternoonStart.toISOString(),
-        afternoonEnd: afternoonEnd.toISOString(),
-        lunchStart: lunchStart.toISOString(),
-        lunchEnd: lunchEnd.toISOString(),
+        morningStart: morningStart,
+        morningEnd: morningEnd,
+        afternoonStart: afternoonStart,
+        afternoonEnd: afternoonEnd,
+        lunchStart: lunchStart,
+        lunchEnd: lunchEnd,
         workDays,
-        leavesPerYear,
       }));
       if (ok) {
         enqueueSnackbar('Đã lưu cài đặt', { variant: 'success' });
@@ -200,13 +198,6 @@ function SettingPage({ history }) {
               />
             </span>
           </div>
-          {/* <div className="item-inline" style={{ marginTop: "10px" }}>
-            <div className="free-time-year-svg"></div>
-            <div style={{ flexBasis: "170px" }}>Số ngày phép 1 năm</div>
-            <span>
-              <InputBase fullWidth value={state.leavesPerYear} onChange={(e) => setState({ leavesPerYear: e.target.value })} />
-            </span>
-          </div> */}
         </div>
         <CenteredModal
           active={state.workDayModal}
