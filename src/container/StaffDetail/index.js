@@ -1,22 +1,24 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import apiService from '../../service/api.service';
-
-
+import { withSnackbar } from 'notistack';
 import BorderedContainer from "./../../components/BorderedContainer";
 import { Checkbox } from '@material-ui/core';
+import Loading from '../../components/Loading';
 
 class StaffDetailPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
+      loading: false
     }
   }
 
   componentDidMount() {
     this.setState({
-      user: this.props.history.location.state.user || {}
+      user: this.props.history.location.state.user || {},
+      loading: false
     });
   }
 
@@ -34,11 +36,25 @@ class StaffDetailPage extends React.Component {
   }
 
   async deleteUser() {
-    await apiService.deleteUserById(this.state.user.id);
-    this.goBack();
+    this.setState({
+      loading: true
+    })
+    let key = this.props.enqueueSnackbar("Đang cập nhật thông tin nhân viên");
+    try {
+      await apiService.deleteUserById(this.state.user.id);
+      this.props.closeSnackbar(key);
+      this.props.enqueueSnackbar("Xóa nhân viên thành công", {variant: "success"});
+      this.goBack();
+    } catch (e) {
+      this.setState({
+        loading: false
+      })
+      this.props.enqueueSnackbar(e.message, {variant: "error"});
+    }
   }
 
   render() {
+    if (this.state.loading) return <Loading />
     return (
         <div className="StaffDetail">
           <div className="title-vs-btn">
@@ -89,4 +105,4 @@ let role = {
   "Loading": "Loading"
 }
 
-export default withRouter(StaffDetailPage);
+export default withSnackbar(withRouter(StaffDetailPage));

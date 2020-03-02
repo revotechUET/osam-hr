@@ -4,6 +4,9 @@ import { withRouter } from 'react-router-dom';
 import './style.less';
 import apiService from '../../service/api.service';
 import Loading from '../../components/Loading';
+import { DataTableFilter } from '../../components/DataTableFilter';
+import { Checkbox, MenuItem, Select, ListItemText } from '@material-ui/core';
+import { withSnackbar } from 'notistack';
 
 const columns = [
   {
@@ -39,25 +42,70 @@ class StaffPage extends React.Component {
     this.state = {
       data: [],
       loading: true,
+      resetPagination: false,
+      filterText: '',
+      departments: [],
+      contracts: [],
+      departmentFilters: [],
+      contractFilters: []
     }
-    //return nameList.join(", ");
   }
 
   componentDidMount() {
     this.clear();
-    this.loadUsers();
+    this.loadAll();
+  }
+
+  async loadAll() {
+    let promises = [];
+    promises.push(this.loadDepartments());
+    promises.push(this.loadUsers());
+    promises.push(this.loadContracts());
+    try {
+      await Promise.all(promises);
+      this.setState({
+        loading: false
+      })
+    } catch (e) {
+      this.props.enqueueSnackbar(e.message, {variant: "error"});
+    }
   }
 
   clear() {
     this.setState({
       data: [],
       loading: true,
-    })
+      filterText: '',
+      departmentFilters: [],
+      contractFilters: []
+    });
+  }
+
+  async loadDepartments() {
+    return new Promise(async (res, rej) => {
+      let rs = await apiService.listDepartment();
+      rs.push({id: "ALL", name: "All"});
+      this.setState({
+        departments: rs
+      }, res(true));
+    });
+  }
+
+  async loadContracts() {
+    return new Promise(async (res, rej) => {
+      let rs = await apiService.getContracts();
+      rs.push({id: "ALL", name: "All"});
+      this.setState({
+        contracts: rs
+      }, res(true));
+    });
   }
 
   async loadUsers() {
-    let users = await apiService.listUsers({ full: true });
-    this.setState({ data: users, loading: false });
+    return new Promise(async (res, rej)=>{
+      let users = await apiService.listUsers({ full: true });
+      this.setState({ data: users }, res(true));
+    });
   }
 
   goToUserDetail(user) {
@@ -68,8 +116,22 @@ class StaffPage extends React.Component {
     });
   }
 
+  onFilter = (e) => {
+    const filterText = e.target.value;
+    this.setState({ filterText });
+  }
+
+  filterByContractAndDepartment(data) {
+    //return data.filter((d) => {if (this.state.contractFilter == "ALL") return true; return d.idContract == this.state.contractFilter;});
+    return data;
+  }
+
   render() {
-    const { data, loading } = this.state;
+    const { data, loading, filterText } = this.state;
+    if (loading) return <Loading />
+    console.log(this.state.departmentFilters);
+    console.log(this.state.contractFilters);
+    const filteredData = this.filterByContractAndDepartment(data.filter(d => d.name.toLowerCase().includes(filterText.toLowerCase())));
     return (
       <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
         <div className="title-vs-btn">
@@ -86,14 +148,59 @@ class StaffPage extends React.Component {
           progressPending={loading}
           progressComponent={<Loading/>}
           columns={columns}
-          data={data}
+          data={filteredData}
           pointerOnHover
           highlightOnHover
           onRowClicked={(row, event) => {this.goToUserDetail(row)}}
+          subHeader
+          subHeaderComponent={
+            <div>
+              <Select onChange={(e) => {
+                  this.setState({ contractFilters: e.target.value });
+                }}
+                value = {this.state.contractFilters}
+                outlined="true"
+                renderValue={selected => selected.join(', ')}
+                multiple
+              >
+                {
+                  (this.state.contracts || []).map((e, idx)=>
+                    <MenuItem key={idx} value={e.id}>
+                      <Checkbox checked={this.state.contractFilters.findIndex((el) => el == e.id) > -1} />
+                      <ListItemText primary={e.name} />
+                    </MenuItem>
+                  )
+                }
+              </Select>
+              <Select onChange={(e) => {
+                  this.setState({ departmentFilters: e.target.value });
+                }}
+                value = {this.state.departmentFilters}
+                outlined="true"
+                renderValue={selected => selected.join(', ')}
+                multiple
+              >
+                {
+                  (this.state.departments || []).map((e, idx)=>
+                    <MenuItem key={idx} value={e.id}>
+                      <Checkbox checked={this.state.departmentFilters.findIndex((el) => el == e.id) > -1} />
+                      <ListItemText primary={e.name} />
+                    </MenuItem>
+                  )
+                }
+              </Select>
+              <DataTableFilter
+                onFilter={this.onFilter}
+                onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
+                filterText={this.state.filterText}
+              />
+            </div>
+          }
+          paginationResetDefaultPage={this.state.resetPagination}
         />
       </div>
     );
   }
 }
 
-export default withRouter(StaffPage);
+export default withSnackbar(withRouter(StaffPage));
