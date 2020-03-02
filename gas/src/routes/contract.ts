@@ -31,16 +31,13 @@ function insertContract(contract: Contract) {
   return ok;
 }
 
-// function updateContract(contract: Contract) {
-//   const ok = db.from<Contract>('contract').update(contract.id, contract);
-//   if (ok) {
-//     scriptCache.remove('CONTRACT');
-//   }
-//   return ok;
-// }
-function updateContract({id, name, type, lunch, leaveRequest}) {
- return  db.from<Contract>('contract').update(id,{name, type, lunch, leaveRequest});
- 
+function updateContract(contract: Contract) {
+  const ok = db.from<Contract>('contract').update(contract.id, contract);
+  if (ok) {
+    const scriptCache = CacheService.getScriptCache();
+    scriptCache.remove('CONTRACT');
+  }
+  return ok;
 }
 
 global.getContracts = getContracts;

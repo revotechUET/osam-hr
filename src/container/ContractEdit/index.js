@@ -16,7 +16,7 @@ class ContractEditPage extends React.Component {
       newContractName: "",
       newContractType: "fulltime",
       newContractLunch: false,
-      newContractSabbatical: false,
+      newContractLeaveRequest: false,
       contracts: [],
       loading: true,
     };
@@ -27,7 +27,7 @@ class ContractEditPage extends React.Component {
       newContractName: this.props.history.location.state.contract.name,
       newContractType: this.props.history.location.state.contract.type,
       newContractLunch: this.props.history.location.state.contract.lunch,
-      newContractSabbatical: this.props.history.location.state.contract.leaveRequest,
+      newContractLeaveRequest: this.props.history.location.state.contract.leaveRequest,
       contracts: [],
       loading: true
     });
@@ -48,8 +48,8 @@ class ContractEditPage extends React.Component {
       case 'contractLunch':
         this.setState({ newContractLunch: e.target.checked });
         break;
-      case 'contractSabbatical':
-        this.setState({ newContractSabbatical: e.target.checked });
+      case 'contractLeaveRequest':
+        this.setState({ newContractLeaveRequest: e.target.checked });
         break;
     }
   }
@@ -63,8 +63,8 @@ class ContractEditPage extends React.Component {
     let name = this.state.newContractName;
     let type = this.state.newContractType;
     let lunch = this.state.newContractLunch;
-    let sabbatical =  this.state.newContractSabbatical;
-    await apis.updateContract({id,name, type, lunch, sabbatical})
+    let leaveRequest =  this.state.newContractLeaveRequest;
+    await apis.updateContract({id,name, type, lunch, leaveRequest})
 
     this.goBack();
 
@@ -102,7 +102,7 @@ class ContractEditPage extends React.Component {
           <div style={{ display: "flex", marginBottom: "10px", alignItems: "center" }}>
             <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Nghỉ phép</div>
             <div style={{ flex: 1 }}>
-              <Checkbox name="contractSabbatical" checked={this.state.newContractSabbatical} onChange={(e) => this.handleChange(e)} />
+              <Checkbox name="contractLeaveRequest" checked={this.state.newContractLeaveRequest} onChange={(e) => this.handleChange(e)} />
             </div>
           </div>
           <div className="footer">

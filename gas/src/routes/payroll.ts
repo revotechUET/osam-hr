@@ -55,10 +55,9 @@ function getPayroll(startDate: string, endDate: string, idDepartment?) {
       endDate,
       setting: {
         ...setting,
-        haveLunch: user.contract.lunch,
-        contractType: user.contract.type,
         daysOff,
       },
+      contract: user.contract,
     });
     if (permittedLeaves > remainingLeaves) {
       permittedLeaves = remainingLeaves;
@@ -103,21 +102,20 @@ export function getMonthInterval(dateInMonth?, raw = false) {
   return { start: start.toISOString(), end: end.toISOString() };
 }
 
-function getSummaries({ startDate, endDate, checkings, leaves, setting }) {
+function getSummaries({ startDate, endDate, checkings, leaves, setting, contract }) {
   const dates = eachDayOfInterval({ start: new Date(startDate), end: new Date(endDate) }).map(d => ({ start: d, end: endOfDay(d) }));
   let points = 0, lunches = 0, permittedLeaves = 0, unpermittedLeaves = 0;
-  const ratio = setting.contractType === 'parttime' ? 2 : 1;
   for (const date of dates) {
     if (setting.daysOff.find(d => isSameDay(d, date.start))) {
       const workDay = setting.workDays[date.start.getDay()];
       if (workDay === 0) continue;
-      else if (workDay === 3) points += 1 * ratio;
-      else points += 0.5 * ratio;
+      else if (workDay === 3) points += 1;
+      else points += 0.5;
     }
     const checking = checkings.find(c => isSameDay(c.date, date.start));
     const leave = leaves.find(l => areIntervalsOverlapping({ start: l.startTime, end: l.endTime }, date));
     if (!checking && !leave) continue;
-    const { point, lunch, permittedLeave, unpermittedLeave } = getDateSummaries(date.start, checking, leave, setting);
+    const { point, lunch, permittedLeave, unpermittedLeave } = getDateSummaries(date.start, checking, leave, setting, contract);
     points += point;
     lunches += lunch;
     permittedLeaves += permittedLeave;
@@ -126,7 +124,7 @@ function getSummaries({ startDate, endDate, checkings, leaves, setting }) {
   return { points, lunches, permittedLeaves, unpermittedLeaves };
 }
 
-function getDateSummaries(date: Date, checking, leave, setting) {
+function getDateSummaries(date: Date, checking, leave, setting, contract) {
   let point = 0, lunch = 0, permittedLeave = 0, unpermittedLeave = 0;
   const workDay = setting.workDays[date.getDay()];
   if (workDay === 0 || !checking && !leave) return { point, lunch, permittedLeave, unpermittedLeave };
@@ -206,7 +204,7 @@ function getDateSummaries(date: Date, checking, leave, setting) {
     permittedLeave2 = permittedLeave2 / total2 * ratio;
     unpermittedLeave2 = unpermittedLeave2 / total2 * ratio;
   }
-  if (workDay === 3 && setting.haveLunch) {
+  if (workDay === 3 && contract.lunch) {
     const lunchStart = new Date(setting.lunchStart);
     lunchStart.setFullYear(y, m, d);
     const lunchEnd = new Date(setting.lunchEnd);
@@ -219,6 +217,9 @@ function getDateSummaries(date: Date, checking, leave, setting) {
   unpermittedLeave = unpermittedLeave1 + unpermittedLeave2;
   if (leave && leave.reason != LeaveReason.Personal) {
     point += permittedLeave;
+    permittedLeave = 0;
+  } else if (!contract.leaveRequest) {
+    unpermittedLeave += permittedLeave;
     permittedLeave = 0;
   }
   return { point: +point.toFixed(2), lunch, permittedLeave: +permittedLeave.toFixed(2), unpermittedLeave: +unpermittedLeave.toFixed(2) };
