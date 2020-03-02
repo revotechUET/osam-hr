@@ -37,10 +37,17 @@ let mock = {
   }]
 }
 
+function normalizeEndTime(end) {
+  let newEnd = new Date(end);
+  newEnd.setHours(23);
+  newEnd.setMinutes(59);
+  newEnd.setSeconds(59);
+  return newEnd;
+}
 class DayOffSettingPage extends React.Component {
   constructor(props) {
     super(props);
-
+    this.viewDate = false;
     this.state = {
       events: [],
       modalActive: false,
@@ -82,8 +89,9 @@ class DayOffSettingPage extends React.Component {
       reject(new Error("Không có lý do nghỉ"));
     });
   }
-  doGet() {
-    apis.getHolidayOfThisMonth().then(calEventsObj => {
+  doGet(aDate) {
+    apis.getHolidayOfMonth(aDate).then(calEventsObj => {
+      console.log(calEventsObj);
       this.setState({
         events: calEventsObj.events.map((e, idx)=>({
           id: e.id,
@@ -119,23 +127,23 @@ class DayOffSettingPage extends React.Component {
   selectSlotHandler(slotObj) {
     console.log("slot:", slotObj);
     this.setState({
-      modalActive:true,
-      detailedActive:false,
-      startTime: slotObj.start,
-      holidayName: "",
-      holidayDesc: "",
-      endTime: slotObj.end
+      modalActive:true, 
+      detailedActive:false, 
+      startTime: new Date(slotObj.start), 
+      holidayName: "", 
+      holidayDesc: "", 
+      endTime: new Date(slotObj.end)
     });
   }
   selectEventHandler(event) {
     console.log("selected:" , event);
     this.setState({
-      detailedActive:true,
-      modalActive:false,
-      holidayName: event.title,
-      holidayDesc: event.description,
-      startTime:event.start,
-      endTime:event.end,
+      detailedActive:true, 
+      modalActive:false, 
+      holidayName: event.title, 
+      holidayDesc: event.description, 
+      startTime: new Date(event.start), 
+      endTime: new Date(event.end),
       eventId: event.id
     })
   }
@@ -163,6 +171,11 @@ class DayOffSettingPage extends React.Component {
           views = {allViews}
           selectable
           localizer={localizer}
+          onNavigate={ (date, view, action) => {  
+            console.log(date, view, action);
+            this.viewDate = date;
+            this.doGet(this.viewDate);
+          }}
           onSelectEvent={event => this.selectEventHandler(event)}
           onSelectSlot = {(slot) => this.selectSlotHandler(slot)}
         />
@@ -199,7 +212,7 @@ class DayOffSettingPage extends React.Component {
                       this.props.closeSnackbar(key);
                       this.props.enqueueSnackbar("Thành công !", {variant: "success"});
                       this.setState({detailedActive:false});
-                      this.doGet();
+                      this.doGet(this.viewDate);
                     }).catch((err) => {
                       this.props.closeSnackbar(key);
                       console.error(err);
@@ -211,16 +224,16 @@ class DayOffSettingPage extends React.Component {
                   let key = this.props.enqueueSnackbar("Đang cập nhật ngày nghỉ");
                   this.updateHoliday(
                     this.state.eventId,
-                    this.state.holidayName,
-                    this.state.holidayDesc,
-                    this.state.startTime,
-                    this.state.endTime,
+                    this.state.holidayName, 
+                    this.state.holidayDesc, 
+                    this.state.startTime.toISOString(), 
+                    normalizeEndTime(this.state.endTime).toISOString(),
                     []
                   ).then((res) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar("Thành công !", {variant: "success"});
                     this.setState({detailedActive:false});
-                    this.doGet();
+                    this.doGet(this.viewDate);
                   }).catch((err) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar(err.message, {variant:"error"});
@@ -259,16 +272,16 @@ class DayOffSettingPage extends React.Component {
               <div className="my-button-ok" onClick={(evt) => {
                   let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
                   this.createHoliday(
-                    this.state.holidayName,
-                    this.state.holidayDesc,
-                    this.state.startTime.toISOString(),
-                    this.state.endTime.toISOString(),
+                    this.state.holidayName, 
+                    this.state.holidayDesc, 
+                    this.state.startTime.toISOString(), 
+                    normalizeEndTime(this.state.endTime).toISOString(), 
                     []
                   ).then((res) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar("Thành công !", {variant: "success"});
                     this.closeModal();
-                    this.doGet();
+                    this.doGet(this.viewDate);
                   }).catch((err) => {
                     this.props.closeSnackbar(key);
                     this.props.enqueueSnackbar(err.message, {variant:"error"});
