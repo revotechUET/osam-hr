@@ -8,8 +8,8 @@ import Autocomplete from "../../components/Autocomplete";
 import apiService from "../../service/api.service";
 import {init} from 'pell';
 
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import CKEditor from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import './style.less';
 import 'pell/dist/pell.css';
@@ -129,30 +129,14 @@ class NotificationNewPage extends React.Component {
               <BorderBottomInput placeholder="Tiêu đề" name="title" value={this.state.notification.title} onChange={(e) => this.handleChange(e)} />
             </div>
           </div>
-
-        <div className = "input-field">
-            <div className = "label"> Nội dung</div>
-            
-              <CKEditor
-                      editor={ ClassicEditor }
-                      data="<p>Please input notification content</p>"
-                      onInit={ editor => {
-                          // You can store the "editor" and use when it is needed.
-                          console.log( 'Editor is ready to use!', editor );
-                      } }
-                      onChange={ ( event, editor ) => {
-                          const data = editor.getData();
-                          console.log( { event, editor, data } );
-                      } }
-                      onBlur={ ( event, editor ) => {
-                          console.log( 'Blur.', editor );
-                      } }
-                      onFocus={ ( event, editor ) => {
-                          console.log( 'Focus.', editor );
-                      } }
-                  />
-      
-        </div>
+          <div className="item-wrap">
+            <span>Người nhận</span>
+          </div>
+          <div className="item-wrap" style={{width: "100%"}}>
+            <span>Nội dung</span>
+            <div className="pell">
+            </div>
+          </div>
         </BorderedContainer>
         <ConfirmDialog onClose={(res) => this.confirmHandler(res)} active={this.state.confirmActive} message={this.state.confirmMessage} />
       </div>
