@@ -27,9 +27,9 @@ const displays = [
   },
   {
     name: "Nghỉ phép",
-    selector: 'sabbatical',
+    selector: 'leaveRequest',
     sortable: true,
-    cell: (row) => <Checkbox defaultChecked={row.sabbatical} />
+    cell: (row) => <Checkbox defaultChecked={row.leaveRequest} />
   }
 ];
 
@@ -42,7 +42,7 @@ class ContractManagementPage extends React.Component {
       newContractName: "",
       newContractType: "fulltime",
       newContractLunch: false,
-      newContractSabbatical: false,
+      newContractLeaveRequest: false,
       contracts: [],
       loading: true,
       contract : {}
@@ -55,7 +55,7 @@ class ContractManagementPage extends React.Component {
       newContractName: "",
       newContractType: "fulltime",
       newContractLunch: false,
-      newContractSabbatical: false,
+      newContractLeaveRequest: false,
       contracts: [],
       loading: true
     });
@@ -77,7 +77,7 @@ class ContractManagementPage extends React.Component {
       newContractName: "",
       newContractType: "fulltime",
       newContractLunch: false,
-      newContractSabbatical: false,
+      newContractLeaveRequest: false,
     });
   }
 
@@ -92,8 +92,8 @@ class ContractManagementPage extends React.Component {
       case 'contractLunch':
         this.setState({ newContractLunch: e.target.checked });
         break;
-      case 'contractSabbatical':
-        this.setState({ newContractSabbatical: e.target.checked });
+      case 'contractLeaveRequest':
+        this.setState({ newContractLeaveRequest: e.target.checked });
         break;
     }
   }
@@ -109,7 +109,7 @@ class ContractManagementPage extends React.Component {
       name: this.state.newContractName,
       type: this.state.newContractType,
       lunch: this.state.newContractLunch,
-      sabbatical: this.state.newContractSabbatical
+      leaveRequest: this.state.newContractLeaveRequest
     });
 
     this.clearModal();
@@ -142,7 +142,7 @@ class ContractManagementPage extends React.Component {
         progressComponent={<Loading />}
         columns={displays}
         data={this.state.contracts}
-        onRowClicked={(row, event) => this.goToContractEdit(row)}   
+        onRowClicked={(row, event) => this.goToContractEdit(row)}
       />
       <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
         <div className="contract-svg"></div>
@@ -174,7 +174,7 @@ class ContractManagementPage extends React.Component {
           <div style={{ display: "flex", marginBottom: "10px", alignItems: "center" }}>
             <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Nghỉ phép</div>
             <div style={{ flex: 1 }}>
-              <Checkbox name="contractSabbatical" checked={this.state.newContractSabbatical} onChange={(e) => this.handleChange(e)} />
+              <Checkbox name="contractLeaveRequest" checked={this.state.newContractLeaveRequest} onChange={(e) => this.handleChange(e)} />
             </div>
           </div>
           <div className="footer">
