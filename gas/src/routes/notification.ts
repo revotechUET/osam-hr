@@ -17,7 +17,7 @@ function getNotifications() {
 function addNotification({title, content, type, receipient}) {
   let id = uuid();
   return db.from<Notification>('notification').insert({
-    id, title, content, type, 
+    id, title, content, type,
     date: new Date().toISOString(),
     receipient, status:'draft'
   });
@@ -28,4 +28,7 @@ function updateNotification(notification: Notification) {
 }
 function deleteNotification({id}) {
   return db.from<Notification>('notification').delete(id);
+}
+function sendNotification({ sendTime, ...notification }) {
+  return "Ok";
 }

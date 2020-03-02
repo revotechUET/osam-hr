@@ -75,12 +75,12 @@ function getPayroll(startDate: string, endDate: string, idDepartment?) {
 }
 
 global.getMonthInterval = getMonthInterval;
-function getMonthInterval(dateInMonth) {
+export function getMonthInterval(dateInMonth?, raw = false) {
   dateInMonth = new Date(dateInMonth || new Date());
   const setting = getSetting();
-  const start = new Date(dateInMonth);
+  let start = new Date(dateInMonth);
   start.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
-  const end = new Date(dateInMonth);
+  let end = new Date(dateInMonth);
   end.setFullYear(dateInMonth.getFullYear(), dateInMonth.getMonth(), setting.monthEnd);
   const date = dateInMonth.getDate();
   const maxDay = getDaysInMonth(dateInMonth);
@@ -95,7 +95,12 @@ function getMonthInterval(dateInMonth) {
     start.setDate(Math.min(maxDay, setting.monthEnd) + 1);
     end.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));
   }
-  return ({ start: start.toISOString(), end: end.toISOString() });
+  start = startOfDay(start);
+  end = endOfDay(end);
+  if (raw) {
+    return { start, end };
+  }
+  return { start: start.toISOString(), end: end.toISOString() };
 }
 
 function getSummaries({ startDate, endDate, checkings, leaves, setting }) {

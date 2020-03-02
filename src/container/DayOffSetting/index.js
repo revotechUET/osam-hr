@@ -127,22 +127,22 @@ class DayOffSettingPage extends React.Component {
   selectSlotHandler(slotObj) {
     console.log("slot:", slotObj);
     this.setState({
-      modalActive:true, 
-      detailedActive:false, 
-      startTime: new Date(slotObj.start), 
-      holidayName: "", 
-      holidayDesc: "", 
+      modalActive:true,
+      detailedActive:false,
+      startTime: new Date(slotObj.start),
+      holidayName: "",
+      holidayDesc: "",
       endTime: new Date(slotObj.end)
     });
   }
   selectEventHandler(event) {
     console.log("selected:" , event);
     this.setState({
-      detailedActive:true, 
-      modalActive:false, 
-      holidayName: event.title, 
-      holidayDesc: event.description, 
-      startTime: new Date(event.start), 
+      detailedActive:true,
+      modalActive:false,
+      holidayName: event.title,
+      holidayDesc: event.description,
+      startTime: new Date(event.start),
       endTime: new Date(event.end),
       eventId: event.id
     })
@@ -171,7 +171,7 @@ class DayOffSettingPage extends React.Component {
           views = {allViews}
           selectable
           localizer={localizer}
-          onNavigate={ (date, view, action) => {  
+          onNavigate={ (date, view, action) => {
             console.log(date, view, action);
             this.viewDate = date;
             this.doGet(this.viewDate);
@@ -191,7 +191,7 @@ class DayOffSettingPage extends React.Component {
                 <input className="input" placeholder="Lý do nghỉ" name="holidayName" value={this.state.holidayName} onChange={(e) => this.handleChange(e)} />
               </div>
             </div>
-            <div style={{ display: "flex", marginBottom: "20px" }}>
+            {/* <div style={{ display: "flex", marginBottom: "20px" }}>
               <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Mô tả</div>
             </div>
             <div style={{ display: "flex", marginBottom: "20px" }}>
@@ -202,7 +202,7 @@ class DayOffSettingPage extends React.Component {
             <div>
               <h4>{this.state.startTime.toLocaleString()}</h4>
               <h4>{this.state.endTime.toLocaleString()}</h4>
-            </div>
+            </div> */}
             <div className="footer">
               <button className="my-button-cancel" onClick={() => { this.setState({ detailedActive:false }) }}>Hủy</button>
               <div className={"my-button-ok" + (this.state.inThePast?" button-disabled":"")} style={{marginRight:"20px"}} onClick={(evt) => {
@@ -224,9 +224,9 @@ class DayOffSettingPage extends React.Component {
                   let key = this.props.enqueueSnackbar("Đang cập nhật ngày nghỉ");
                   this.updateHoliday(
                     this.state.eventId,
-                    this.state.holidayName, 
-                    this.state.holidayDesc, 
-                    this.state.startTime.toISOString(), 
+                    this.state.holidayName,
+                    this.state.holidayDesc,
+                    this.state.startTime.toISOString(),
                     normalizeEndTime(this.state.endTime).toISOString(),
                     []
                   ).then((res) => {
@@ -272,10 +272,10 @@ class DayOffSettingPage extends React.Component {
               <div className="my-button-ok" onClick={(evt) => {
                   let key = this.props.enqueueSnackbar("Đang tạo ngày nghỉ");
                   this.createHoliday(
-                    this.state.holidayName, 
-                    this.state.holidayDesc, 
-                    this.state.startTime.toISOString(), 
-                    normalizeEndTime(this.state.endTime).toISOString(), 
+                    this.state.holidayName,
+                    this.state.holidayDesc,
+                    this.state.startTime.toISOString(),
+                    normalizeEndTime(this.state.endTime).toISOString(),
                     []
                   ).then((res) => {
                     this.props.closeSnackbar(key);

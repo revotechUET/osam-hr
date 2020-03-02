@@ -36,6 +36,7 @@ export default function LeaveDetailPage({ history }) {
   return (
     <div>
       <div className="title-vs-btn">
+        <Link className="my-button active-btn ti ti-arrow-left" to={"/leaves"} title="Sửa"></Link>
         <Link className="my-button active-btn ti ti-pencil" to={`/leaves/${id}/edit`} title="Sửa"></Link>
         <Confirm buttonProps={{ className: "my-button ti ti-close", style: { background: "#ddd", boxShadow: "none", color: "#888" }, title: "Từ chối" }} onOk={() => approve(false)} title="Từ chối yêu cầu nghỉ?" />
         <Confirm buttonProps={{ className: "my-button active-btn ti ti-check", style: { background: "linear-gradient(120deg, #67dc2c, #38c53e)" }, title: "Phê duyệt" }} onOk={() => approve()} title="Phê duyệt yêu cầu nghỉ?" />

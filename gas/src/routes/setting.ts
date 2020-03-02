@@ -8,7 +8,7 @@ export function getSetting() {
   const setting = db.from('setting').getDataJSON()[0];
   if (!setting) return null;
   setting.workDays = JSON.parse(setting.workDays);
-  scriptCache.put('CONTRACT', JSON.stringify(setting), 21600);
+  scriptCache.put('SETTING', JSON.stringify(setting), 21600);
   return setting;
 }
 

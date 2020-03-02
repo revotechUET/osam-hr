@@ -231,6 +231,9 @@ class ApiService {
   updateNotification(notification) {
     return gscriptrun("updateNotification", notification);
   }
+  sendNotification(notification, sendTime) {
+    return gscriptrun('sendNotification', { ...notification, sendTime });
+  }
 }
 
 export default new ApiService();
