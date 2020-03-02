@@ -18,16 +18,16 @@ class ContractEditPage extends React.Component {
       newContractLunch: false,
       newContractSabbatical: false,
       contracts: [],
-      loading: true
+      loading: true,
     };
   }
 
   componentDidMount() {
     this.setState({
-      newContractName: "",
-      newContractType: "fulltime",
-      newContractLunch: false,
-      newContractSabbatical: false,
+      newContractName: this.props.history.location.state.contract.name,
+      newContractType: this.props.history.location.state.contract.type,
+      newContractLunch: this.props.history.location.state.contract.lunch,
+      newContractSabbatical: this.props.history.location.state.contract.leaveRequest,
       contracts: [],
       loading: true
     });
@@ -59,13 +59,6 @@ class ContractEditPage extends React.Component {
     if (this.state.newContractName.length === 0) {
       return;
     }
-    // await apis.updateContract({
-    //     id : this.props.match.params.id,
-    //     name: this.state.newContractName,
-    //       type: this.state.newContractType,
-    //       lunch: this.state.newContractLunch,
-    //       sabbatical: this.state.newContractSabbatical
-    // });
     let id = this.props.match.params.id;
     let name = this.state.newContractName;
     let type = this.state.newContractType;

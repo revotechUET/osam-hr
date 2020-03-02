@@ -44,7 +44,8 @@ class ContractManagementPage extends React.Component {
       newContractLunch: false,
       newContractSabbatical: false,
       contracts: [],
-      loading: true
+      loading: true,
+      contract : {}
     };
   }
 
@@ -115,6 +116,13 @@ class ContractManagementPage extends React.Component {
 
   }
 
+  goToContractEdit(contract) {
+    this.props.history.push({
+      pathname: `/contracts/${contract.id}/edit`,
+      state: {contract: contract}
+    });
+  }
+
   render() {
     return (<div className="ContractManagement" style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
       <div className="title-vs-btn">
@@ -134,10 +142,7 @@ class ContractManagementPage extends React.Component {
         progressComponent={<Loading />}
         columns={displays}
         data={this.state.contracts}
-        onRowClicked = {
-          // this.setState({modalActive : true});
-          (row, event) => { this.props.history.push(`/contracts/${row.id}/edit`);}
-        }
+        onRowClicked={(row, event) => this.goToContractEdit(row)}   
       />
       <CenteredModal active={this.state.modalActive} onCancel={() => { this.clearModal() }}>
         <div className="contract-svg"></div>
