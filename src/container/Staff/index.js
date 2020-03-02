@@ -126,6 +126,57 @@ class StaffPage extends React.Component {
     return data;
   }
 
+  contractFilterHandle(values) {
+    //
+    this.setState((state)=>{
+      //check if all state has all in ?
+      let allIdxBefore = state.contractFilters.findIndex((e)=>e == "ALL");
+      let allIdxAfter = values.findIndex((e) => e == "ALL");
+
+      //case 1: uncheck All:
+      if (allIdxBefore > -1 && allIdxAfter < 0) {
+        return {
+          contractFilters: []
+        };
+      }
+      //case 2: check all
+      else if (allIdxBefore < 0 && allIdxAfter > -1) {
+        return {
+          contractFilters: this.state.contracts.map((e) => e.id)
+        }
+      }
+      //normal case
+      return {
+        contractFilters: values
+      }
+    });
+  }
+
+  departmentFilterHandle(values) {
+    this.setState((state)=>{
+      //check if all state has all in ?
+      let allIdxBefore = state.departmentFilters.findIndex((e)=>e == "ALL");
+      let allIdxAfter = values.findIndex((e) => e == "ALL");
+
+      //case 1: uncheck All:
+      if (allIdxBefore > -1 && allIdxAfter < 0) {
+        return {
+          departmentFilters: []
+        };
+      }
+      //case 2: check all
+      else if (allIdxBefore < 0 && allIdxAfter > -1) {
+        return {
+          departmentFilters: this.state.departments.map((e) => e.id)
+        }
+      }
+      //normal case
+      return {
+        departmentFilters: values
+      }
+    });
+  }
+
   render() {
     const { data, loading, filterText } = this.state;
     if (loading) return <Loading />
@@ -156,7 +207,8 @@ class StaffPage extends React.Component {
           subHeaderComponent={
             <div>
               <Select onChange={(e) => {
-                  this.setState({ contractFilters: e.target.value });
+                  this.contractFilterHandle(e.target.value);
+                  // this.setState({ contractFilters: e.target.value });
                 }}
                 value = {this.state.contractFilters}
                 outlined="true"
@@ -173,7 +225,8 @@ class StaffPage extends React.Component {
                 }
               </Select>
               <Select onChange={(e) => {
-                  this.setState({ departmentFilters: e.target.value });
+                  this.departmentFilterHandle(e.target.value);
+                  //this.setState({ departmentFilters: e.target.value });
                 }}
                 value = {this.state.departmentFilters}
                 outlined="true"
