@@ -50,17 +50,19 @@ function StaffLeavePage({ history }) {
       loading: false,
       filterText: '',
       statusFilter: [],
-      resetPagination: false
+      reasonFilter: [],
+      resetPagination: false,
+      users: [],
+      selectedUser: null
     });
   const cancellable = apiService.useCancellable();
-  // useEffect(()=>{
-    
-  // }, [state.filterText, state.statusFilter]);
+
   useEffect(() => {
     (async () => {
       setState({ loading: true })
       const list = await cancellable(apiService.listLeaves({}));
-      setState({ list, loading: false });
+      const users = await cancellable(apiService.listUsers());
+      setState({ list, users, loading: false });
     })();
   }, []);
 
@@ -68,9 +70,6 @@ function StaffLeavePage({ history }) {
     history.push(`/leaves/${row.id}`);
   });
   const { list, loading } = state;
-  let filteredList = list.filter((d)=>{
-    return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
-  });
   return (
     <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
@@ -86,9 +85,18 @@ function StaffLeavePage({ history }) {
         progressComponent={<Loading />}
         persistTableHead
         columns={columns}
-        data={list.filter((d)=>{
-          return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
-        })}
+        data={
+          list
+          .filter((d)=>{
+            state.selectedUser ?  d.requester.id == state.selectedUser : true
+          })
+          .filter((d)=>{
+            return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
+          })
+          .filter((d)=>{
+            return state.reasonFilter.length ? state.reasonFilter.includes(d.reason) : true
+          })
+        }
         onRowClicked={onRowClicked}
         pointerOnHover
         highlightOnHover
@@ -106,6 +114,31 @@ function StaffLeavePage({ history }) {
               onChange={(e, values) => {
                 setState({
                   statusFilter: values.map(v => v.value)
+                })
+              }}
+            />
+            <Autocomplete
+              multiple
+              filterSelectedOptions
+              options={reasonOptions}
+              value={reasonOptions.filter(d => state.reasonFilter.includes(d.value))}
+              keyProp="value"
+              labelProp="name"
+              onChange={(e, values) => {
+                setState({
+                  reasonFilter: values.map(v => v.value)
+                })
+              }}
+            />
+            <Autocomplete
+              filterSelectedOptions
+              options={state.users}
+              value={state.users.find(e => e.id == state.selectedUser)}
+              keyProp="id"
+              labelProp="name"
+              onChange={(e, value) => {
+                setState({
+                  selectedUser: value.id
                 })
               }}
             />
@@ -141,6 +174,21 @@ let statusOptions = [
   {
     name: 'Đã hết hạn',
     value: 'expired'
+  }
+]
+
+let reasonOptions = [
+  {
+    name: 'Lý do khác',
+    value: 0
+  },
+  {
+    name: 'Đi công vụ',
+    value: 1
+  },
+  {
+    name: 'Đi công tác',
+    value: 2
   }
 ]
 
