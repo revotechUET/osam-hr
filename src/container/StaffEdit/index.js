@@ -6,6 +6,7 @@ import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import Loading from '../../components/Loading';
+import { withSnackbar } from 'notistack';
 import './style.less';
 
 class StaffEditPage extends React.Component {
@@ -22,7 +23,7 @@ class StaffEditPage extends React.Component {
       contract: {},
       emailLists: null,
       contracts: null,
-      loading: true
+      loading: false
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -39,6 +40,7 @@ class StaffEditPage extends React.Component {
     //load department
     // this.clear();
     let user = this.props.history.location.state.user || {};
+    console.log(user);
     //console.log(user);
     this.setState({
       userName: user.name,
@@ -48,13 +50,16 @@ class StaffEditPage extends React.Component {
       departmentList: user.departments.map((v)=>(v.id)),
       contract: user.idContract,
       idUser: user.id,
-      loading: true,
+      loading: false,
       departments: [],
     })
     this.load();
   }
 
   async load() {
+    this.setState({
+      loading: true
+    })
     let promises = [];
     //console.log('run');
     promises.push(this.loadEmailList());
@@ -95,11 +100,21 @@ class StaffEditPage extends React.Component {
         role: this.state.role,
         departments: this.state.departmentList
       }
-      await apiService.updateUserById(this.state.idUser, data);
-      this.props.history.push('/staffs');
+      this.setState({
+        loading: true
+      });
+      let key = this.props.enqueueSnackbar("Đang cập nhật thông tin nhân viên");
+      try {
+        await apiService.updateUserById(this.state.idUser, data);
+        this.props.closeSnackbar(key);
+        this.props.enqueueSnackbar("Cập nhật thông tin nhân viên thành công", {variant: "success"});
+        this.props.history.push('/staffs');
+      } catch (e) {
+        this.props.enqueueSnackbar(e.message, {variant: "error"});
+      }
     }
     else {
-      console.log(this.state.errors);
+      // do nothing
     }
     e.preventDefault();
   }
@@ -173,7 +188,7 @@ class StaffEditPage extends React.Component {
                 outlined="true"
               >
                 {
-                  this.state.contracts.map((e, idx)=>
+                  (this.state.contracts || []).map((e, idx)=>
                     <MenuItem key={idx} value={e.id}>{e.name}</MenuItem>
                   )
                 }
@@ -233,4 +248,4 @@ let optionsForRole = [
   { value: "admin", name: "Admin" }
 ];
 
-export default withRouter(StaffEditPage);
+export default withSnackbar(withRouter(StaffEditPage));

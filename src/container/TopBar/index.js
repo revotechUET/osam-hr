@@ -1,10 +1,17 @@
 import React from 'react';
-// import { fromEvent } from 'rxjs';
 import { withRouter } from 'react-router-dom';
 
 import './style.less';
 
-
+const notifications = [{
+  subject: "Notifi 1",
+  content: "Di truc nhat",
+  unread: true
+},{
+  subject: "Notifi 1",
+  content: "Di truc nhat",
+  unread: false
+}];
 
 class TopBar extends React.Component {
 
@@ -52,54 +59,20 @@ class TopBar extends React.Component {
             <div ref={this.contentRef} className="container-drop-down-noti">
             {opening &&
               <div className="drop-down-noti">
-                <div style={{flex: 1, overflow: "auto", margin: "10px"}}>
-                    <div className="item-noti">
+                <div style={{flex: 1, overflow: "auto", margin: "10px"}}> 
+                  {notifications.map(n => (<div className="item-noti">
                       <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
                       <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
+                        <div>{n.subject}</div>
+                        <span>{n.content}</span>
                       </div>
-                    </div>
-                    <div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
-                      </div>
-                    </div>
-                    <div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
-                      </div>
-                    </div>
-                    <div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
-                      </div>
-                    </div>
-                    <div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
-                      </div>
-                    </div>
-                    <div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
-                        <div>Thông báo lịch trực nhật</div>
-                        <span>25/10/2019</span>
-                      </div>
-                    </div>
+                    </div>)) }
                 </div>
+                {/*
                 <div style={{height:"40px", display: "grid", gridGap: "10px", gridTemplateColumns: "auto auto", margin: "0 10px 10px 10px"}}>
                   <div className="btn-noti">Đánh dấu tất cả đã đọc</div>
                   <div className="btn-noti" onClick={()=>{this.setState({opening: false}); this.props.history.push("/my-notifies");}}>Xem tất cả</div>
-                </div>
+                </div>*/}
               </div>
               }
             </div>

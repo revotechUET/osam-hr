@@ -6,6 +6,8 @@ import apiService from '../../service/api.service';
 import Autocomplete from './../../components/Autocomplete';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
+import Loading from '../../components/Loading';
+import { withSnackbar } from 'notistack';
 import './style.less';
 
 class StaffNewPage extends React.Component {
@@ -21,7 +23,8 @@ class StaffNewPage extends React.Component {
       departmentList: [],
       contract: null,
       emailLists: null,
-      idUser: null
+      idUser: null,
+      loading: false
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -52,7 +55,8 @@ class StaffNewPage extends React.Component {
       departmentList: [],
       contract: null,
       emailLists: null,
-      idUser: null
+      idUser: null,
+      loading: false
     });
   }
 
@@ -93,6 +97,10 @@ class StaffNewPage extends React.Component {
   }
 
   async handleSave(e) {
+    this.setState({
+      loading: true
+    });
+    let key = this.props.enqueueSnackbar("Đang lưu thông tin nhân viên mới");
     if (this.handleValidation()) {
       let data = {
         "name": this.state.userName,
@@ -105,9 +113,14 @@ class StaffNewPage extends React.Component {
       }
       try {
         await apiService.appendUser(data);
+        this.props.closeSnackbar(key);
+        this.props.enqueueSnackbar("Lưu thành công", {variant: "success"});
         this.props.history.push('/staffs'); 
       } catch (e) {
-        
+        this.props.enqueueSnackbar(e.message, {variant: "error"});
+        this.setState({
+          loading: false
+        })
       }
     }
     else {
@@ -172,6 +185,7 @@ class StaffNewPage extends React.Component {
   }
 
   render() {
+    if (this.state.loading) return <Loading />
     return (
       <div className="StaffNew">
         <div className="title-vs-btn">
@@ -271,4 +285,4 @@ class StaffNewPage extends React.Component {
   }
 }
 
-export default withRouter(StaffNewPage);
+export default withSnackbar(withRouter(StaffNewPage));

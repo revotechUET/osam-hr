@@ -31,7 +31,7 @@ class DepartmentPage extends React.Component {
       columns: columns,
       loading: true,
       resetPagination: false,
-      filterText: '',
+      filterText: ''
     }
   }
 
@@ -44,7 +44,7 @@ class DepartmentPage extends React.Component {
 
   onFilter = (e) => {
     const filterText = e.target.value;
-    this.setState({ filterText, filteredData: this.state.data.filter(d => d.name.toLowerCase().includes(filterText.toLowerCase())) });
+    this.setState({ filterText });
   }
 
   render() {

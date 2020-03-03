@@ -171,6 +171,6 @@ export default [
   {
     path: "/tungtest",
     exact: true,
-    component: DayOffSettingPage
+    component: NotificationNewPage
   }
 ];
