@@ -104,7 +104,8 @@ function StaffLeavePage({ history }) {
         pagination
         subHeader
         subHeaderComponent={
-          <div>
+          <div style={{display: "flex"}}>
+            <div style={{marginRight: "20px"}}>
             <Autocomplete
               multiple
               filterSelectedOptions
@@ -118,6 +119,9 @@ function StaffLeavePage({ history }) {
                 })
               }}
             />
+
+            </div>
+            <div style={{marginRight: "20px"}}>
             <Autocomplete
               multiple
               filterSelectedOptions
@@ -131,6 +135,9 @@ function StaffLeavePage({ history }) {
                 })
               }}
             />
+
+            </div>
+            <div style={{marginRight: "20px"}}>
             <Autocomplete
               //filterSelectedOptions
               options={state.users}
@@ -144,6 +151,11 @@ function StaffLeavePage({ history }) {
                 })
               }}
             />
+
+            </div>
+
+
+
             <DataTableFilter
               onFilter={(e)=>{
                 setState({

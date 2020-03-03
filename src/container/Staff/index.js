@@ -63,7 +63,7 @@ class StaffPage extends React.Component {
     promises.push(this.loadUsers());
     promises.push(this.loadContracts());*/
     Promise.all([
-      apiService.listDepartment(), 
+      apiService.listDepartment(),
       apiService.getContracts(),
       apiService.listUsers({ full: true })
     ]).then(results => {
@@ -143,7 +143,7 @@ class StaffPage extends React.Component {
       //filter by contracts
       if (this.state.contractFilters.length > 0) {
         return this.state.contractFilters.includes(e.idContract);
-      } 
+      }
       return true;
     })
     .filter((e)=>{
@@ -235,7 +235,8 @@ class StaffPage extends React.Component {
           onRowClicked={(row, event) => {this.goToUserDetail(row)}}
           subHeader
           subHeaderComponent={
-            <div>
+            <div style={{display: "flex"}}>
+              <div style={{marginRight: "20px"}}>
               <Autocomplete
                 multiple
                 filterSelectedOptions
@@ -251,6 +252,8 @@ class StaffPage extends React.Component {
                   })
                 }}
               />
+              </div>
+              <div style={{marginRight: "20px"}}>
               <Autocomplete
                 multiple
                 filterSelectedOptions
@@ -266,6 +269,9 @@ class StaffPage extends React.Component {
                   })
                 }}
               />
+
+              </div>
+
               {/* <Select onChange={(e) => {
                   this.contractFilterHandle(e.target.value);
                   // this.setState({ contractFilters: e.target.value });

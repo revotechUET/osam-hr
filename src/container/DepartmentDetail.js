@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import {withSnackbar} from 'notistack';
 import apiService from '../service/api.service';
 import Loading from '../components/Loading';
 
@@ -28,8 +29,8 @@ class DepartmentDetailPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            departmentDetail: null,
+            loading: false,
+            departmentDetail: {},
             manager: null,
             approvers: [],
             staff    : []
@@ -38,10 +39,10 @@ class DepartmentDetailPage extends React.Component {
         this.delete = this.delete.bind(this);
         this.goBack = this.goBack.bind(this);
     }
-
     async componentDidMount() {
+        this.setState({loading: true});
         const id = this.props.match.params.id;
-        let departmentDetail = await apiService.departmentDetail({});
+         let departmentDetail = await apiService.departmentDetail({});
         let users = await apiService.listUsers({full : true});
         departmentDetail.forEach((value, index) => {
             if (value['id'] === id) {
@@ -69,24 +70,31 @@ class DepartmentDetailPage extends React.Component {
 
     edit() {
         let departmentId = this.props.match.params.id;
-        this.props.history.push(
-            {
-                pathname : `/departments/${departmentId}/edit`,
-                state: {department: this.state.departmentDetail}
-            });
+        this.props.history.push({
+            pathname : `/departments/${departmentId}/edit`,
+            state: {department: this.state.departmentDetail}
+        });
     }
 
-    async delete() {
-        await apiService.deleteDepartment(this.state.departmentDetail.id);
-        this.props.history.push('/departments');
+    delete() {
+        this.setState({loading : true});
+        apiService.deleteDepartment(this.state.departmentDetail.id).then((res) => {
+            this.setState({loading : false});
+            this.props.history.push('/departments');
+        }).catch(e => {
+            this.setState({loading : false});
+            this.props.enqueueSnackbar(e.message,{variant : 'error'});
+        });
     }
 
     goBack(){
         this.props.history.push('/departments');
     }
     render() {
-        if (this.state.loading) {
-            return (<Loading />)
+        if(this.state.loading){
+            return (
+                <Loading />
+            )
         }
         return (
             <div className="StaffDetail">
@@ -95,7 +103,7 @@ class DepartmentDetailPage extends React.Component {
                     <div className="my-button active-btn ti ti-pencil" onClick={this.edit}></div>
                     <div className="my-button ti ti-trash" style={{background: "#ddd", boxShadow: "none", color: "#888"}} onClick={this.delete}></div>
 
-                    <div className="title">Bộ phận / <span>{this.state.departmentDetail.name}</span></div>
+                    <div className="title">Bộ phận / <span>{(this.state.departmentDetail||{}).name || "No name"}</span></div>
                 </div>
                 <BorderedContainer>
                 <div className="item-detail" style={{ width: "100%", marginBottom: "40px" }}>
@@ -117,6 +125,18 @@ class DepartmentDetailPage extends React.Component {
                     <div className="item-detail" style={{ flex: 1 }}>
                         <div className="infor-item-detail">
                             <div style={{ display: "flex", flexDirection: "column" }}>
+                                <div style={{ display: "flex", marginBottom: "10px" }}>
+                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người quản lý</div>
+                                    <div style={{ flex: 1 }}>{(this.state.manager|{}).name || "Unknown"}</div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "10px" }}>
+                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người phụ trách duyệt leave request</div>
+                                    <div style={{ flex: 1 }}>{(this.state.approvers || []).map((e) => e).join(", ")}</div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "10px" }}>
+                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Hoạt động</div>
+                                    <div style={{ flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={(this.state.departmentDetail||{}).active} /></div>
+                                </div>
                                 <div style={{ marginBottom: "10px" }}>
                                     <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Danh sách nhân viên</div>
                                     <DataTable
@@ -142,4 +162,4 @@ class DepartmentDetailPage extends React.Component {
 }
 
 
-export default withRouter(DepartmentDetailPage);
+export default withSnackbar(withRouter(DepartmentDetailPage)); 
