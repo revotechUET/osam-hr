@@ -7,6 +7,7 @@ import Loading from '../../components/Loading';
 import { DataTableFilter } from '../../components/DataTableFilter';
 import { Checkbox, MenuItem, Select, ListItemText } from '@material-ui/core';
 import { withSnackbar } from 'notistack';
+import Autocomplete from '../../components/Autocomplete';
 
 const columns = [
   {
@@ -40,27 +41,42 @@ class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      loading: true,
+      data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
+      loading: false,
       resetPagination: false,
       filterText: '',
-      departments: [],
-      contracts: [],
+      departments: [{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"},{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],
+      contracts: [{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"}],
       departmentFilters: [],
       contractFilters: []
     }
   }
 
   componentDidMount() {
-    this.clear();
+    //this.clear();
     this.loadAll();
   }
 
-  async loadAll() {
-    let promises = [];
+  loadAll() {
+    /*let promises = [];
     promises.push(this.loadDepartments());
     promises.push(this.loadUsers());
-    promises.push(this.loadContracts());
+    promises.push(this.loadContracts());*/
+    Promise.all([
+      apiService.listDepartment(), 
+      apiService.getContracts(),
+      apiService.listUsers({ full: true })
+    ]).then(results => {
+      let [departments, contracts, users] = results;
+      this.setState({
+        data: users,
+        departments, contracts,
+        loading: false
+      });
+    }).catch(e => {
+      this.props.enqueueSnackbar(e.message, {variant: "error"});
+    });
+    /*
     try {
       await Promise.all(promises);
       this.setState({
@@ -69,6 +85,7 @@ class StaffPage extends React.Component {
     } catch (e) {
       this.props.enqueueSnackbar(e.message, {variant: "error"});
     }
+    */
   }
 
   clear() {
@@ -122,7 +139,6 @@ class StaffPage extends React.Component {
   }
 
   filterByContractAndDepartment(data) {
-    //return data.filter((d) => {if (this.state.contractFilter == "ALL") return true; return d.idContract == this.state.contractFilter;});
     return data;
   }
 
@@ -206,6 +222,21 @@ class StaffPage extends React.Component {
           subHeader
           subHeaderComponent={
             <div>
+              <Autocomplete
+                multiple
+                filterSelectedOptions
+                options={this.state.contracts}
+                value={this.state.contracts.filter(c => this.state.contractFilters.includes(c.id))}
+                keyProp="id"
+                labelProp="name"
+                onChange={(e, values) => {
+                  console.log("******", values);
+                  this.setState(state => {
+                    state.contractFilters = values.map(v => v.id);
+                    return state;
+                  })
+                }}
+              />
               <Select onChange={(e) => {
                   this.contractFilterHandle(e.target.value);
                   // this.setState({ contractFilters: e.target.value });

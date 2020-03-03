@@ -135,7 +135,7 @@ class NotificationNewPage extends React.Component {
     }).catch(e => {
       console.error(e);
       this.props.closeSnackbar(key);
-      this.enqueueSnackbar(e.message, { variant: "error" });
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
     });
   }
   componentDidMount() {
