@@ -153,9 +153,6 @@ function StaffLeavePage({ history }) {
             />
 
             </div>
-
-
-
             <DataTableFilter
               onFilter={(e)=>{
                 setState({
