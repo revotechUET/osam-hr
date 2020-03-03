@@ -47,7 +47,6 @@ class NotifyPage extends React.Component {
     super(props);
     this.state = {
       data: notifications,
-      filteredData: notifications,
       loading: false,
       filterText: "",
       statusFilter: [],
@@ -80,7 +79,6 @@ class NotifyPage extends React.Component {
     apiService.getNotifications().then(notifications => {
       this.setState({
         data: notifications,
-        filteredData: notifications.filter(noti => noti.title.toLowerCase().includes(this.state.filterText.toLowerCase())),
         loading: false
       });
     }).catch(e => {
@@ -93,9 +91,7 @@ class NotifyPage extends React.Component {
   }
   render() {
     const { data, loading } = this.state;
-    console.log(data);
-    let filteredData1 = this.filter(data);
-    console.log(filteredData1);
+    let filteredData = this.filter(data);
     return (<div className = "NotiPage">
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/notifies/new")}></div>
@@ -113,7 +109,7 @@ class NotifyPage extends React.Component {
           progressPending={loading}
           progressComponent={<Loading/>}
           columns={columns}
-          data={filteredData1}
+          data={filteredData}
           pointerOnHover
           highlightOnHover
           subHeader
@@ -151,7 +147,6 @@ class NotifyPage extends React.Component {
     </div>)
   }
 }
-
 
 let statusOptions = [
   {

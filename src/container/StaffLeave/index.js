@@ -5,6 +5,9 @@ import Loading from '../../components/Loading';
 import apiService from '../../service/api.service';
 import { dateFormat } from '../../utils/date';
 import { leaveReason, leaveStatus } from '../../utils/enums';
+import { DataTableFilter } from '../../components/DataTableFilter';
+import Autocomplete from '../../components/Autocomplete';
+
 import './style.less';
 
 const columns = [
@@ -45,9 +48,14 @@ function StaffLeavePage({ history }) {
     {
       list: [],
       loading: false,
+      filterText: '',
+      statusFilter: [],
+      resetPagination: false
     });
   const cancellable = apiService.useCancellable();
-
+  // useEffect(()=>{
+    
+  // }, [state.filterText, state.statusFilter]);
   useEffect(() => {
     (async () => {
       setState({ loading: true })
@@ -55,10 +63,14 @@ function StaffLeavePage({ history }) {
       setState({ list, loading: false });
     })();
   }, []);
+
   const onRowClicked = useCallback((row, event) => {
     history.push(`/leaves/${row.id}`);
   });
   const { list, loading } = state;
+  let filteredList = list.filter((d)=>{
+    return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
+  });
   return (
     <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
@@ -74,14 +86,65 @@ function StaffLeavePage({ history }) {
         progressComponent={<Loading />}
         persistTableHead
         columns={columns}
-        data={list}
+        data={list.filter((d)=>{
+          return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
+        })}
         onRowClicked={onRowClicked}
         pointerOnHover
         highlightOnHover
         pagination
+        subHeader
+        subHeaderComponent={
+          <div>
+            <Autocomplete
+              multiple
+              filterSelectedOptions
+              options={statusOptions}
+              value={statusOptions.filter(d => state.statusFilter.includes(d.value))}
+              keyProp="value"
+              labelProp="name"
+              onChange={(e, values) => {
+                setState({
+                  statusFilter: values.map(v => v.value)
+                })
+              }}
+            />
+            <DataTableFilter
+              onFilter={(e)=>{
+                setState({
+                  filterText: e.target.value
+                })
+              }}
+              onClear={() => setState({ resetPagination: !state.resetPagination, filterText: '' })}
+              filterText={state.filterText}
+            />
+          </div>
+        }
       />
     </div>
   )
 }
+
+let statusOptions = [
+  {
+    name: 'Đã phê duyệt',
+    value: 'approved'
+  },
+  {
+    name: 'Đang chờ',
+    value: 'waiting'
+  },
+  {
+    name: 'Đã từ chối',
+    value: 'rejected'
+  },
+  {
+    name: 'Đã hết hạn',
+    value: 'expired'
+  }
+]
+
+
+
 
 export default withRouter(StaffLeavePage);
