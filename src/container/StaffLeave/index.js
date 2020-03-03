@@ -132,7 +132,7 @@ function StaffLeavePage({ history }) {
               }}
             />
             <Autocomplete
-              filterSelectedOptions
+              //filterSelectedOptions
               options={state.users}
               value={state.users.find(e => e.id == state.selectedUser)}
               keyProp="id"
