@@ -61,7 +61,7 @@ class NotifyPage extends React.Component {
 
   doFilter = (e) => {
     const filterText = e.target.value;
-    console.log(filterText, this.state.data, this.state.filteredData);
+    //console.log(filterText, this.state.data, this.state.filteredData);
     this.setState({ 
       filterText, 
       // filteredData: this.state.data.filter(d => d.title.toLowerCase().includes(filterText.toLowerCase())) 
@@ -101,7 +101,7 @@ class NotifyPage extends React.Component {
         <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/notifies/new")}></div>
         <div className="title">Thông báo</div>
       </div>
-      <div style={{marginTop: '40px'}}>
+      <div style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
         <DataTable
           noHeader
           fixedHeader

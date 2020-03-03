@@ -98,21 +98,25 @@ class DepartmentDetailPage extends React.Component {
                     <div className="title">Bộ phận / <span>{this.state.departmentDetail.name}</span></div>
                 </div>
                 <BorderedContainer>
+                <div className="item-detail" style={{ width: "100%", marginBottom: "40px" }}>
+                  <div className="infor-item-detail">
+                    <span>Người quản lý</span>
+                    <div style={{fontWeight: "bold", fontSize: "150%", marginBottom: "20px"}}>{this.state.manager.name}</div>
+                    <div style={{display: "flex", flexDirection: "column"}}>
+                      <div style={{display: "flex", marginBottom: "10px"}}>
+                          <div style={{flexBasis: "150px", fontWeight: "bold"}}>Người duyệt y/c nghỉ</div>
+                          <div style={{flex: 1}}>{(this.state.approvers || []).map((e) => e).join(", ")}</div>
+                      </div>
+                      <div style={{display: "flex", marginBottom: "10px"}}>
+                          <div style={{flexBasis: "150px", fontWeight: "bold"}}>Hoạt động</div>
+                          <div style={{flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={this.state.departmentDetail.active} /></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                     <div className="item-detail" style={{ flex: 1 }}>
                         <div className="infor-item-detail">
                             <div style={{ display: "flex", flexDirection: "column" }}>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người quản lý</div>
-                                    <div style={{ flex: 1 }}>{this.state.manager.name}</div>
-                                </div>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người phụ trách duyệt leave request</div>
-                                    <div style={{ flex: 1 }}>{(this.state.approvers || []).map((e) => e).join(", ")}</div>
-                                </div>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Hoạt động</div>
-                                    <div style={{ flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={this.state.departmentDetail.active} /></div>
-                                </div>
                                 <div style={{ marginBottom: "10px" }}>
                                     <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Danh sách nhân viên</div>
                                     <DataTable
