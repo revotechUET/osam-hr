@@ -23,5 +23,6 @@ export function googleUser(email?: string) {
 
 export function userInfo(email?: string): User {
   email = email || Session.getActiveUser().getEmail();
-  return db.from('user').query.where('email', email).toJSON(1)[0];
+  let user = db.from('user').query.where('email', email).toJSON(1)[0];
+  return user;
 }
