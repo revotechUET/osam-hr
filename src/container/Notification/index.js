@@ -61,9 +61,9 @@ class NotifyPage extends React.Component {
   doFilter = (e) => {
     const filterText = e.target.value;
     //console.log(filterText, this.state.data, this.state.filteredData);
-    this.setState({ 
-      filterText, 
-      // filteredData: this.state.data.filter(d => d.title.toLowerCase().includes(filterText.toLowerCase())) 
+    this.setState({
+      filterText,
+      // filteredData: this.state.data.filter(d => d.title.toLowerCase().includes(filterText.toLowerCase()))
     });
   }
 
@@ -117,25 +117,28 @@ class NotifyPage extends React.Component {
             this.props.history.push('/notifies/details', {notification});
           }}
           subHeaderComponent={
-            <div>
+            <div style={{display: "flex"}}>
+              <div style={{marginRight: "20px"}}>
+              <Autocomplete
+                  multiple
+                  filterSelectedOptions
+                  options={statusOptions}
+                  value={statusOptions.filter(d => this.state.statusFilter.includes(d.value))}
+                  keyProp="value"
+                  labelProp="name"
+                  onChange={(e, values) => {
+                    this.setState({
+                      statusFilter: values.map(v => v.value)
+                    })
+                  }}
+                />
+              </div>
                {/* <DateRangePicker value = {this.state.createdDayFilter} onChange={(e)=>{
                  this.setState({
                    createdDayFilter: e
                  })
                }}/> */}
-               <Autocomplete
-                multiple
-                filterSelectedOptions
-                options={statusOptions}
-                value={statusOptions.filter(d => this.state.statusFilter.includes(d.value))}
-                keyProp="value"
-                labelProp="name"
-                onChange={(e, values) => {
-                  this.setState({
-                    statusFilter: values.map(v => v.value)
-                  })
-                }}
-              />
+
                <DataTableFilter
                 onFilter={this.doFilter}
                 onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
