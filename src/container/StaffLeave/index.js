@@ -70,7 +70,8 @@ function StaffLeavePage({ history }) {
     history.push(`/leaves/${row.id}`);
   });
   const { list, loading } = state;
-  console.log(state.selectedUser);
+  //console.log(state.selectedUser);
+  console.log(list);
   return (
     <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
@@ -97,6 +98,7 @@ function StaffLeavePage({ history }) {
           .filter((d)=>{
             return state.reasonFilter.length ? state.reasonFilter.includes(d.reason) : true
           })
+          .filter((d => (d.requester.name.toLowerCase() + ";" + d.id.toLowerCase()).includes(state.filterText.toLowerCase())))
         }
         onRowClicked={onRowClicked}
         pointerOnHover
@@ -135,11 +137,10 @@ function StaffLeavePage({ history }) {
                 })
               }}
             />
-
             </div>
             <div style={{marginRight: "20px"}}>
             <Autocomplete
-              //filterSelectedOptions
+              filterSelectedOptions
               options={state.users}
               value={state.users.find(e => e.id == state.selectedUser)}
               keyProp="id"
@@ -151,7 +152,6 @@ function StaffLeavePage({ history }) {
                 })
               }}
             />
-
             </div>
             <DataTableFilter
               onFilter={(e)=>{

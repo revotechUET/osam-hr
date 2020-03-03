@@ -210,9 +210,7 @@ class StaffPage extends React.Component {
   render() {
     const { data, loading, filterText } = this.state;
     if (loading) return <Loading />
-    console.log(this.state.departmentFilters);
-    console.log(this.state.contractFilters);
-    const filteredData = this.filterByContractAndDepartment(data.filter(d => d.name.toLowerCase().includes(filterText.toLowerCase())));
+    const filteredData = this.filterByContractAndDepartment(data.filter(d => (d.name.toLowerCase() + ";" +d.email.toLowerCase()).includes(filterText.toLowerCase())));
     return (
       <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
         <div className="title-vs-btn">

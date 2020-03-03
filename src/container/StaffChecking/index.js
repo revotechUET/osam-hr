@@ -5,6 +5,7 @@ import { dateFormat } from '../../utils/date';
 import apiService from '../../service/api.service';
 import Loading from '../../components/Loading';
 import { DataTableFilter } from '../../components/DataTableFilter';
+import Autocomplete from '../../components/Autocomplete';
 import './style.less';
 
 const columns = [
@@ -45,28 +46,36 @@ class StaffChecking extends React.Component {
       allChecking: [],
       resetPagination: false,
       filterText: '',
+      selectedUser: null,
+      users: []
     }
   }
 
-
   onFilter = (e) => {
     const filterText = e.target.value;
-    this.setState({ filterText, filteredData: this.state.staffChecking.filter(d => d.requester.name.toLowerCase().includes(filterText.toLowerCase())) });
+    this.setState({ filterText });
   }
 
   async componentDidMount() {
     this.setState({ loading: true });
     let check = await apiService.listCheck({});
-    this.setState({ loading: false, staffChecking: check });
+    const users = await apiService.listUsers();
+    this.setState({ loading: false, staffChecking: check, users });
   }
   render() {
     const { staffChecking, filterText, loading } = this.state;
-    const filteredData = staffChecking.filter(d => d.requester.name.toLowerCase().includes(filterText.toLowerCase()));
     if (loading) {
       return (
         <Loading />
       )
     }
+
+    //console.log(staffChecking);
+    const filteredData = staffChecking.filter(d => d.requester.name.toLowerCase().includes(filterText.toLowerCase()))
+    .filter(e=>{
+      return this.state.selectedUser ? e.requester.idUser == this.state.selectedUser : true
+    });
+    //console.log(filteredData);
     return (<div style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={() => this.props.history.push("/checking/new")}></div>
@@ -88,11 +97,26 @@ class StaffChecking extends React.Component {
         onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); }}
         subHeader
         subHeaderComponent={
-          <DataTableFilter
-            onFilter={this.onFilter}
-            onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
-            filterText={this.state.filterText}
-          />
+          <div>
+            <Autocomplete
+              filterSelectedOptions
+              options={this.state.users}
+              value={this.state.users.find(e => e.id == this.state.selectedUser)}
+              keyProp="id"
+              labelProp="name"
+              onChange={(e, value) => {
+                //console.log('value: ', value);
+                this.setState({
+                  selectedUser: value.id
+                });
+              }}
+            />
+            <DataTableFilter
+              onFilter={this.onFilter}
+              onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
+              filterText={this.state.filterText}
+            />
+          </div>
         }
         paginationResetDefaultPage={this.state.resetPagination}
       />
