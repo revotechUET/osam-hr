@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import DataTable from 'react-data-table-component';
 import { DataTableFilter } from '../../components/DataTableFilter';
+//import DateRangePicker from '../../components/DateRangePicker';
+import Autocomplete from '../../components/Autocomplete';
 import apiService from '../../service/api.service';
 import './style.less';
 
@@ -48,7 +50,12 @@ class NotifyPage extends React.Component {
       filteredData: notifications,
       loading: false,
       filterText: "",
-      resetPagination: false
+      statusFilter: [],
+      resetPagination: false,
+      createdDayFilter: {
+        start: new Date(2000,0,0),
+        end: new Date(2100,0,0)
+      }
     }
   }
 
@@ -57,8 +64,17 @@ class NotifyPage extends React.Component {
     console.log(filterText, this.state.data, this.state.filteredData);
     this.setState({ 
       filterText, 
-      filteredData: this.state.data.filter(d => d.title.toLowerCase().includes(filterText.toLowerCase())) });
+      // filteredData: this.state.data.filter(d => d.title.toLowerCase().includes(filterText.toLowerCase())) 
+    });
   }
+
+  filter(data) {
+    return data.filter(d => d.title.toLowerCase().includes(this.state.filterText.toLowerCase()))
+    .filter((d)=>{
+      return this.state.statusFilter.length ? this.state.statusFilter.includes(d.status) : true
+    });
+  }
+
   doGet() {
     //this.setState({loading: true});
     apiService.getNotifications().then(notifications => {
@@ -76,7 +92,10 @@ class NotifyPage extends React.Component {
     this.doGet();
   }
   render() {
-    const { data, filteredData, loading } = this.state;
+    const { data, loading } = this.state;
+    console.log(data);
+    let filteredData1 = this.filter(data);
+    console.log(filteredData1);
     return (<div className = "NotiPage">
       <div className="title-vs-btn">
         <div className="my-button active-btn ti ti-plus" onClick={()=>this.props.history.push("/notifies/new")}></div>
@@ -94,7 +113,7 @@ class NotifyPage extends React.Component {
           progressPending={loading}
           progressComponent={<Loading/>}
           columns={columns}
-          data={filteredData}
+          data={filteredData1}
           pointerOnHover
           highlightOnHover
           subHeader
@@ -102,15 +121,51 @@ class NotifyPage extends React.Component {
             this.props.history.push('/notifies/details', {notification});
           }}
           subHeaderComponent={
-            <DataTableFilter
-              onFilter={this.doFilter}
-              onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
-              filterText={this.state.filterText}
-            />
+            <div>
+               {/* <DateRangePicker value = {this.state.createdDayFilter} onChange={(e)=>{
+                 this.setState({
+                   createdDayFilter: e
+                 })
+               }}/> */}
+               <Autocomplete
+                multiple
+                filterSelectedOptions
+                options={statusOptions}
+                value={statusOptions.filter(d => this.state.statusFilter.includes(d.value))}
+                keyProp="value"
+                labelProp="name"
+                onChange={(e, values) => {
+                  this.setState({
+                    statusFilter: values.map(v => v.value)
+                  })
+                }}
+              />
+               <DataTableFilter
+                onFilter={this.doFilter}
+                onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
+                filterText={this.state.filterText}
+              />
+            </div>
           } />
         </div>
     </div>)
   }
 }
+
+
+let statusOptions = [
+  {
+    name: "Nháp",
+    value: 'draft'
+  },
+  {
+    name: 'Đã gửi',
+    value: 'sent'
+  },
+  {
+    name: 'Chờ gửi',
+    value: 'pending'
+  }
+]
 
 export default withRouter(NotifyPage);

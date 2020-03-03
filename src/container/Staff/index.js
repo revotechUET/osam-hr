@@ -41,7 +41,7 @@ class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
+      data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"},{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
       loading: false,
       resetPagination: false,
       filterText: '',
@@ -139,59 +139,73 @@ class StaffPage extends React.Component {
   }
 
   filterByContractAndDepartment(data) {
-    return data;
-  }
-
-  contractFilterHandle(values) {
-    //
-    this.setState((state)=>{
-      //check if all state has all in ?
-      let allIdxBefore = state.contractFilters.findIndex((e)=>e == "ALL");
-      let allIdxAfter = values.findIndex((e) => e == "ALL");
-
-      //case 1: uncheck All:
-      if (allIdxBefore > -1 && allIdxAfter < 0) {
-        return {
-          contractFilters: []
-        };
+    return data.filter((e)=>{
+      //filter by contracts
+      if (this.state.contractFilters.length > 0) {
+        return this.state.contractFilters.includes(e.idContract);
+      } 
+      return true;
+    })
+    .filter((e)=>{
+      //filter by departments
+      if (this.state.departmentFilters.length > 0) {
+        let deps = e.departments.map(de=>de.id);
+        return !this.state.departmentFilters.some((d)=>!deps.includes(d));
       }
-      //case 2: check all
-      else if (allIdxBefore < 0 && allIdxAfter > -1) {
-        return {
-          contractFilters: this.state.contracts.map((e) => e.id)
-        }
-      }
-      //normal case
-      return {
-        contractFilters: values
-      }
+      return true;
     });
   }
 
-  departmentFilterHandle(values) {
-    this.setState((state)=>{
-      //check if all state has all in ?
-      let allIdxBefore = state.departmentFilters.findIndex((e)=>e == "ALL");
-      let allIdxAfter = values.findIndex((e) => e == "ALL");
+  // contractFilterHandle(values) {
+  //   //
+  //   this.setState((state)=>{
+  //     //check if all state has all in ?
+  //     let allIdxBefore = state.contractFilters.findIndex((e)=>e == "ALL");
+  //     let allIdxAfter = values.findIndex((e) => e == "ALL");
 
-      //case 1: uncheck All:
-      if (allIdxBefore > -1 && allIdxAfter < 0) {
-        return {
-          departmentFilters: []
-        };
-      }
-      //case 2: check all
-      else if (allIdxBefore < 0 && allIdxAfter > -1) {
-        return {
-          departmentFilters: this.state.departments.map((e) => e.id)
-        }
-      }
-      //normal case
-      return {
-        departmentFilters: values
-      }
-    });
-  }
+  //     //case 1: uncheck All:
+  //     if (allIdxBefore > -1 && allIdxAfter < 0) {
+  //       return {
+  //         contractFilters: []
+  //       };
+  //     }
+  //     //case 2: check all
+  //     else if (allIdxBefore < 0 && allIdxAfter > -1) {
+  //       return {
+  //         contractFilters: this.state.contracts.map((e) => e.id)
+  //       }
+  //     }
+  //     //normal case
+  //     return {
+  //       contractFilters: values
+  //     }
+  //   });
+  // }
+
+  // departmentFilterHandle(values) {
+  //   this.setState((state)=>{
+  //     //check if all state has all in ?
+  //     let allIdxBefore = state.departmentFilters.findIndex((e)=>e == "ALL");
+  //     let allIdxAfter = values.findIndex((e) => e == "ALL");
+
+  //     //case 1: uncheck All:
+  //     if (allIdxBefore > -1 && allIdxAfter < 0) {
+  //       return {
+  //         departmentFilters: []
+  //       };
+  //     }
+  //     //case 2: check all
+  //     else if (allIdxBefore < 0 && allIdxAfter > -1) {
+  //       return {
+  //         departmentFilters: this.state.departments.map((e) => e.id)
+  //       }
+  //     }
+  //     //normal case
+  //     return {
+  //       departmentFilters: values
+  //     }
+  //   });
+  // }
 
   render() {
     const { data, loading, filterText } = this.state;
@@ -230,14 +244,29 @@ class StaffPage extends React.Component {
                 keyProp="id"
                 labelProp="name"
                 onChange={(e, values) => {
-                  console.log("******", values);
                   this.setState(state => {
-                    state.contractFilters = values.map(v => v.id);
-                    return state;
+                    return {
+                      contractFilters: values.map(v => v.id)
+                    }
                   })
                 }}
               />
-              <Select onChange={(e) => {
+              <Autocomplete
+                multiple
+                filterSelectedOptions
+                options={this.state.departments}
+                value={this.state.departments.filter(d => this.state.departmentFilters.includes(d.id))}
+                keyProp="id"
+                labelProp="name"
+                onChange={(e, values) => {
+                  this.setState(state => {
+                    return {
+                      departmentFilters: values.map(v => v.id)
+                    }
+                  })
+                }}
+              />
+              {/* <Select onChange={(e) => {
                   this.contractFilterHandle(e.target.value);
                   // this.setState({ contractFilters: e.target.value });
                 }}
@@ -272,7 +301,7 @@ class StaffPage extends React.Component {
                     </MenuItem>
                   )
                 }
-              </Select>
+              </Select> */}
               <DataTableFilter
                 onFilter={this.onFilter}
                 onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
