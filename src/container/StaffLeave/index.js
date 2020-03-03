@@ -70,6 +70,7 @@ function StaffLeavePage({ history }) {
     history.push(`/leaves/${row.id}`);
   });
   const { list, loading } = state;
+  console.log(state.selectedUser);
   return (
     <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
@@ -88,7 +89,7 @@ function StaffLeavePage({ history }) {
         data={
           list
           .filter((d)=>{
-            state.selectedUser ?  d.requester.id == state.selectedUser : true
+            return state.selectedUser ?  d.requester.id == state.selectedUser : true
           })
           .filter((d)=>{
             return state.statusFilter.length ? state.statusFilter.includes(d.status) : true
@@ -137,6 +138,7 @@ function StaffLeavePage({ history }) {
               keyProp="id"
               labelProp="name"
               onChange={(e, value) => {
+                //console.log('value: ', value);
                 setState({
                   selectedUser: value.id
                 })
