@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 
 import BorderedContainer from '../components/BorderedContainer';
 import DataTable from 'react-data-table-component';
+import { Checkbox } from '@material-ui/core';
 
 
 const displays = [
@@ -29,7 +30,7 @@ class DepartmentDetailPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             departmentDetail: {},
             manager: null,
             approvers: [],
@@ -111,13 +112,15 @@ class DepartmentDetailPage extends React.Component {
                     <span>Người quản lý</span>
                     <div style={{fontWeight: "bold", fontSize: "150%", marginBottom: "20px"}}>{this.state.manager.name}</div>
                     <div style={{display: "flex", flexDirection: "column"}}>
-                      <div style={{display: "flex", marginBottom: "10px"}}>
+                      <div style={{display: "flex"}}>
                           <div style={{flexBasis: "150px", fontWeight: "bold"}}>Người duyệt y/c nghỉ</div>
                           <div style={{flex: 1}}>{(this.state.approvers || []).map((e) => e).join(", ")}</div>
                       </div>
-                      <div style={{display: "flex", marginBottom: "10px"}}>
+                      <div style={{display: "flex", alignItems: 'center'}}>
                           <div style={{flexBasis: "150px", fontWeight: "bold"}}>Hoạt động</div>
-                          <div style={{flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={this.state.departmentDetail.active} /></div>
+                          <div style={{ flex: 1 }}>
+                            <Checkbox name="contractLunch" defaultChecked={this.state.departmentDetail.active} readOnly disabled />
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -125,18 +128,6 @@ class DepartmentDetailPage extends React.Component {
                     <div className="item-detail" style={{ flex: 1 }}>
                         <div className="infor-item-detail">
                             <div style={{ display: "flex", flexDirection: "column" }}>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người quản lý</div>
-                                    <div style={{ flex: 1 }}>{(this.state.manager|{}).name || "Unknown"}</div>
-                                </div>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Người phụ trách duyệt leave request</div>
-                                    <div style={{ flex: 1 }}>{(this.state.approvers || []).map((e) => e).join(", ")}</div>
-                                </div>
-                                <div style={{ display: "flex", marginBottom: "10px" }}>
-                                    <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Hoạt động</div>
-                                    <div style={{ flex: 1}}><input style={{ width : '4%', height:'10px'}} className="input checkbox" type="checkbox" defaultChecked={(this.state.departmentDetail||{}).active} /></div>
-                                </div>
                                 <div style={{ marginBottom: "10px" }}>
                                     <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Danh sách nhân viên</div>
                                     <DataTable
@@ -162,4 +153,4 @@ class DepartmentDetailPage extends React.Component {
 }
 
 
-export default withSnackbar(withRouter(DepartmentDetailPage)); 
+export default withSnackbar(withRouter(DepartmentDetailPage));

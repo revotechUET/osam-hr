@@ -15,11 +15,13 @@ function addNewDepartment(data) {
 }
 
 function listDepartment({ loadManagers }) {
+  let departments;
   if (loadManagers) {
-    return db.join<Department, User>('department', 'user', 'idManager', 'manager').setType('inner').toJSON();
+    departments = db.join<Department, User>('department', 'user', 'idManager', 'manager').setType('inner').toJSON();
   } else {
-    return db.from<Department>('department').query.toJSON();
+    departments = db.from<Department>('department').query.toJSON();
   }
+  return departments.map(d => ({ ...d, idApprovers: JSON.parse(d.idApprovers) }));
 }
 
 function departmentDetail({ id }) {
@@ -27,7 +29,7 @@ function departmentDetail({ id }) {
   if (id) {
     departmentQuery.sWhere('id', id);
   }
-  return departmentQuery.toJSON();
+  return departmentQuery.toJSON().map(d => ({...d, idApprovers: JSON.parse(d.idApprovers)}));
 }
 
 function deleteDepartment(id) {

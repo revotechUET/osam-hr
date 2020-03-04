@@ -5,20 +5,19 @@ import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import './style.less';
+import { Checkbox } from "@material-ui/core";
 
 class DepartmentEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       departmentName: '',
-      manager: null,
       idManager: null,
       active: true,
       name: '',
-      approvers: null,
+      users: null,
       idApprovers: null,
       loading: false,
-
     };
     this.handleManagerChange = this.handleManagerChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -28,16 +27,16 @@ class DepartmentEdit extends React.Component {
   }
 
   async handleSave() {
-    let id  = this.props.match.params.id; 
+    let id = this.props.match.params.id;
     let name = this.state.departmentName;
     let idManager = this.state.idManager;
     let idApprovers = this.state.idApprovers;
     let active = this.state.active;
-    let edit = await apiService.editDepartment({id, name, idManager, idApprovers, active});
+    let edit = await apiService.editDepartment({ id, name, idManager, idApprovers, active });
     if (edit) {
       this.props.history.push('/departments');
     }
-    else{
+    else {
       console.log("Toang rồi");
     }
   }
@@ -61,15 +60,16 @@ class DepartmentEdit extends React.Component {
   async componentDidMount() {
     let department = this.props.history.location.state.department || {};
     this.setState({
-      departmentName : department.name,
-      idManager : department.idManager,
-      active : department.active
-
+      departmentName: department.name,
+      idManager: department.idManager,
+      idApprovers: department.idApprovers,
+      active: department.active,
     })
     let users = await apiService.listUsers();
-    this.setState({ manager: users, approvers: users });
+    this.setState({ users });
   }
   render() {
+    const { users } = this.state;
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
@@ -88,13 +88,14 @@ class DepartmentEdit extends React.Component {
             <span>Người quản lý</span>
             <div>
               <Autocomplete
-                loading={this.state.manager === null}
+                loading={users === null}
                 style={{ flex: 1 }}
-                options={this.state.manager}
+                options={users}
                 keyProp='id'
                 labelProp='name'
+                keyValue={this.state.idManager}
                 onChange={(event, value) => {
-                  this.setState({ idManager: value && value.id});
+                  this.setState({ idManager: value && value.id });
                 }}
               />
             </div>
@@ -105,11 +106,12 @@ class DepartmentEdit extends React.Component {
               <Autocomplete
                 multiple
                 filterSelectedOptions
-                loading={this.state.approvers === null}
+                loading={users === null}
                 style={{ flex: 1 }}
-                options={this.state.approvers}
+                options={users}
                 keyProp='id'
                 labelProp='name'
+                keyValue={this.state.idApprovers}
                 onChange={(event, value) => {
                   this.setState({ idApprovers: value.map(v => v.id) });
                 }}
@@ -119,7 +121,7 @@ class DepartmentEdit extends React.Component {
           <div className="item-wrap" style={{ width: "70px" }}>
             <span>Hoạt động</span>
             <div>
-              <input className="input checkbox" type="checkbox" checked={this.state.active} onClick={this.handleActiveStatus} />
+              <Checkbox name="contractLunch" checked={this.state.active} onChange={this.handleActiveStatus} />
             </div>
           </div>
         </BorderedContainer>

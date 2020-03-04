@@ -1,5 +1,5 @@
-import { areIntervalsOverlapping, eachDayOfInterval, eachMonthOfInterval, endOfDay, getDaysInMonth, isSameDay, min, startOfDay, subMonths } from 'date-fns';
-import { Leave, LeaveStatus, LeaveReason } from "../@types/leave";
+import { addMonths, areIntervalsOverlapping, eachDayOfInterval, eachMonthOfInterval, endOfDay, getDaysInMonth, isSameDay, min, startOfDay } from 'date-fns';
+import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
 import { db } from "../db";
 import { getEvents } from './calendar';
 import { getSetting } from './setting';
@@ -84,12 +84,12 @@ export function getMonthInterval(dateInMonth?, raw = false) {
   const date = dateInMonth.getDate();
   const maxDay = getDaysInMonth(dateInMonth);
   if (date <= setting.monthEnd) {
-    const prevMonth = subMonths(dateInMonth, 1);
+    const prevMonth = addMonths(dateInMonth, -1);
     const prevMonthMaxDay = getDaysInMonth(prevMonth);
     start.setMonth(prevMonth.getMonth(), Math.min(prevMonthMaxDay, setting.monthEnd) + 1);
     end.setDate(Math.min(maxDay, setting.monthEnd));
   } else {
-    const nextMonth = subMonths(dateInMonth, 1);
+    const nextMonth = addMonths(dateInMonth, 1);
     const nextMonthMaxDay = getDaysInMonth(nextMonth);
     start.setDate(Math.min(maxDay, setting.monthEnd) + 1);
     end.setMonth(nextMonth.getMonth(), Math.min(nextMonthMaxDay, setting.monthEnd));

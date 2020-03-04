@@ -1,11 +1,11 @@
-import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
 
 export default function HrAutocomplete(props) {
-  const { getOptions, options, keyProp = 'id', labelProp = 'name', InputProps, ...elementProps } = props;
+  const { getOptions, options, keyProp = 'id', keyValue, labelProp = 'name', InputProps, ...elementProps } = props;
   const [_options, setOptions] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
@@ -29,6 +29,17 @@ export default function HrAutocomplete(props) {
       active = false;
     };
   }, [loading, getOptions]);
+
+  const getValue = useCallback(() => {
+    const allOptions = options || _options;
+    if (elementProps.multiple) {
+      if (!Array.isArray(keyValue)) return [];
+      return allOptions.filter(o => keyValue.includes(o[keyProp]));
+    } else {
+      if (!keyValue) return null;
+      return allOptions.find(o => o[keyProp] === keyValue);
+    }
+  }, [keyValue, options, _options]);
 
   return (
     <Autocomplete
@@ -62,6 +73,7 @@ export default function HrAutocomplete(props) {
           {...InputProps}
         />
       )}
+      value={getValue()}
       {...elementProps}
     />
   );
