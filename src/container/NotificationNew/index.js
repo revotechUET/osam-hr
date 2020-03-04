@@ -8,7 +8,6 @@ import Loading from "../../components/Loading";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import CenteredModal from "../../components/CenteredModal";
 import ConfirmDialog from '../../dialogs/ConfirmDialog';
 import Autocomplete from "../../components/Autocomplete";
@@ -42,7 +41,7 @@ class NotificationNewPage extends React.Component {
       notification.receipient = JSON.parse(notification.receipient);
     }
     this.state = {
-      loading: true,
+      loading: false,
       sendTime: new Date(),
       sendNow: true,
       sendModalActive: false,
@@ -104,6 +103,9 @@ class NotificationNewPage extends React.Component {
     Object.assign(toSave, notification);
     toSave.receipient = JSON.stringify(notification.receipient);
     console.log(toSave);
+    this.setState({
+
+    })
     fn(toSave).then(res => {
       console.log(res);
       if (notification.id) {
@@ -128,23 +130,26 @@ class NotificationNewPage extends React.Component {
     Object.assign(toSend, notification);
     toSend.receipient = JSON.stringify(notification.receipient);
     console.log(toSend);
+    this.setState({loading: true});
     apiService.sendNotification(toSend, aSendTime).then(res => {
       console.log(res);
       this.props.closeSnackbar(key);
       this.setState(state => {
         state.notification.status = 'sent';
         state.sendModalActive = false;
+        state.loading = false;
         return state;
       });
     }).catch(e => {
       console.error(e);
       this.props.closeSnackbar(key);
       this.props.enqueueSnackbar(e.message, { variant: "error" });
+      this.setState({loading: false});
     });
   }
   componentDidMount() {
     let jobs = [apiService.listDepartment(), apiService.listUsers()];
-    //this.setState({loading: true});
+    this.setState({loading: true});
     Promise.all(jobs).then(([departments, users]) => {
       this.setState({
         loading: false,
@@ -155,7 +160,11 @@ class NotificationNewPage extends React.Component {
         }
       });
     }).catch(e => {
-      console.error(e)
+      console.error(e);
+      this.setState({
+        loading: false
+      });
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
     });
 
     this.editor = init({
@@ -173,7 +182,8 @@ class NotificationNewPage extends React.Component {
     let {receipientLists} = this.state;
     let { id, status, receipient } = this.state.notification;
     let state = this.state;
-    console.log(receipientLists, receipient.type);
+    //console.log(receipientLists, receipient.type);
+    if (this.state.loading) return <Loading />
     return (
       <div className="NotificationNew">
         <div className="title-vs-btn">

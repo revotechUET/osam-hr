@@ -15,7 +15,7 @@ import routerConfig from './router.config.js';
 
 const theme = createMuiTheme({
   palette: {
-    primary: {main: "#ff9800"},
+    primary: { main: "#ff9800" },
     secondary: { main: amber[300] },
   },
   status: {

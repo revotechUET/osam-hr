@@ -7,7 +7,7 @@ import Loading from '../../components/Loading';
 import { DataTableFilter } from '../../components/DataTableFilter';
 import Autocomplete from '../../components/Autocomplete';
 import './style.less';
-import { red } from '@material-ui/core/colors';
+import { theme } from '../../components/App';
 
 const columns = [
   {
@@ -23,12 +23,12 @@ const columns = [
   {
     name: "Giờ check in",
     // selector: 'checkinTime'
-    selector: row => dateFormat(row.checkinTime, 'hh:mm')
+    selector: row => dateFormat(row.checkinTime, 'HH:mm')
   },
   {
     name: "Giờ check out",
     // selector: 'checkoutTime'
-    selector: row => dateFormat(row.checkoutTime, 'hh:mm')
+    selector: row => dateFormat(row.checkoutTime, 'HH:mm')
   },
   // {
   //   name: "Tổng công"
@@ -82,9 +82,9 @@ class StaffChecking extends React.Component {
 
     //console.log(staffChecking);
     const filteredData = staffChecking.filter(d => d.requester.name.toLowerCase().includes(filterText.toLowerCase()))
-    .filter(e=>{
-      return this.state.selectedUser ? e.requester.idUser == this.state.selectedUser : true
-    });
+      .filter(e => {
+        return this.state.selectedUser ? e.requester.idUser == this.state.selectedUser : true
+      });
     //console.log(filteredData);
     return (<div style={{ marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff" }}>
       <div className="title-vs-btn">
@@ -102,10 +102,10 @@ class StaffChecking extends React.Component {
         persistTableHead
         columns={columns}
         data={filteredData}
-        conditionalRowStyles = {conditionalRowStyles}
+        conditionalRowStyles={conditionalRowStyles}
         pointerOnHover
         highlightOnHover
-        onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); console.log(row);}}
+        onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); console.log(row); }}
         subHeader
         subHeaderComponent={
           <div>
@@ -118,7 +118,7 @@ class StaffChecking extends React.Component {
               onChange={(e, value) => {
                 //console.log('value: ', value);
                 this.setState({
-                  selectedUser: value.id
+                  selectedUser: (value || {}).id
                 });
               }}
             />

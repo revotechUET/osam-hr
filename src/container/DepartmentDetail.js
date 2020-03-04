@@ -81,6 +81,7 @@ class DepartmentDetailPage extends React.Component {
         this.setState({loading : true});
         apiService.deleteDepartment(this.state.departmentDetail.id).then((res) => {
             this.setState({loading : false});
+            this.props.enqueueSnackbar("Xóa bộ phận thành công",{variant : 'success'});
             this.props.history.push('/departments');
         }).catch(e => {
             this.setState({loading : false});

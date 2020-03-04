@@ -148,7 +148,7 @@ function StaffLeavePage({ history }) {
               onChange={(e, value) => {
                 //console.log('value: ', value);
                 setState({
-                  selectedUser: value.id
+                  selectedUser: (value || {}).id
                 })
               }}
             />

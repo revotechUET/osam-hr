@@ -4,8 +4,10 @@ import Autocomplete from "../../components/Autocomplete";
 import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
+import Loading from "../../components/Loading";
 import './style.less';
 import { Checkbox } from "@material-ui/core";
+import { withSnackbar } from 'notistack';
 
 class DepartmentEdit extends React.Component {
   constructor(props) {
@@ -17,7 +19,7 @@ class DepartmentEdit extends React.Component {
       name: '',
       users: null,
       idApprovers: null,
-      loading: false,
+      loading: false
     };
     this.handleManagerChange = this.handleManagerChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -32,13 +34,29 @@ class DepartmentEdit extends React.Component {
     let idManager = this.state.idManager;
     let idApprovers = this.state.idApprovers;
     let active = this.state.active;
-    let edit = await apiService.editDepartment({ id, name, idManager, idApprovers, active });
-    if (edit) {
-      this.props.history.push('/departments');
+    this.setState({
+      loading: true
+    });
+    let key = this.props.enqueueSnackbar("Đang lưu");
+    try {
+      let edit = await apiService.editDepartment({ id, name, idManager, idApprovers, active });
+      this.setState({
+        loading: false
+      });
+      this.props.closeSnackbar(key);
+      if (edit) {
+        this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
+        this.props.history.push('/departments');
+      }
+      else {
+        this.props.enqueueSnackbar("Lỗi", { variant: "error" });
+        console.log("Toang rồi");
+      }
+    } catch (e) {
+      this.props.closeSnackbar(key);
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
     }
-    else {
-      console.log("Toang rồi");
-    }
+    
   }
 
   handleCancel() {
@@ -121,7 +139,7 @@ class DepartmentEdit extends React.Component {
           <div className="item-wrap" style={{ width: "70px" }}>
             <span>Hoạt động</span>
             <div>
-              <Checkbox name="contractLunch" checked={this.state.active} onChange={this.handleActiveStatus} />
+              <Checkbox checked={this.state.active} onChange={this.handleActiveStatus} />
             </div>
           </div>
         </BorderedContainer>
@@ -130,4 +148,4 @@ class DepartmentEdit extends React.Component {
   }
 }
 
-export default withRouter(DepartmentEdit);
+export default withSnackbar(withRouter(DepartmentEdit));
