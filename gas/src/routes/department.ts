@@ -2,6 +2,7 @@ import { Department } from '../@types/department';
 import { User } from '../@types/user';
 import { db } from '../db';
 import { uuid } from '../utils';
+import {User_Department} from '../@types/user_department';
 
 global.addNewDepartment = addNewDepartment;
 global.listDepartment = listDepartment;
@@ -33,6 +34,11 @@ function departmentDetail({ id }) {
 }
 
 function deleteDepartment(id) {
+  const table = db.from<User_Department>('user_department');
+  let user_department = table.query.where('idDepartment', id).toJSON();
+  for (let i = 0; i < user_department.length; i++) {
+    table.delete(user_department[i].id);
+  }
   return db.from<Department>('department').delete(id);
 }
 
