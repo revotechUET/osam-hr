@@ -37,7 +37,6 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave() {
-    this.setState({ loading: true });
     let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
     if(this.handleValidation()){
       try {
@@ -70,6 +69,14 @@ class DepartmentNewPage extends React.Component {
           loading: false
         });
       }
+      this.props.closeSnackbar(key);
+      this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
+      this.props.history.push('/departments');
+    } catch (e) {
+        this.props.closeSnackbar(key);
+        this.props.enqueueSnackbar(e.message, { variant: "error" });
+    } finally {
+      this.setState({loading: false});
     }
   }
 

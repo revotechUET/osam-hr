@@ -55,6 +55,7 @@ class DepartmentEdit extends React.Component {
     } catch (e) {
       this.props.closeSnackbar(key);
       this.props.enqueueSnackbar(e.message, { variant: "error" });
+      this.setState({loading: false});
     }
     
   }
@@ -82,12 +83,14 @@ class DepartmentEdit extends React.Component {
       idManager: department.idManager,
       idApprovers: department.idApprovers,
       active: department.active,
+      loading: true
     })
     let users = await apiService.listUsers();
-    this.setState({ users });
+    this.setState({ users, loading: false });
   }
   render() {
     const { users } = this.state;
+    if (this.state.loading) return <Loading />
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
