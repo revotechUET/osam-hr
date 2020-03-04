@@ -4,7 +4,9 @@ import Autocomplete from "../../components/Autocomplete";
 import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
+import {withSnackbar} from 'notistack';
 import './style.less';
+import Loading from "../../components/Loading";
 
 
 class DepartmentNewPage extends React.Component {
@@ -21,6 +23,7 @@ class DepartmentNewPage extends React.Component {
       loading: false,
       departments : [],
       nameDepartmentExist : false,
+      idGroup : '',
       errors : {}
 
     };
@@ -33,27 +36,37 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave() {
+    this.setState({loading : true});
+    let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
     if(this.handleValidation()){
       let id = await apiService.generateDepartmentId();
+      let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
+      this.setState({idGroup : groupKey.id})
       let data = {
         id : id,
         name: this.state.departmentName,
         idManager: this.state.idManager.id,
         idApprovers: this.state.idApprovers,
-        active: this.state.active
+        active: this.state.active,
+        idGroup : this.state.idGroup
       };
-      let addNewDepartment = await apiService.addNewDepartment(data);
-      await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
-      let updateDepartment = {
-        departments : [id]
+      try{
+        let addNewDepartment = await apiService.addNewDepartment(data);
+        let updateDepartment = {
+          departments : [id]
+        }
+        await apiService.updateUserById(this.state.idManager.id, updateDepartment );
+        if (addNewDepartment) {
+          this.props.closeSnackbar(key);
+          this.props.enqueueSnackbar("Lưu thành công", {variant: "success"});
+          this.props.history.push('/departments');
+        }
+      }catch(e){
+        this.props.enqueueSnackbar(e.message, {variant: "error"});
+        this.setState({
+          loading: false
+        });
       }
-      await apiService.updateUserById(this.state.idManager.id, updateDepartment );
-      if (addNewDepartment) {
-        this.props.history.push('/departments');
-      }
-    }
-    else{
-      console.log(this.state.errors);
     }
   }
 
@@ -61,6 +74,10 @@ class DepartmentNewPage extends React.Component {
     let formIsValid = true;
     let e = {};
     // name
+    if (this.state.departmentName === '') {
+      formIsValid = false;
+      e["name"] = "Cannot be empty";
+    }
     this.state.departments.forEach((val, index) => {
       if(val.name === this.state.departmentName){
         formIsValid = false;
@@ -100,6 +117,11 @@ class DepartmentNewPage extends React.Component {
     this.setState({ manager: users, approvers: users , departments : department});
   }
   render() {
+    if(this.state.loading){
+      return(
+        <Loading />
+      )
+    }
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
@@ -159,4 +181,4 @@ class DepartmentNewPage extends React.Component {
   }
 }
 
-export default withRouter(DepartmentNewPage);
+export default withSnackbar(withRouter(DepartmentNewPage));

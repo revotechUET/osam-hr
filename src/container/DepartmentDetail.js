@@ -142,7 +142,7 @@ class DepartmentDetailPage extends React.Component {
                                     <DataTable
                                         noHeader
                                         fixedHeader
-                                        fixedHeaderScrollHeight="calc(100vh - 333px)"
+                                        fixedHeaderScrollHeight="calc(100vh - 333px)" 
                                         persistTableHead
                                         pagination
                                         noDataComponent='Không có nhân viên'

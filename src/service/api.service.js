@@ -134,6 +134,14 @@ class ApiService {
   createGroup(email, name){
     return gscriptrun('createGroup',email, name);
   }
+
+  listGroups(email){
+    return gscriptrun('listGroups', email);
+  }
+
+  deleteGroup(groupKey){
+    return gscriptrun('deleteGroup', groupKey);
+  }
   //#endregion
 
   //#region leave
