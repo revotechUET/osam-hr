@@ -42,31 +42,36 @@ class DepartmentDetailPage extends React.Component {
     }
     async componentDidMount() {
         this.setState({loading: true});
-        const id = this.props.match.params.id;
-         let departmentDetail = await apiService.departmentDetail({});
-        let users = await apiService.listUsers({full : true});
-        departmentDetail.forEach((value, index) => {
-            if (value['id'] === id) {
-                this.setState({ departmentDetail: value });
-            }
-        });
-        users.forEach((value, index) => {
-            if (value.id.includes(this.state.departmentDetail.idManager)) {
-                this.setState({ manager: value })
-            }
-            value.departments.forEach((val, indx) => {
-                if(val.name === this.state.departmentDetail.name){
-                    this.state.staff.push(value);
+        try {
+            const id = this.props.match.params.id;
+            let departmentDetail = await apiService.departmentDetail({});
+            let users = await apiService.listUsers({full : true});
+            departmentDetail.forEach((value, index) => {
+                if (value['id'] === id) {
+                    this.setState({ departmentDetail: value });
                 }
+            });
+            users.forEach((value, index) => {
+                if (value.id.includes(this.state.departmentDetail.idManager)) {
+                    this.setState({ manager: value })
+                }
+                value.departments.forEach((val, indx) => {
+                    if(val.name === this.state.departmentDetail.name){
+                        this.state.staff.push(value);
+                    }
+                })
             })
-        })
-        let idApprovers = this.state.departmentDetail.idApprovers
-        users.forEach((value, index) => {
-            if (idApprovers.includes(value.id)) {
-                this.state.approvers.push(value.name)
-            }
-        });
-        this.setState({ loading: false });
+            let idApprovers = this.state.departmentDetail.idApprovers
+            users.forEach((value, index) => {
+                if (idApprovers.includes(value.id)) {
+                    this.state.approvers.push(value.name)
+                }
+            });
+        } catch (e) {
+            this.props.enqueueSnackbar(e.message, {variant: "error"});
+        } finally {
+            this.setState({ loading: false });
+        }
     }
 
     edit() {
@@ -93,7 +98,7 @@ class DepartmentDetailPage extends React.Component {
         this.props.history.push('/departments');
     }
     render() {
-        if(this.state.loading){
+        if (this.state.loading){
             return (
                 <Loading />
             )

@@ -41,19 +41,22 @@ class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"},{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
+      //data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"},{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
       loading: false,
       resetPagination: false,
       filterText: '',
-      departments: [{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"},{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],
-      contracts: [{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"}],
+      //departments: [{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"},{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],
+      //contracts: [{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"}],
       departmentFilters: [],
-      contractFilters: []
+      contractFilters: [],
+      data: [],
+      contracts: [],
+      departments: []
     }
   }
 
   componentDidMount() {
-    //this.clear();
+    this.clear();
     this.loadAll();
   }
 
@@ -62,6 +65,7 @@ class StaffPage extends React.Component {
     promises.push(this.loadDepartments());
     promises.push(this.loadUsers());
     promises.push(this.loadContracts());*/
+    this.setState({loading: true});
     Promise.all([
       apiService.listDepartment(),
       apiService.getContracts(),
@@ -75,6 +79,7 @@ class StaffPage extends React.Component {
       });
     }).catch(e => {
       this.props.enqueueSnackbar(e.message, {variant: "error"});
+      this.setState({loading: false});
     });
     /*
     try {
@@ -91,39 +96,38 @@ class StaffPage extends React.Component {
   clear() {
     this.setState({
       data: [],
-      loading: true,
       filterText: '',
       departmentFilters: [],
       contractFilters: []
     });
   }
 
-  async loadDepartments() {
-    return new Promise(async (res, rej) => {
-      let rs = await apiService.listDepartment();
-      rs.push({id: "ALL", name: "All"});
-      this.setState({
-        departments: rs
-      }, res(true));
-    });
-  }
+  // async loadDepartments() {
+  //   return new Promise(async (res, rej) => {
+  //     let rs = await apiService.listDepartment();
+  //     rs.push({id: "ALL", name: "All"});
+  //     this.setState({
+  //       departments: rs
+  //     }, res(true));
+  //   });
+  // }
 
-  async loadContracts() {
-    return new Promise(async (res, rej) => {
-      let rs = await apiService.getContracts();
-      rs.push({id: "ALL", name: "All"});
-      this.setState({
-        contracts: rs
-      }, res(true));
-    });
-  }
+  // async loadContracts() {
+  //   return new Promise(async (res, rej) => {
+  //     let rs = await apiService.getContracts();
+  //     rs.push({id: "ALL", name: "All"});
+  //     this.setState({
+  //       contracts: rs
+  //     }, res(true));
+  //   });
+  // }
 
-  async loadUsers() {
-    return new Promise(async (res, rej)=>{
-      let users = await apiService.listUsers({ full: true });
-      this.setState({ data: users }, res(true));
-    });
-  }
+  // async loadUsers() {
+  //   return new Promise(async (res, rej)=>{
+  //     let users = await apiService.listUsers({ full: true });
+  //     this.setState({ data: users }, res(true));
+  //   });
+  // }
 
   goToUserDetail(user) {
     //console.log(user);
