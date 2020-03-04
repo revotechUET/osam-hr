@@ -6,7 +6,7 @@ global.createGroup = createGroup;
 global.listGroups = listGroups;
 global.deleteGroup = deleteGroup;
 
-function deleteGroup(groupKey){
+export function deleteGroup(groupKey){
   var service = getService();
   var requestBody = JSON.stringify({groupKey : groupKey});
   if(service.hasAccess()){
@@ -66,19 +66,5 @@ export function createGroup(name) {
     throw service.getLastError();
   }
 }
-
-// function getService() {
-//   return OAuth2.createService('Google')
-//     .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/v2/auth')
-//     .setTokenUrl('https://oauth2.googleapis.com/token')
-//     .setClientId('662965188559-01aaqnfc5ut6s30s15r2clka6rti7ppc.apps.googleusercontent.com')
-//     .setClientSecret('gl8hJEQfE1kmOgsmR0SpV2GJ')
-//     .setCallbackFunction('authCallback')
-//     .setPropertyStore(PropertiesService.getUserProperties())
-//     .setScope('https://www.googleapis.com/auth/admin.directory.group')
-//     .setParam('access_type', 'offline')
-//     .setParam('approval_prompt', 'force')
-//     .setParam('login_hint', Session.getActiveUser().getEmail());
-// }
 
 

@@ -32,6 +32,7 @@ export default {
     "scopes": [
       "https://www.googleapis.com/auth/spreadsheets",
       "https://www.googleapis.com/auth/admin.directory.group",
+      "https://www.googleapis.com/auth/userinfo.email",
     ],
     "adminEmail": "admin@rvtcompany.page",
   },

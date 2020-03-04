@@ -38,33 +38,29 @@ class DepartmentNewPage extends React.Component {
 
   async handleSave() {
     this.setState({loading : true});
+    if (!this.handleValidation()) return;
     let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
-    if(this.handleValidation()){      
-      let data = {
-        name: this.state.departmentName,
-        idManager: this.state.idManager.id,
-        idApprovers: this.state.idApprovers,
-        active: this.state.active,
-        idGroup: this.state.idGroup
-      };
-      try {
-        const newDepartment = await apiService.addNewDepartment(data);
-        if (newDepartment) {
-          this.props.closeSnackbar(key);
-          this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
-          this.props.history.push('/departments');
-        }
-      } catch (e) {
-        this.props.enqueueSnackbar(e.message, { variant: "error" });
-        this.setState({
-          loading: false
-        });
-      }  
-     finally {
+    let data = {
+      name: this.state.departmentName,
+      idManager: this.state.idManager.id,
+      idApprovers: this.state.idApprovers,
+      active: this.state.active,
+      idGroup: this.state.idGroup
+    };
+    try {
+      const newDepartment = await apiService.addNewDepartment(data);
+      if (newDepartment) {
+        this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
+        this.props.history.push('/departments');
+      }
+    } catch (e) {
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
+    } finally {
+      this.props.closeSnackbar(key);
       this.setState({loading: false});
     }
   }
-}
+
 
   handleValidation() {
     let formIsValid = true;
