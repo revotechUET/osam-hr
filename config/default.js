@@ -6,7 +6,7 @@ export default {
     spreadsheetId,
     sheetSpecs: {
       user: ['id', 'email', 'role', 'name', 'active', 'idContract'],
-      department: ['id', 'name', 'active', 'idManager', 'idApprovers'],
+      department: ['id', 'name', 'active', 'idManager', 'idApprovers', 'idGroup'],
       user_department: ['id', 'idUser', 'idDepartment'],
       contract: ['id', 'name', 'type', 'lunch', 'leaveRequest'],
       checking: ['id', 'date', 'checkinTime', 'checkoutTime', 'reportContent', 'responseContent', 'reportStatus', 'idUser', 'note', 'point', 'lunch'],
@@ -31,6 +31,8 @@ export default {
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-607%40osam-hr.iam.gserviceaccount.com",
     "scopes": [
       "https://www.googleapis.com/auth/spreadsheets",
-    ]
+      "https://www.googleapis.com/auth/admin.directory.group",
+    ],
+    "adminEmail": "admin@rvtcompany.page",
   },
 }

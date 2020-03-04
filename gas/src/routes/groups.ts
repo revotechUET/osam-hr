@@ -1,5 +1,7 @@
-import { googleUser, userInfo } from "../utils";
-import {getService} from '../services';
+import { googleUser, userInfo, removeAccent } from "../utils";
+import { getService } from '../services';
+import config from '../../../config';
+
 global.createGroup = createGroup;
 global.listGroups = listGroups;
 global.deleteGroup = deleteGroup;
@@ -20,7 +22,7 @@ function deleteGroup(groupKey){
 
     return JSON.parse(response.getContentText()) ;
   }
-  return "Bug in delete group"; 
+  return "Bug in delete group";
 }
 
 function listGroups(email){
@@ -44,15 +46,14 @@ function listGroups(email){
   return "Bug in list groups";
 }
 
-function createGroup(email, name) {
-  var service = getService();
-
-  let groupEmail = name + "@" + email.split('@')[1];
-
-  var requestBody = JSON.stringify({ email: groupEmail, name: name });
+export function createGroup(name) {
+  const service = getService(config.serviceAccount.adminEmail);
+  const email = Session.getActiveUser().getEmail();
+  const groupEmail = removeAccent(name) + "@" + email.split('@')[1];
+  const requestBody = JSON.stringify({ email: groupEmail, name: name });
   if (service.hasAccess()) {
-    var url = 'https://www.googleapis.com/admin/directory/v1/groups';
-    var response = UrlFetchApp.fetch(url, {
+    const url = 'https://www.googleapis.com/admin/directory/v1/groups';
+    const response = UrlFetchApp.fetch(url, {
       method: 'post',
       contentType: "application/json",
       payload: requestBody,
@@ -60,13 +61,10 @@ function createGroup(email, name) {
         Authorization: 'Bearer ' + service.getAccessToken()
       }
     });
-    var result = JSON.parse(response.getContentText());
+    return JSON.parse(response.getContentText());
   } else {
-    var authorizationUrl = service.getAuthorizationUrl();
-    Logger.log('Open the following URL and re-run the script: %s',
-      authorizationUrl);
+    throw service.getLastError();
   }
-  return result;
 }
 
 // function getService() {

@@ -2,6 +2,8 @@ import { Department } from '../@types/department';
 import { User } from '../@types/user';
 import { db } from '../db';
 import { uuid } from '../utils';
+import { updateUserById, loadUserById } from './user';
+import { createGroup } from './groups';
 
 global.addNewDepartment = addNewDepartment;
 global.listDepartment = listDepartment;
@@ -11,7 +13,17 @@ global.departmentEdit = departmentEdit;
 global.generateDepartmentId = generateDepartmentId;
 
 function addNewDepartment(data) {
-  return db.from<Department>('department').insert({ ...data });
+  const dId = uuid();
+  const table = db.from<Department>('department');
+  const ok = table.insert({ ...data, id: dId });
+  if (!ok) return ok;
+  // add manager to department
+  const manager = loadUserById(data.idManager, { loadDepartments: true });
+  updateUserById(manager.id, { departments: [...manager.departments.map(d => d.id), dId] });
+  // create group
+  const group = createGroup(data.name);
+  table.update(dId, { idGroup: group.id });
+  return ok;
 }
 
 function listDepartment({ loadManagers }) {
@@ -29,7 +41,7 @@ function departmentDetail({ id }) {
   if (id) {
     departmentQuery.sWhere('id', id);
   }
-  return departmentQuery.toJSON().map(d => ({...d, idApprovers: JSON.parse(d.idApprovers)}));
+  return departmentQuery.toJSON().map(d => ({ ...d, idApprovers: JSON.parse(d.idApprovers) }));
 }
 
 function deleteDepartment(id) {

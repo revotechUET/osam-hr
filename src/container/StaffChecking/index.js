@@ -7,7 +7,6 @@ import Loading from '../../components/Loading';
 import { DataTableFilter } from '../../components/DataTableFilter';
 import Autocomplete from '../../components/Autocomplete';
 import './style.less';
-import { theme } from '../../components/App';
 
 const columns = [
   {
@@ -41,9 +40,9 @@ const columns = [
 
 const conditionalRowStyles = [
   {
-    when : row => row.reportStatus === "reported",
-    style : {
-      color : 'red',
+    when: row => row.reportStatus === "reported",
+    style: {
+      color: '#ff9800',
     }
   }
 ];

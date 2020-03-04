@@ -3,7 +3,7 @@ import { Department } from "../@types/department";
 import { User } from "../@types/user";
 import { User_Department } from "../@types/user_department";
 import { db } from "../db";
-import {uuid} from '../utils';
+import { uuid } from '../utils';
 
 global.listUsersDomain = listUsersDomain;
 global.listUsers = listUsers;
@@ -13,12 +13,12 @@ global.updateUserById = updateUserById;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
-      maxResults: maxResults || 500,
-      orderBy: 'email',
-      domain: ''
+    maxResults: maxResults || 500,
+    orderBy: 'email',
+    domain: ''
   };
   var response = AdminDirectory.Users.list(optionalArgs);
-  return response.users.map((e)=>({primaryEmail: e.primaryEmail, id: e.id, name: {familyName: e.name.familyName, givenName: e.name.givenName, fullName: e.name.fullName}}));
+  return response.users.map((e) => ({ primaryEmail: e.primaryEmail, id: e.id, name: { familyName: e.name.familyName, givenName: e.name.givenName, fullName: e.name.fullName } }));
 }
 
 export function listUsers({ full = false, loadDepartments = false, loadContracts = false } = {}) {
@@ -39,7 +39,7 @@ export function listUsers({ full = false, loadDepartments = false, loadContracts
   return users;
 }
 
-function loadUserById(id, {full, loadDepartments, loadContracts}) {
+export function loadUserById(id, { full = false, loadDepartments = false, loadContracts = false }) {
   let users = db.from<User>('user').query.where('id', id).toJSON();
   if (users.length == 0) return null;
   let user = users[0];
@@ -67,14 +67,16 @@ function deleteUserById(id) {
   return db.from<User>('user').delete(id);
 }
 
-function updateUserById(id, info) {
+export function updateUserById(id, info) {
   const table = db.from<User_Department>('user_department');
   let user_department = table.query.where('idUser', id).toJSON();
   for (let i = 0; i < user_department.length; i++) {
     table.delete(user_department[i].id);
   }
-  for (let i = 0; i < info.departments.length; i++) {
-    table.insert({id:  uuid(),idUser: id, idDepartment: info.departments[i] });
+  if (info.departments) {
+    for (let i = 0; i < info.departments.length; i++) {
+      table.insert({ id: uuid(), idUser: id, idDepartment: info.departments[i] });
+    }
   }
   delete info.departments
   return db.from<User>('user').update(id, info);
@@ -83,7 +85,7 @@ function updateUserById(id, info) {
 function appendUser(data) {
   const table = db.from<User_Department>('user_department');
   for (let i = 0; i < data.departments.length; i++) {
-    table.insert({id:  uuid(),idUser: data.id, idDepartment: data.departments[i] });
+    table.insert({ id: uuid(), idUser: data.id, idDepartment: data.departments[i] });
   }
   return db.from<User>('user').insert(data);
 }
