@@ -118,7 +118,7 @@ class StaffChecking extends React.Component {
               onChange={(e, value) => {
                 //console.log('value: ', value);
                 this.setState({
-                  selectedUser: value.id
+                  selectedUser: (value || {}).id
                 });
               }}
             />

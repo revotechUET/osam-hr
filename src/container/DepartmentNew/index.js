@@ -39,9 +39,13 @@ class DepartmentNewPage extends React.Component {
     this.setState({loading : true});
     let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
     if(this.handleValidation()){
-      let id = await apiService.generateDepartmentId();
-      let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
-      this.setState({idGroup : groupKey.id})
+      try {
+        let id = await apiService.generateDepartmentId();
+        let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
+      } catch (e) {
+        this.props.enqueueSnackbar(e.message, {variant: "error"});
+      }
+      this.setState({idGroup : groupKey.id});
       let data = {
         id : id,
         name: this.state.departmentName,
@@ -61,7 +65,7 @@ class DepartmentNewPage extends React.Component {
           this.props.enqueueSnackbar("Lưu thành công", {variant: "success"});
           this.props.history.push('/departments');
         }
-      }catch(e){
+      } catch(e){
         this.props.enqueueSnackbar(e.message, {variant: "error"});
         this.setState({
           loading: false
@@ -112,16 +116,19 @@ class DepartmentNewPage extends React.Component {
   }
 
   async componentDidMount() {
-    let users = await apiService.listUsers({full : true});
-    let department = await apiService.listDepartment();
-    this.setState({ manager: users, approvers: users , departments : department});
+    this.setState({loading: true});
+    try {
+      let users = await apiService.listUsers({full : true});
+      let department = await apiService.listDepartment();
+      this.setState({ manager: users, approvers: users , departments : department, loading: false});
+    } catch (e) {
+      this.setState({loading: false});
+      this.props.enqueueSnackbar(e.message, {variant: "error"});
+    }
+    
   }
   render() {
-    if(this.state.loading){
-      return(
-        <Loading />
-      )
-    }
+    if (this.state.loading) return <Loading />
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
@@ -172,7 +179,7 @@ class DepartmentNewPage extends React.Component {
           <div className="item-wrap" style={{ width: "70px" }}>
             <span>Hoạt động</span>
             <div>
-              <input className="input checkbox" type="checkbox" checked={this.state.active} onClick={this.handleActiveStatus} />
+              <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={this.handleActiveStatus} />
             </div>
           </div>
         </BorderedContainer>
