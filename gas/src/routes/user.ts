@@ -83,6 +83,8 @@ export function updateUserById(id, info) {
 }
 
 function appendUser(data) {
+  const existed = db.from<User>('user').query.where('email', data.email).toJSON().length;
+  if (existed) throw 'Email nhân viên đã tồn tại';
   const table = db.from<User_Department>('user_department');
   for (let i = 0; i < data.departments.length; i++) {
     table.insert({ id: uuid(), idUser: data.id, idDepartment: data.departments[i] });

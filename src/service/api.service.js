@@ -101,6 +101,20 @@ class ApiService {
   }
 
   appendUser(data) {
+    let { name, email, idContract, role } = data;
+    if (!name || !name.length) {
+      throw new Error("\"Tên nhân viên\" không được để trống");
+
+    }
+    if (!email || !email.length) {
+      throw new Error("\"Email\" không được để trống");
+    }
+    if (!idContract || !idContract.length) {
+      throw new Error("\"Hợp đồng\" không được để trống");
+    }
+    if (!role || !role.length) {
+      throw new Error("\"Vai trò\" không được để trống");
+    }
     return gscriptrun('appendUser', data);
   }
   //#endregion
@@ -159,6 +173,9 @@ class ApiService {
   }
   leaveApprove(payload) {
     return gscriptrun('leaveApprove', payload)
+  }
+  leaveDelete({ id, status, deletedReason }) {
+    return gscriptrun("leaveDelete", { id, status, deletedReason });
   }
   //#endregion
 

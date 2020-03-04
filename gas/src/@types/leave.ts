@@ -7,6 +7,8 @@ export interface Leave {
   status: LeaveStatus,
   idRequester: string,
   idApprover?: string,
+  deletedReason?: string,
+  eventId?: string
 }
 
 export enum LeaveReason {
@@ -19,5 +21,5 @@ export enum LeaveStatus {
   Waiting = 'waiting',
   Approved = 'approved',
   Rejected = 'rejected',
-  Expired = 'expired',
+  Deleted = 'deleted',
 }

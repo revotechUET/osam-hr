@@ -39,11 +39,11 @@ class DepartmentNewPage extends React.Component {
   async handleSave() {
     this.setState({loading : true});
     if (!this.handleValidation()) return;
-    let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
+    let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới", {variant: 'info', persist: true});
     let data = {
       name: this.state.departmentName,
       idManager: this.state.idManager.id,
-      idApprovers: this.state.idApprovers,
+      idApprovers: this.state.idApprovers || [this.state.idManager.id],
       active: this.state.active,
       idGroup: this.state.idGroup
     };
@@ -76,6 +76,10 @@ class DepartmentNewPage extends React.Component {
         e["name"] = "Đã tồn tại";
       }
     });
+    if (!this.state.idManager || !this.state.idManager.id) {
+      formIsValid = false;
+      e['manager'] = "Cannot be empty";
+    }
     this.setState({
       errors: e
     });
@@ -104,19 +108,21 @@ class DepartmentNewPage extends React.Component {
   }
 
   async componentDidMount() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     try {
-      let users = await apiService.listUsers({full : true});
+      let users = await apiService.listUsers({ full: true });
       let department = await apiService.listDepartment();
-      this.setState({ manager: users, approvers: users , departments : department, loading: false});
+      this.setState({ manager: users, approvers: users, departments: department, loading: false });
     } catch (e) {
-      this.setState({loading: false});
-      this.props.enqueueSnackbar(e.message, {variant: "error"});
+      this.setState({ loading: false });
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
     }
 
   }
+
+
   render() {
-    if (this.state.loading) return <Loading />
+    // if (this.state.loading) return <Loading />
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
@@ -146,6 +152,7 @@ class DepartmentNewPage extends React.Component {
                 }}
               />
             </div>
+            <div className="error">{this.state.errors["manager"]}</div>
           </div>
           <div className="item-wrap">
             <span>Người phụ trách duyệt leave request</span>
@@ -171,6 +178,7 @@ class DepartmentNewPage extends React.Component {
             </div>
           </div>
         </BorderedContainer>
+
       </div>
     );
   }

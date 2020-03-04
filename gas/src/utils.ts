@@ -30,3 +30,12 @@ export function userInfo(email?: string): User {
 export function removeAccent(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, 'd').replace(/Đ/g, 'D');
 }
+
+export function sendMail(subject, email, body) {
+  MailApp.sendEmail({
+    to: email,
+    subject: `[hr][notice][leave]${subject}`,
+    htmlBody: body,
+    noReply: true,
+  });
+}

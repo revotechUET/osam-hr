@@ -128,11 +128,11 @@ function SettingPage({ history }) {
             <div>
               <div>
                 <span>Check in trước</span>
-                <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchStart} onChange={v => setState({ lunchStart: v })} />
+                <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchStart} onChange={v => setState({ lunchStart: v })} />
               </div>
               <div>
                 <span>Check out sau</span>
-                <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchEnd} onChange={v => setState({ lunchEnd: v })} />
+                <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.lunchEnd} onChange={v => setState({ lunchEnd: v })} />
               </div>
             </div>
             <Error error={state.errors.lunch} />
@@ -157,8 +157,8 @@ function SettingPage({ history }) {
             <div className="morning-svg"></div>
             <div style={{ flexBasis: "120px" }}>Ca làm sáng</div>
             <span>
-              <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningStart} onChange={v => setState({ morningStart: v })} />
-              <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningEnd} onChange={v => setState({ morningEnd: v })} />
+              <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningStart} onChange={v => setState({ morningStart: v })} />
+              <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.morningEnd} onChange={v => setState({ morningEnd: v })} />
             </span>
             <Error error={state.errors.morning} />
           </div>
@@ -166,8 +166,8 @@ function SettingPage({ history }) {
             <div className="afternoon-svg"></div>
             <div style={{ flexBasis: "120px" }}>Ca làm Chiều</div>
             <span>
-              <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonStart} onChange={v => setState({ afternoonStart: v })} />
-              <TimePicker TextFieldComponent={InputBase} inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonEnd} onChange={v => setState({ afternoonEnd: v })} />
+              <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonStart} onChange={v => setState({ afternoonStart: v })} />
+              <TimePicker inputProps={{ style: { fontWeight: "bold", fontSize: "150%" } }} variant="inline" autoOk ampm={false} minutesStep={5} value={state.afternoonEnd} onChange={v => setState({ afternoonEnd: v })} />
             </span>
             <Error error={state.errors.afternoon} />
           </div>
