@@ -46,7 +46,6 @@ function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, resp
 
 function checkingResponse(id, responseContent){
   let table = db.from<Checking>('checking');
-  console.log(id, responseContent);
-  table.update(id, {responseContent : responseContent});
+  table.update(id, {responseContent : responseContent, reportStatus : "done"});
   return;
 }
