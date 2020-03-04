@@ -178,8 +178,8 @@ class ApiService {
   checkingEdit(payload){
     return gscriptrun('checkingEdit', payload);
   }
-  checkingResponse(payload){
-    return gscriptrun('checkingResponse', payload);
+  checkingResponse(id, content){
+    return gscriptrun('checkingResponse', id, content);
   }
 
   //#endregion

@@ -19,7 +19,7 @@ class StaffDetailPage extends React.Component {
         }
         this.edit = this.edit.bind(this);
         this.response = this.response.bind(this);
-        this.clearModal = this.clearModal.bind(this);
+        this.goBack = this.goBack.bind(this);
         this.saveResponseContent = this.saveResponseContent.bind(this);
     }
 
@@ -34,18 +34,16 @@ class StaffDetailPage extends React.Component {
         this.setState({ loading: false });
     }
 
-    clearModal() {
-        this.setState({
-          modalActive: false
-        });
+    goBack() {
+        this.props.history.goBack();
     };
     
     async saveResponseContent() {
+        this.setState({loading : true});
         let id = this.props.match.params.id;
-        let responseCon = this.state.responseContent;
-        console.log(id, responseCon);
-        await apiService.checkingEdit({id, responseCon});
-        this.clearModal();
+        await apiService.checkingResponse(id, this.state.responseContent);
+        this.setState({loading : false});
+        this.goBack();
       }
 
     edit() {
@@ -100,7 +98,7 @@ class StaffDetailPage extends React.Component {
                     </div>
                 </BorderedContainer>
 
-                <CenteredModal active={this.state.modalActive} onCancel={ this.clearModal}>
+                <CenteredModal active={this.state.modalActive} onCancel={ this.goBack}>
                     <div className="contract-svg"></div>
                     <div className="content-modal">
                         <div style={{ display: "flex", marginBottom: "20px" }}>
@@ -108,7 +106,7 @@ class StaffDetailPage extends React.Component {
                         </div>
                         <input type="text" value = {this.state.responseContent} onChange = {this.response}></input>
                         <div className="footer">
-                            <div className="my-button-cancel" onClick={this.clearModal}>Hủy</div>
+                            <div className="my-button-cancel" onClick={this.goBack}>Hủy</div>
                             <div className="my-button-ok" onClick={this.saveResponseContent}>Lưu</div>
                         </div>
                     </div>
