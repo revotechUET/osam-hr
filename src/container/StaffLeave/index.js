@@ -71,7 +71,6 @@ function StaffLeavePage({ history }) {
   });
   const { list, loading } = state;
   //console.log(state.selectedUser);
-  console.log(list);
   return (
     <div style={{marginTop: "40px", borderRadius: "10px", padding: "10px 20px", background: "#fff"}}>
       <div className="title-vs-btn">
@@ -140,6 +139,7 @@ function StaffLeavePage({ history }) {
             </div>
             <div style={{marginRight: "20px"}}>
             <Autocomplete
+              disableClearable={false}
               filterSelectedOptions
               options={state.users}
               value={state.users.find(e => e.id == state.selectedUser)}

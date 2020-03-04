@@ -24,7 +24,9 @@ export default function LeaveDetailPage({ history }) {
   }, [id]);
   const approve = async (approved = true) => {
     const status = approved ? 'approved' : 'rejected';
+    setLoading(true);
     const ok = await apiService.leaveApprove({ id, status });
+    setLoading(false);
     if (ok) {
       enqueueSnackbar(leaveStatus[status], { variant: 'success' });
       setLeave({ ...leave, status });
