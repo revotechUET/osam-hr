@@ -18,7 +18,8 @@ class StaffCheckingNewPage extends React.Component {
       checkOut: new Date(),
       note: '',
       idRequester: null,
-      loading: false
+      loading: false,
+      error : {}
     }
 
     this.handleCancle = this.handleCancle.bind(this);
@@ -36,9 +37,9 @@ class StaffCheckingNewPage extends React.Component {
       date: this.state.date.toISOString(),
       checkinTime: new Date(this.state.checkIn).toISOString(),
       checkoutTime: new Date(this.state.checkOut).toISOString(),
-      reportContent: "toDo",
-      responseContent: "toDo",
-      reportStatus: "toDo",
+      reportContent: "",
+      responseContent: "",
+      reportStatus: "none",
       idUser: this.state.idRequester,
       note: this.state.note
     }
@@ -74,6 +75,10 @@ class StaffCheckingNewPage extends React.Component {
 
   handleNoteChange(evt) {
     this.setState({ note: evt.target.value });
+  }
+
+  handleValidation(){
+    
   }
 
   async componentDidMount() {

@@ -55,6 +55,7 @@ class ContractEditPage extends React.Component {
   }
 
   async updateContract() {
+    this.setState({loading : true});
     //checkvalid
     if (this.state.newContractName.length === 0) {
       return;
@@ -65,12 +66,17 @@ class ContractEditPage extends React.Component {
     let lunch = this.state.newContractLunch;
     let leaveRequest =  this.state.newContractLeaveRequest;
     await apis.updateContract({id,name, type, lunch, leaveRequest})
-
+    this.setState({loading : false});
     this.goBack();
 
   }
 
   render() {
+    if(this.state.loading){
+      return(
+        <Loading />
+      )
+    }
     return (
       <CenteredModal active={true} onCancel={() => { this.clearModal() }}>
         <div className="contract-svg"></div>

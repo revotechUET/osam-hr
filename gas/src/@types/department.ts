@@ -3,5 +3,6 @@ export interface Department {
     name        :string,
     active      :number,
     idManager   :string,
-    idApprovers : string
+    idApprovers : string,
+    idGroup     : string
   }

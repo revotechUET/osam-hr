@@ -7,6 +7,7 @@ import Loading from '../../components/Loading';
 import { DataTableFilter } from '../../components/DataTableFilter';
 import Autocomplete from '../../components/Autocomplete';
 import './style.less';
+import { red } from '@material-ui/core/colors';
 
 const columns = [
   {
@@ -35,6 +36,15 @@ const columns = [
   {
     name: "Ghi chú",
     selector: 'note'
+  }
+];
+
+const conditionalRowStyles = [
+  {
+    when : row => row.reportStatus === "pending",
+    style : {
+      color : 'red',
+    }
   }
 ];
 class StaffChecking extends React.Component {
@@ -92,9 +102,10 @@ class StaffChecking extends React.Component {
         persistTableHead
         columns={columns}
         data={filteredData}
+        conditionalRowStyles = {conditionalRowStyles}
         pointerOnHover
         highlightOnHover
-        onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); }}
+        onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); console.log(row);}}
         subHeader
         subHeaderComponent={
           <div>

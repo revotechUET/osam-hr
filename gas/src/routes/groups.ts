@@ -61,13 +61,12 @@ function createGroup(email, name) {
       }
     });
     var result = JSON.parse(response.getContentText());
-    console.log(result);
   } else {
     var authorizationUrl = service.getAuthorizationUrl();
     Logger.log('Open the following URL and re-run the script: %s',
       authorizationUrl);
   }
-  return;
+  return result;
 }
 
 function getService() {
