@@ -139,7 +139,7 @@ class DepartmentEdit extends React.Component {
           <div className="item-wrap" style={{ width: "70px" }}>
             <span>Hoạt động</span>
             <div>
-              <Checkbox name="contractLunch" checked={this.state.active} onChange={this.handleActiveStatus} />
+              <Checkbox checked={this.state.active} onChange={this.handleActiveStatus} />
             </div>
           </div>
         </BorderedContainer>

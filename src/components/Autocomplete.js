@@ -31,6 +31,7 @@ export default function HrAutocomplete(props) {
   }, [loading, getOptions]);
 
   const getValue = useCallback(() => {
+    if (!keyValue && !elementProps.value) return undefined;
     const allOptions = options || _options;
     if (elementProps.multiple) {
       if (!Array.isArray(keyValue)) return [];
