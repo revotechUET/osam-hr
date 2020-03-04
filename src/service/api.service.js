@@ -133,8 +133,8 @@ class ApiService {
 
   }
 
-  deleteDepartment(id){
-    return gscriptrun('deleteDepartment', id);
+  deleteDepartment(id, groupKey){
+    return gscriptrun('deleteDepartment', id, groupKey);
   }
 
   editDepartment(payload){

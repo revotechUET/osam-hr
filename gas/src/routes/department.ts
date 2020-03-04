@@ -3,7 +3,7 @@ import { User } from '../@types/user';
 import { db } from '../db';
 import { uuid } from '../utils';
 import { updateUserById, loadUserById } from './user';
-import { createGroup } from './groups';
+import { createGroup, deleteGroup } from './groups';
 import {User_Department} from '../@types/user_department';
 
 global.addNewDepartment = addNewDepartment;
@@ -45,7 +45,9 @@ function departmentDetail({ id }) {
   return departmentQuery.toJSON().map(d => ({ ...d, idApprovers: JSON.parse(d.idApprovers) }));
 }
 
-function deleteDepartment(id) {
+function deleteDepartment(id, groupKey) {
+  console.log(groupKey);
+  deleteGroup(groupKey);
   const table = db.from<User_Department>('user_department');
   let user_department = table.query.where('idDepartment', id).toJSON();
   for (let i = 0; i < user_department.length; i++) {

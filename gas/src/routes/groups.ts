@@ -8,19 +8,16 @@ global.deleteGroup = deleteGroup;
 
 export function deleteGroup(groupKey){
   var service = getService();
-  var requestBody = JSON.stringify({groupKey : groupKey});
   if(service.hasAccess()){
-    var url = "https://www.googleapis.com/admin/directory/v1/groups";
+    var url = "https://www.googleapis.com/admin/directory/v1/groups/" + groupKey;
     var response = UrlFetchApp.fetch(url, {
       method : 'delete',
       contentType : "application/json",
-      payload : requestBody,
       headers : {
         Authorization: 'Bearer ' + service.getAccessToken()
       }
     });
-
-    return JSON.parse(response.getContentText()) ;
+    return ;
   }
   return "Bug in delete group";
 }
