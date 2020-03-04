@@ -41,7 +41,7 @@ const columns = [
 
 const conditionalRowStyles = [
   {
-    when : row => row.reportStatus === "pending",
+    when : row => row.reportStatus === "reported",
     style : {
       color : 'red',
     }
