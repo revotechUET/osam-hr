@@ -6,6 +6,8 @@ import Loading from '../components/Loading';
 
 import BorderedContainer from '../components/BorderedContainer';
 import DataTable from 'react-data-table-component';
+import ConfirmDialog from "../dialogs/ConfirmDialog";
+
 import { Checkbox } from '@material-ui/core';
 
 
@@ -73,7 +75,16 @@ class DepartmentDetailPage extends React.Component {
             this.setState({ loading: false });
         }
     }
-
+    confirmIt(message) {
+      return new Promise((resolve, reject) => {
+        this._resolve = resolve;
+        this._reject = reject;
+        this.setState({
+          confirmMessage: message,
+          confirmActive: true
+        });
+      })
+    }
     edit() {
         let departmentId = this.props.match.params.id;
         this.props.history.push({
@@ -108,7 +119,9 @@ class DepartmentDetailPage extends React.Component {
                 <div className="title-vs-btn">
                     <div className="my-button ti ti-arrow-left" onClick={this.goBack}  style={{background: "transparent", boxShadow: "none", color: "#888", fontSize: "20px"}}></div>
                     <div className="my-button active-btn ti ti-pencil" onClick={this.edit}></div>
-                    <div className="my-button ti ti-trash" style={{background: "#ddd", boxShadow: "none", color: "#888"}} onClick={this.delete}></div>
+              <div className="my-button ti ti-trash" style={{ background: "#ddd", boxShadow: "none", color: "#888" }} onClick={() => {
+                this.confirmIt(`Các nhân viên sẽ được xóa khỏi bộ phận này. Xác nhận xóa bộ phận ${this.state.departmentDetail.name}`).then(() => this.delete()).catch(e => { });
+              }}></div>
 
                     <div className="title">Bộ phận / <span>{(this.state.departmentDetail||{}).name || "No name"}</span></div>
                 </div>
@@ -139,7 +152,7 @@ class DepartmentDetailPage extends React.Component {
                                     <DataTable
                                         noHeader
                                         fixedHeader
-                                        fixedHeaderScrollHeight="calc(100vh - 333px)" 
+                                        fixedHeaderScrollHeight="calc(100vh - 333px)"
                                         persistTableHead
                                         pagination
                                         noDataComponent='Không có nhân viên'
@@ -153,6 +166,11 @@ class DepartmentDetailPage extends React.Component {
                         </div>
                     </div>
                 </BorderedContainer>
+                <ConfirmDialog active={this.state.confirmActive} message={this.state.confirmMessage} onClose={(res) => {
+                  this.setState({ confirmActive: false });
+                  if (res) this._resolve()
+                  else this._reject();
+                }} />
             </div>
         );
     }

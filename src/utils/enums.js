@@ -3,7 +3,7 @@ export const leaveStatus = {
   'waiting': 'Chờ phê duyệt',
   'approved': 'Đã phê duyệt',
   'rejected': 'Đã từ chối',
-  'expired': 'Đã huỷ',
+  'deleted': 'Đã huỷ',
 }
 export const leaveReason = {
   all: ['0', '1', '2'],

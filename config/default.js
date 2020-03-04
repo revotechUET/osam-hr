@@ -10,7 +10,7 @@ export default {
       user_department: ['id', 'idUser', 'idDepartment'],
       contract: ['id', 'name', 'type', 'lunch', 'leaveRequest'],
       checking: ['id', 'date', 'checkinTime', 'checkoutTime', 'reportContent', 'responseContent', 'reportStatus', 'idUser', 'note', 'point', 'lunch'],
-      leave: ['id', 'startTime', 'endTime', 'reason', 'description', 'status', 'idRequester', 'idApprover'],
+      leave: ['id', 'startTime', 'endTime', 'reason', 'description', 'status', 'idRequester', 'idApprover', 'deletedReason', 'eventId'],
       notification: ['id', 'title', 'content', 'type', 'date', 'receipient', 'status', 'sendDate'],
       setting: [
         ['id', 'welcomeMessage', 'monthEnd', 'yearEnd', 'morningStart', 'morningEnd', 'afternoonStart', 'afternoonEnd', 'lunchStart', 'lunchEnd', 'workDays', 'leavesPerYear'],

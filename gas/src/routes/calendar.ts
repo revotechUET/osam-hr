@@ -102,7 +102,7 @@ function getEventsOfMonth({ calendarIdx = 0, startDate = 1, date, buffer = 0}) {
   }
   return _loadEvents(calendarIdx, start, end);
 }
-function createEvent({calendarIdx = 0, summary, description, start, end, emails = []}) {
+export function createEvent({calendarIdx = 0, summary, description, start, end, emails = []}) {
     var calendarId = calendarIds[calendarIdx];
     var event = _createEvent(calendarId,{
         summary, description,
@@ -118,7 +118,7 @@ function createEvent({calendarIdx = 0, summary, description, start, end, emails 
     return event;
 }
 
-function updateEvent({calendarIdx = 0, eventId, summary, description, start, end, emails = []}) {
+export function updateEvent({calendarIdx = 0, eventId, summary, description, start, end, emails = []}) {
   var calendarId = calendarIds[calendarIdx];
   var event = _updateEvent(calendarId, eventId, {
     summary, description, start: {dateTime:start}, end: {dateTime:end},

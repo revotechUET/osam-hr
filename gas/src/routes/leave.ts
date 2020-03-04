@@ -3,7 +3,9 @@ import { Leave, LeaveReason, LeaveStatus } from "../@types/leave";
 import { User } from "../@types/user";
 import { db } from "../db";
 import template from '../email-templates/new-leave-request.html';
-import { userInfo, uuid } from "../utils";
+import { userInfo, uuid, sendMail } from "../utils";
+import { createEvent, updateEvent } from '../routes/calendar';
+import config from '../../../config';
 
 
 global.leaveList = leaveList;
@@ -30,11 +32,42 @@ global.leaveDetail = leaveDetail;
 function leaveDetail({ id }) {
   return db.join<Leave, User>('leave', 'user', 'idRequester', 'requester').sWhere('id', id).toJSON(1)[0];
 }
-
+global.leaveDelete = leaveDelete;
+function leaveDelete({ id, status, deletedReason }) {
+  const user = userInfo();
+  const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Deleted, idApprover: user.id, deletedReason });
+  const leaveWithUser = db.join<Leave, User>('leave', 'user', 'idRequester', 'user').sWhere('id', id).toJSON()[0];
+  let requester = leaveWithUser.user;
+  sendMail(`Huỷ yêu cầu nghỉ ${id}`, requester.email, "Yêu cầu nghỉ của bạn đã bị huỷ rồi đấy");
+  return ok;
+}
 global.leaveApprove = leaveApprove;
 function leaveApprove({ id, status }) {
   const user = userInfo();
   const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Approved, idApprover: user.id });
+  const leaveWithUser = db.join<Leave, User>('leave', 'user', 'idRequester', 'user').sWhere('id', id).toJSON()[0];
+  let requester = leaveWithUser.user;
+  let action = (status === LeaveStatus.Approved) ? "Chấp nhận" : "Từ chối";
+  sendMail(`${action} yêu cầu nghỉ ${id}`, requester.email, `Yêu cầu nghỉ của bạn đã được ${action.toLowerCase()} rồi đấy`);
+
+  // Update calendar
+  Calendar.Events.update({
+    summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
+  }, config.calendarIds[0], leaveWithUser.eventId);
+
+  // let event = Calendar.Events.get(config.calendarIds[0], leaveWithUser.eventId);
+  // if (event) {
+  //   updateEvent({
+  //     calendarIdx: 0,
+  //     eventId: event.id,
+  //     summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
+  //     description: event.description,
+  //     start: new Date(event.start.dateTime).toISOString(),
+  //     end: new Date(event.end.dateTime).toISOString(),
+  //     emails: notifyList
+  //   });
+  // }
+
   return ok;
 }
 
@@ -48,6 +81,19 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
   )
   const leaves = leavesQuery.toJSON();
   if (leaves.length) throw 'Đã có yêu cầu nghỉ trong thời gian này';
+
+  const requester = db.from<User>('user').query.where('id', idRequester).toJSON(1)[0];
+  // create event in leave calendar
+  let event = createEvent({
+    calendarIdx: 0,
+    summary: `[Pending] - ${requester.name} - ${LeaveReason[reason]}`,
+    description: description,
+    start: new Date(startTime).toISOString(),
+    end: new Date(endTime).toISOString(),
+    emails: notifyList
+  });
+
+
   const leave: Leave = {
     id: uuid('lr-'),
     idRequester,
@@ -56,12 +102,14 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
     reason,
     description,
     status: LeaveStatus.Waiting,
+    eventId: event.id
   }
   const ok = leaveTable.insert(leave);
   if (!ok) return ok;
+
+  // Send notificaton via mail
   if (notifyList.length) {
     console.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());
-    const requester = db.from<User>('user').query.where('id', idRequester).toJSON(1)[0];
     const htmlTemplate = HtmlService.createTemplate(template);
     htmlTemplate.requester = requester.name;
     htmlTemplate.startTime = format(new Date(startTime), 'HH:mm dd/MM/yyyy');
@@ -76,6 +124,8 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
       noReply: true,
     })
   }
+
+
   return leave;
 }
 

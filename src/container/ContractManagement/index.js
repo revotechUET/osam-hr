@@ -2,6 +2,7 @@ import { Checkbox, MenuItem, Select } from '@material-ui/core';
 import React from 'react';
 import DataTable from 'react-data-table-component';
 import { withRouter } from 'react-router-dom';
+import { withSnackbar } from 'notistack';
 import Loading from '../../components/Loading';
 import CenteredModal from './../../components/CenteredModal';
 import apis from './../../service/api.service';
@@ -104,16 +105,29 @@ class ContractManagementPage extends React.Component {
     if (this.state.newContractName.length === 0) {
       return;
     }
+
+    this.setState({ loading: true });
     //do request
     apis.insertContract({
       name: this.state.newContractName,
       type: this.state.newContractType,
       lunch: this.state.newContractLunch,
       leaveRequest: this.state.newContractLeaveRequest
+    }).then(ok => {
+      this.clearModal();
+      this.setState({ loading: false });
+      if (ok) {
+        this.props.enqueueSnackbar("Thành công !", { variant: "success" });
+        this.load();
+      }
+      else {
+        this.props.enqueueSnackbar("Không thành công !", {variant : "error"});
+      }
+    }).catch(e => {
+      this.setState({ loading: false });
+      this.clearModal();
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
     });
-
-    this.clearModal();
-
   }
 
   goToContractEdit(contract) {
@@ -187,4 +201,4 @@ class ContractManagementPage extends React.Component {
   }
 }
 
-export default withRouter(ContractManagementPage);
+export default withSnackbar(withRouter(ContractManagementPage));

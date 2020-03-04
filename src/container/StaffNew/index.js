@@ -48,7 +48,7 @@ class StaffNewPage extends React.Component {
       userName: '',
       email: '',
       active: true,
-      role: '',
+      role: 'user',
       errors: {},
       departments: null,
       contracts: null,
@@ -115,7 +115,7 @@ class StaffNewPage extends React.Component {
         await apiService.appendUser(data);
         this.props.closeSnackbar(key);
         this.props.enqueueSnackbar("Lưu thành công", {variant: "success"});
-        this.props.history.push('/staffs'); 
+        this.props.history.push('/staffs');
       } catch (e) {
         this.props.enqueueSnackbar(e.message, {variant: "error"});
         this.setState({
