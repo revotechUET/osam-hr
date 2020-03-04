@@ -1,15 +1,18 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { withSnackbar } from 'notistack';
+import apiService from '../../service/api.service';
+import NotificationDialog from '../../dialogs/NotificationDialog';
 
 import './style.less';
 
 const notifications = [{
   subject: "Notifi 1",
-  content: "Di truc nhat",
+  date: "Di truc nhat",
   unread: true
 },{
   subject: "Notifi 1",
-  content: "Di truc nhat",
+  date: "Di truc nhat",
   unread: false
 }];
 
@@ -19,54 +22,74 @@ class TopBar extends React.Component {
     super(props);
 
     this.state = {
-      opening: false
+      opening: false,
+      notifications: notifications,
+      notificationDialogActive: false,
+      notificationContent: ""
     }
-
-    this.contentRef = React.createRef();
-    this.bellRef = React.createRef();
   }
-
+  doGet() {
+    apiService.getMyNotifications().then(myNotifications => {
+      this.setState({ notifications: myNotifications||[] });
+    }).catch(e => {
+      console.error(e);
+      this.props.enqueueSnackbar(e.message, {variant: 'error'});
+    });
+  }
   componentDidMount() {
+    apiService.checkMail().then(() => {}).catch(e => console.error(e.message));
+    this.timer = setInterval(() => {
+      apiService.checkMail().then(() => {}).catch(e => console.error(e.message));
+    }, 1000 * 60 * 5);
+
     this.setState({
       openning: false
     });
-    // this.clickStream = fromEvent(document, 'click').subscribe((e)=>{
-    //     if (this.bellRef.current.contains(e.target)) {
-    //       return;
-    //     }
-    //     if (!(this.contentRef).current.contains(e.target)) {
-    //         if (this.state.opening)
-    //           this.setState({
-    //               opening: false
-    //           });
-    //     }
-    // });
   }
 
   componentWillUnmount() {
-    if (this.clickStream) this.clickStream.unsubscribe();
+    clearInterval(this.timer); 
   }
 
+  handleMessageClicked(e, idx) {
+    let noti = this.state.notifications[idx];
+    apiService.getMyNotificationBody(noti.messageId).then(body => {
+      console.log(body);
+      this.setState({notificationDialogActive: true, notificationContent: body});
+    }).catch(e => {
+      console.error(e);
+      let body = "<div>Troi oi, content day roi</div>";
+      this.setState({notificationDialogActive: true, notificationContent: body});
+      this.props.enqueueSnackbar(e.message, {variant: 'error'});
+    });
+  }
   render() {
-    const { opening } = this.state;
+    let { opening, notifications } = this.state;
     return (
       <React.Fragment>
         <div className="TopBar">
           <div style={{position: "relative"}}>
-            <div ref={this.bellRef} className="bell-svg" onClick={() => this.setState({ opening: !opening })}>
+            <div className="bell-svg" onClick={() => {
+                this.setState({ opening: !this.state.opening });
+                if (this.state.opening) {
+                  this.doGet();
+                }
+            }}>
               <div className="bage"></div>
             </div>
-            <div ref={this.contentRef} className="container-drop-down-noti">
+            <div className="container-drop-down-noti">
             {opening &&
               <div className="drop-down-noti">
                 <div style={{flex: 1, overflow: "auto", margin: "10px"}}> 
-                  {notifications.map(n => (<div className="item-noti">
-                      <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
-                      <div style={{flex: 1}}>
+                  {notifications.map((n, idx) => (<div key={idx} className="item-noti" onClick={(e) => {
+                        this.handleMessageClicked(e, idx);
+                    }}>
+                    <div className="bell-svg" style={{margin: "0 20px 0 0"}}></div>
+                    <div style={{flex: 1}}>
                         <div>{n.subject}</div>
-                        <span>{n.content}</span>
-                      </div>
-                    </div>)) }
+                        <span>{n.date}</span>
+                    </div>
+                  </div>)) }
                 </div>
                 {/*
                 <div style={{height:"40px", display: "grid", gridGap: "10px", gridTemplateColumns: "auto auto", margin: "0 10px 10px 10px"}}>
@@ -79,9 +102,12 @@ class TopBar extends React.Component {
           </div>
           <div className="user-profile-svg"></div>
         </div>
+        <NotificationDialog active={this.state.notificationDialogActive} content={this.state.notificationContent} onClose={() => {
+          this.setState({notificationDialogActive: false});
+        }}/>
       </React.Fragment>
     );
   }
 }
 
-export default withRouter(TopBar);
+export default withSnackbar(withRouter(TopBar));

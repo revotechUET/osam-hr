@@ -122,9 +122,13 @@ class NotificationNewPage extends React.Component {
     let key = this.props.enqueueSnackbar("Đang thực hiện", { variant: "info" });
     let aSendTime = sendTime;
     if (sendNow)
-      aSendTime = undefined;
+      aSendTime = "";
 
-    apiService.sendNotification(notification, aSendTime).then(res => {
+    let toSend = {};
+    Object.assign(toSend, notification);
+    toSend.receipient = JSON.stringify(notification.receipient);
+    console.log(toSend);
+    apiService.sendNotification(toSend, aSendTime).then(res => {
       console.log(res);
       this.props.closeSnackbar(key);
       this.setState(state => {
@@ -146,7 +150,8 @@ class NotificationNewPage extends React.Component {
         loading: false,
         receipientLists: {
           department:departments,
-          staff: users
+          staff: users,
+          all: []
         }
       });
     }).catch(e => {
@@ -168,6 +173,7 @@ class NotificationNewPage extends React.Component {
     let {receipientLists} = this.state;
     let { id, status, receipient } = this.state.notification;
     let state = this.state;
+    console.log(receipientLists, receipient.type);
     return (
       <div className="NotificationNew">
         <div className="title-vs-btn">
@@ -258,9 +264,9 @@ class NotificationNewPage extends React.Component {
               <div style={{flex: 1, lineHeight: 2}}>
                 Hình thức gửi: 
               </div>
-              <Select style={{flexBasis: "60%"}} value={this.state.sendNow} onChange={val => {
-                console.log(val);
-                this.setState({ sendNow: val })
+              <Select style={{flexBasis: "60%"}} value={this.state.sendNow} onChange={evt => {
+                console.log(evt.target.value);
+                this.setState({ sendNow: evt.target.value });
               }}>
                 <MenuItem value={true}>Gửi ngay</MenuItem>
                 <MenuItem value={false}>Hẹn giờ gửi</MenuItem>

@@ -5,5 +5,6 @@ export interface Notification {
   type        : string,
   date        : string,
   receipient  : string,
-  status      : string
+  status      : string,
+  sendDate    : string
 }

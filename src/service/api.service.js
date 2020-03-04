@@ -232,7 +232,16 @@ class ApiService {
     return gscriptrun("updateNotification", notification);
   }
   sendNotification(notification, sendTime) {
-    return gscriptrun('sendNotification', { ...notification, sendTime });
+    return gscriptrun('sendEmailNotif', { id: notification.id, sendTime });
+  }
+  getMyNotifications(messageCount=10) {
+    return gscriptrun('getMyNotifications', {messageCount});
+  }
+  getMyNotificationBody(messageId) {
+    return gscriptrun('getMyNotificationBody', {messageId});
+  }
+  checkMail() {
+    return gscriptrun('checkMail', {});
   }
 }
 

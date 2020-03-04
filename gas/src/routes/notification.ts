@@ -8,11 +8,17 @@ import { uuid } from '../utils';
 
 import { db } from '../db';
 
+import { getTrigger, handleTriggered, setupTriggerArguments } from '../triggers';
 global.getNotifications = getNotifications;
 global.addNotification = addNotification;
 global.updateNotification = updateNotification;
 global.deleteNotification = deleteNotification;
-global.sendNotification = sendNotification;
+global.sendEmailNotif = sendEmailNotif;
+global.scheduleNotification = scheduleNotification;
+global.getMyNotifications = getMyNotifications;
+global.getMyNotificationBody = getMyNotificationBody;
+
+global.checkMail = checkMail;
 
 global._getAllUsers = _getAllUsers;
 global._getUsersFromIds = _getUsersFromIds;
@@ -27,7 +33,7 @@ function addNotification({title, content, type, receipient}) {
   return db.from<Notification>('notification').insert({
     id, title, content, type,
     date: new Date().toISOString(),
-    receipient, status:'draft'
+    receipient, status:'draft', sendDate: ''
   });
 }
 function updateNotification(notification: Notification) {
@@ -76,19 +82,64 @@ function doSendNotification(notification) {
 
   MailApp.sendEmail({
     to: users.map(u => u.email).join(','),
-    subject: notification.title,
+    subject: `[hr][notice]${notification.title}`,
     htmlBody: notification.content,
     noReply: true,
   });
   notification.status = 'sent';
+  notification.sendDate = new Date().toISOString();
   return updateNotification(notification);
 }
-function sendNotification({ sendTime, ...notification }) {
-  if (sendTime) {
+function scheduleNotification(evt) {
+  var notification = handleTriggered(evt.triggerUid);
+  doSendNotification(notification);
+}
+function sendEmailNotif({ id, sendTime }) {
+  //return {notification, sendTime};
+  let notification = db.from<Notification>('notification').query.where('id', id).toJSON();
+  if (!notification) return "error";
+  if (!isNaN(Date.parse(sendTime))) {
     Logger.log("create trigger");
+    let trigger = getTrigger('scheduleNotification', new Date(sendTime));
+    setupTriggerArguments(trigger, [notification], false);
   }
   else {
     return doSendNotification(notification);
   }
   return "Ok";
+}
+
+function checkMail() {
+  const messageCount = 20;
+  const scriptCache = CacheService.getScriptCache();
+  let inboxThreads = GmailApp.getInboxThreads(0, messageCount);
+  let messages = [];
+  for (let i = 0; i < inboxThreads.length; i++) {
+    let msg = inboxThreads[i].getMessages()[0];
+    let subject = msg.getSubject();
+    //if (subject.substr(0, '[hr]'.length) === '[hr]') {
+      messages.push({
+        messageId: msg.getId(),
+        subject: subject,
+        date: msg.getDate(),
+        unread: msg.isUnread()
+      });
+    //}
+  }
+  let messagesStr = JSON.stringify(messages);
+  Logger.log("Check mails: " + messagesStr);
+  scriptCache.put('MAILS', messagesStr);
+  return "Ok";
+}
+
+function getMyNotifications({messageCount = 10}) {
+  const scriptCache = CacheService.getScriptCache();
+  const mails = scriptCache.get('MAILS');
+  if (mails) return JSON.parse(mails);
+  else return [];
+}
+
+function getMyNotificationBody({messageId}) {
+  let message = GmailApp.getMessageById(messageId);
+  return message.getBody();
 }

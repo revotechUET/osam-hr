@@ -21,7 +21,7 @@ const columns = [
   },
   {
     name: 'Ngày tạo',
-    selector: notification => new Date(notification.date).toLocaleString(),
+    selector: notification => ( isNaN(Date.parse(notification.date))? '<Not set>' : new Date(notification.date).toLocaleString() ),
     sortable: true
   },
   {
@@ -34,13 +34,18 @@ const columns = [
     selector: "status",
     sortable: true
   },
+  {
+    name: 'Ngày gửi',
+    selector: notification => ( isNaN(Date.parse(notification.sendDate))? '<Not set>' : new Date(notification.sendDate).toLocaleString() ),
+    sortable: true
+  }
 ];
 const notifications = [{
-  id:1, title: "Bao ngi", content: "Duoc <b>nghi</b> roi", type: "popup", receipient: '{"type":"all", "selected":[]}', status:"draft", date: "2020-02-29T07:26:21.334Z"
+  id:1, title: "Bao ngi", content: "Duoc <b>nghi</b> roi", type: "popup", receipient: '{"type":"all", "selected":[]}', status:"draft", date: "2020-02-29T07:26:21.334Z", sendDate: ""
 }, {
-  id:2, title: "Thong b nghi", content: "Duoc <b><u>nghi</u></b> roi 1", type: "normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "sent", date: "2020-02-29T07:26:21.334Z"
+  id:2, title: "Thong b nghi", content: "Duoc <b><u>nghi</u></b> roi 1", type: "normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "sent", date: "2020-02-29T07:26:21.334Z", sendDate: ""
 }, {
-  id:4, title: "Bao nghi", content: "Duoc nghi roi 3", type:"normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "draft", date: "2020-02-29T07:26:21.334Z"
+  id:4, title: "Bao nghi", content: "Duoc nghi roi 3", type:"normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "draft", date: "2020-02-29T07:26:21.334Z", sendDate: ""
 }]
 class NotifyPage extends React.Component {
   constructor(props) {
