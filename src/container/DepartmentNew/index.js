@@ -38,29 +38,36 @@ class DepartmentNewPage extends React.Component {
 
   async handleSave() {
     let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
-    if (!this.handleValidation()) {
-      return;
-    }
-    this.setState({ loading: true });
-    try {
-      let id = await apiService.generateDepartmentId();
-      let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
-      this.setState({idGroup : groupKey.id});
+    if(this.handleValidation()){
+      try {
+        // let id = await apiService.generateDepartmentId();
+        // let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
+      } catch (e) {
+        this.props.enqueueSnackbar(e.message, { variant: "error" });
+        this.setState({ loading: false });
+        return;
+      }
+      // this.setState({idGroup : groupKey.id});
       let data = {
-        id: id,
         name: this.state.departmentName,
         idManager: this.state.idManager.id,
         idApprovers: this.state.idApprovers,
         active: this.state.active,
         idGroup: this.state.idGroup
       };
-      let addNewDepartment = await apiService.addNewDepartment(data);
-      let updateDepartment = {
-        departments: [id]
-      }
-      await apiService.updateUserById(this.state.idManager.id, updateDepartment);
-      if (addNewDepartment) {
-        // pass
+      try {
+        const newDepartment = await apiService.addNewDepartment(data);
+        // await apiService.updateUserById(this.state.idManager.id, {departments: []});
+        if (newDepartment) {
+          this.props.closeSnackbar(key);
+          this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
+          this.props.history.push('/departments');
+        }
+      } catch (e) {
+        this.props.enqueueSnackbar(e.message, { variant: "error" });
+        this.setState({
+          loading: false
+        });
       }
       this.props.closeSnackbar(key);
       this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
