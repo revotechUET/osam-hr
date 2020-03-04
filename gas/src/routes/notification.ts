@@ -117,14 +117,14 @@ function checkMail() {
   for (let i = 0; i < inboxThreads.length; i++) {
     let msg = inboxThreads[i].getMessages()[0];
     let subject = msg.getSubject();
-    //if (subject.substr(0, '[hr]'.length) === '[hr]') {
+    if (subject.substr(0, '[hr]'.length) === '[hr]') {
       messages.push({
         messageId: msg.getId(),
         subject: subject,
         date: msg.getDate(),
         unread: msg.isUnread()
       });
-    //}
+    }
   }
   let messagesStr = JSON.stringify(messages);
   Logger.log("Check mails: " + messagesStr);

@@ -41,6 +41,16 @@ const columns = [
     selector: row => leaveStatus[row.status],
     sortable: true,
   },
+  {
+    name: 'Lý do huỷ',
+    selector: 'deletedReason',
+    sortable: true
+  },
+  {
+    name: 'eventId',
+    selector: 'eventId',
+    sortable: true
+  }
 ]
 
 function StaffLeavePage({ history }) {
