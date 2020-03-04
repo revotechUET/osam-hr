@@ -37,17 +37,9 @@ class DepartmentNewPage extends React.Component {
   }
 
   async handleSave() {
+    this.setState({loading : true});
     let key = this.props.enqueueSnackbar("Đang lưu thông tin bộ phận mới");
-    if(this.handleValidation()){
-      try {
-        // let id = await apiService.generateDepartmentId();
-        // let groupKey =  await apiService.createGroup(this.state.idManager.email, this.state.departmentName);
-      } catch (e) {
-        this.props.enqueueSnackbar(e.message, { variant: "error" });
-        this.setState({ loading: false });
-        return;
-      }
-      // this.setState({idGroup : groupKey.id});
+    if(this.handleValidation()){      
       let data = {
         name: this.state.departmentName,
         idManager: this.state.idManager.id,
@@ -57,7 +49,6 @@ class DepartmentNewPage extends React.Component {
       };
       try {
         const newDepartment = await apiService.addNewDepartment(data);
-        // await apiService.updateUserById(this.state.idManager.id, {departments: []});
         if (newDepartment) {
           this.props.closeSnackbar(key);
           this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
@@ -68,17 +59,12 @@ class DepartmentNewPage extends React.Component {
         this.setState({
           loading: false
         });
-      }
-      this.props.closeSnackbar(key);
-      this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
-      this.props.history.push('/departments');
-    } catch (e) {
-        this.props.closeSnackbar(key);
-        this.props.enqueueSnackbar(e.message, { variant: "error" });
-    } finally {
+      }  
+     finally {
       this.setState({loading: false});
     }
   }
+}
 
   handleValidation() {
     let formIsValid = true;
