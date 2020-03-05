@@ -4,7 +4,7 @@ import HomePage from '../container/HomePage';
 import LeaveDetailPage from '../container/LeaveDetaiPage';
 import LeaveEditPage from '../container/LeaveEditPage';
 import TestPage from '../container/TestPage';
-import CheckingDetailPage from './../container/ChekingDetail';
+import CheckingDetailPage from './../container/CheckingDetail';
 import ContractManagementPage from './../container/ContractManagement';
 import DayOffSettingPage from './../container/DayOffSetting';
 import DepartmentPage from './../container/Department';

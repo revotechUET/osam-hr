@@ -7,10 +7,12 @@ import newTemplate from './email-templates/new-leave-request.html';
 import approveTmpl from './email-templates/approve-leave-request.html';
 import rejectTmpl from './email-templates/reject-leave-request.html';
 import deleteTmpl from './email-templates/delete-leave-request.html';
+import responseTmpl from './email-templates/response-checking-request.html';
 
 const templates = {
   new: newTemplate, approve: approveTmpl, 
-  delete: deleteTmpl, reject: rejectTmpl
+  delete: deleteTmpl, reject: rejectTmpl,
+  response: responseTmpl
 }
 
 const subjectTemplates = {
@@ -18,6 +20,7 @@ const subjectTemplates = {
   approve: '[hr][leave-approved] <?= approver ?> chấp nhận yêu cầu nghỉ', 
   delete: '[hr][leave-deleted] <?= approver ?> huỷ yêu cầu nghỉ', 
   reject: '[hr][leave-rejected] <?= approver ?> từ chối yêu cầu nghỉ',
+  response: '[hr][checking-response] <?= approver ?> gửi phản hồi'
 }
 
 export function dateString(date: Date = new Date()) {

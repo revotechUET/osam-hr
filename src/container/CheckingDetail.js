@@ -8,7 +8,7 @@ import { dateFormat } from '../utils/date'
 
 
 
-class StaffDetailPage extends React.Component {
+class CheckingDetailPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -117,4 +117,4 @@ class StaffDetailPage extends React.Component {
 }
 
 
-export default withRouter(StaffDetailPage);
+export default withRouter(CheckingDetailPage);

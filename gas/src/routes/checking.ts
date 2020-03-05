@@ -1,7 +1,7 @@
 import {Checking} from '../@types/checking';
 import { User } from '../@types/user';
 import {db} from '../db';
-import { dateString , uuid } from '../utils';
+import { dateString , uuid, sendMail, userInfo } from '../utils';
 
 
 global.listCheck = listCheck;
@@ -46,6 +46,13 @@ function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, resp
 
 function checkingResponse(id, responseContent){
   let table = db.from<Checking>('checking');
+  let user = userInfo();
   table.update(id, {responseContent : responseContent, reportStatus : "done"});
+
+  const checkingWithUser = db.join<Checking, User>('checking', 'user', 'idUser', 'user').sWhere('id', id).toJSON()[0];
+  sendMail('response', [checkingWithUser.user.email], {
+    approver: user.name,
+    content: checkingWithUser.responseContent || "khong co gi"
+  });
   return;
 }
