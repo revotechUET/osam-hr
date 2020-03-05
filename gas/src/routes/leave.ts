@@ -59,7 +59,7 @@ function leaveApprove({ id, status }) {
   let action = (status === LeaveStatus.Approved) ? "approve" : "reject";
 
   //sendMail(`${action} yêu cầu nghỉ ${id}`, requester.email, `Yêu cầu nghỉ của bạn đã được ${action.toLowerCase()} rồi đấy`);
-  
+
   sendMail(action, [requester.email], {
     approver: user.name,
     startTime: leaveWithUser.startTime,
@@ -72,10 +72,10 @@ function leaveApprove({ id, status }) {
   // Update calendar
   if (leaveWithUser.eventId && leaveWithUser.eventId.length) {
     updateEvent({
-      calendarIdx: 0, eventId: leaveWithUser.eventId, 
+      calendarIdx: 0, eventId: leaveWithUser.eventId,
       summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
-      description: leaveWithUser.description, 
-      start: leaveWithUser.startTime, 
+      description: leaveWithUser.description,
+      start: leaveWithUser.startTime,
       end: leaveWithUser.endTime
     });
     /*Calendar.Events.update({
@@ -93,9 +93,10 @@ global.leaveNew = leaveNew;
 function leaveNew({ idRequester, startTime, endTime, reason, description, notifyList = [] }) {
   const leaveTable = db.from<Leave>('leave');
   const leavesQuery = leaveTable.query
+  const [idRequesterCol, statusCol, startTimeCol, endTimeCol] = ['idRequester', 'status', 'startTime', 'endTime'].map(leavesQuery.getColId.bind(leavesQuery));
   leavesQuery.raw(
-    `SELECT * WHERE ${leavesQuery.getColId('idRequester')} ='${idRequester}' AND
-     ((B >='${startTime}' AND B <='${endTime}') OR (C >= '${startTime}' AND C <='${endTime}'))`
+    `SELECT * WHERE ${idRequesterCol} ='${idRequester}' AND (${statusCol} ='${LeaveStatus.Approved}' OR ${statusCol} ='${LeaveStatus.Waiting}')
+      ((${startTimeCol} >='${startTime}' AND ${startTimeCol} <='${endTime}') OR (${endTimeCol} >= '${startTime}' AND ${endTimeCol} <='${endTime}'))`
   )
   const leaves = leavesQuery.toJSON();
   if (leaves.length) throw 'Đã có yêu cầu nghỉ trong thời gian này';
