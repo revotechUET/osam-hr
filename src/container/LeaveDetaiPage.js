@@ -19,11 +19,13 @@ export default function LeaveDetailPage({ history }) {
   const [resolveFn, setResolveFn] = useState();
   const [rejectFn, setRejectFn] = useState();
   useEffect(() => {
-    (async () => {
-      const leave = await cancellable(apiService.leaveDetail({ id }));
+    const leave = cancellable(apiService.leaveDetail({ id })).then(leave => {
       setLeave(leave);
       setLoading(false);
-    })()
+    }).catch(e => {
+      console.error(e);
+      this.props.enqueueSnackbar(e.message, {variant: 'error'});
+    });
   }, [id]);
   const promptIt = () => {
     console.log("prompt");
@@ -37,17 +39,20 @@ export default function LeaveDetailPage({ history }) {
       setRejectFn(() => reject);
     });
   }
-  const approve = async (approved = true) => {
+  const approve = (approved = true) => {
     const status = approved ? 'approved' : 'rejected';
     setLoading(true);
-    const ok = await apiService.leaveApprove({ id, status });
-    setLoading(false);
-    if (ok) {
-      enqueueSnackbar(leaveStatus[status], { variant: 'success' });
-      setLeave({ ...leave, status });
-    } else {
-      enqueueSnackbar('Không thành công', { variant: 'error' });
-    }
+    //const ok = apiService.leaveApprove({ id, status });
+    return apiService.leaveApprove({ id, status }).then(ok => {
+      setLoading(false);
+      if (ok) {
+        enqueueSnackbar(leaveStatus[status], { variant: 'success' });
+        setLeave({ ...leave, status });
+      } else {
+        enqueueSnackbar('Không thành công', { variant: 'error' });
+      }
+      return 1;
+    });
   }
 
   const deleteFn = (reason) => {
@@ -80,11 +85,7 @@ export default function LeaveDetailPage({ history }) {
         <Confirm buttonProps={{ className: "my-button ti ti-close", style: { background: "#ddd", boxShadow: "none", color: "#888" }, title: "Từ chối" }} onOk={() => approve(false)} title="Từ chối yêu cầu nghỉ?" />
         <Confirm buttonProps={{ className: "my-button active-btn ti ti-check", style: { background: "linear-gradient(120deg, #67dc2c, #38c53e)" }, title: "Phê duyệt" }} onOk={() => approve()} title="Phê duyệt yêu cầu nghỉ?" />
         {(leave.status === "approved") ? (<div className="my-button active-btn ti ti-trash" title="Huỷ" onClick={() => {
-          promptIt()
-            .then(reason => {
-              deleteFn(reason);
-            })
-            .catch(e => { });
+          promptIt().then(reason => { deleteFn(reason); }).catch(e => { });
         }} ></div>) : (<></>)}
 
         <div className="title">Yêu cầu nghỉ / <span className="uppercase">{id}</span></div>

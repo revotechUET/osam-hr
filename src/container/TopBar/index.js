@@ -23,7 +23,7 @@ class TopBar extends React.Component {
 
     this.state = {
       opening: false,
-      notifications: notifications,
+      notifications: [], //notifications,
       notificationDialogActive: false,
       notificationContent: ""
     }
@@ -71,9 +71,7 @@ class TopBar extends React.Component {
           <div style={{position: "relative"}}>
             <div className="bell-svg" onClick={() => {
                 this.setState({ opening: !this.state.opening });
-                if (this.state.opening) {
-                  this.doGet();
-                }
+                this.doGet();
             }}>
               <div className="bage"></div>
             </div>

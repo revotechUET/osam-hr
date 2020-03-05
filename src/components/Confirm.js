@@ -13,8 +13,14 @@ export default function Confirm({ label, title, content, onOk, buttonProps }) {
   };
 
   const handleOk = async () => {
-    await onOk();
-    handleClose();
+    try {
+      await onOk();
+      handleClose();
+    }
+    catch(e) {
+      console.error(e);
+      handleClose();
+    }
   }
 
   return (

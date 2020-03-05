@@ -38,7 +38,16 @@ function leaveDelete({ id, status, deletedReason }) {
   const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Deleted, idApprover: user.id, deletedReason });
   const leaveWithUser = db.join<Leave, User>('leave', 'user', 'idRequester', 'user').sWhere('id', id).toJSON()[0];
   let requester = leaveWithUser.user;
-  sendMail(`Huỷ yêu cầu nghỉ ${id}`, requester.email, "Yêu cầu nghỉ của bạn đã bị huỷ rồi đấy");
+  sendMail('delete', [requester.email], {
+    approver: user.name,
+    startTime: leaveWithUser.startTime,
+    endTime: leaveWithUser.endTime,
+    reason: LeaveReason[leaveWithUser.reason],
+    id: leaveWithUser.id,
+    description: deletedReason
+  });
+
+  //sendMail(`Huỷ yêu cầu nghỉ ${id}`, requester.email, "Yêu cầu nghỉ của bạn đã bị huỷ rồi đấy");
   return ok;
 }
 global.leaveApprove = leaveApprove;
@@ -47,26 +56,35 @@ function leaveApprove({ id, status }) {
   const ok = db.from<Leave>('leave').update(id, { status: status || LeaveStatus.Approved, idApprover: user.id });
   const leaveWithUser = db.join<Leave, User>('leave', 'user', 'idRequester', 'user').sWhere('id', id).toJSON()[0];
   let requester = leaveWithUser.user;
-  let action = (status === LeaveStatus.Approved) ? "Chấp nhận" : "Từ chối";
-  sendMail(`${action} yêu cầu nghỉ ${id}`, requester.email, `Yêu cầu nghỉ của bạn đã được ${action.toLowerCase()} rồi đấy`);
+  let action = (status === LeaveStatus.Approved) ? "approve" : "reject";
+
+  //sendMail(`${action} yêu cầu nghỉ ${id}`, requester.email, `Yêu cầu nghỉ của bạn đã được ${action.toLowerCase()} rồi đấy`);
+  
+  sendMail(action, [requester.email], {
+    approver: user.name,
+    startTime: leaveWithUser.startTime,
+    endTime: leaveWithUser.endTime,
+    reason: LeaveReason[leaveWithUser.reason],
+    id: leaveWithUser.id,
+    description: leaveWithUser.description
+  });
 
   // Update calendar
-  Calendar.Events.update({
-    summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
-  }, config.calendarIds[0], leaveWithUser.eventId);
-
-  // let event = Calendar.Events.get(config.calendarIds[0], leaveWithUser.eventId);
-  // if (event) {
-  //   updateEvent({
-  //     calendarIdx: 0,
-  //     eventId: event.id,
-  //     summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
-  //     description: event.description,
-  //     start: new Date(event.start.dateTime).toISOString(),
-  //     end: new Date(event.end.dateTime).toISOString(),
-  //     emails: notifyList
-  //   });
-  // }
+  if (leaveWithUser.eventId && leaveWithUser.eventId.length) {
+    updateEvent({
+      calendarIdx: 0, eventId: leaveWithUser.eventId, 
+      summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
+      description: leaveWithUser.description, 
+      start: leaveWithUser.startTime, 
+      end: leaveWithUser.endTime
+    });
+    /*Calendar.Events.update({
+      summary: `[${action}] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
+      start: {
+        dateTime: new Date(leaveWithUser.startTime)
+      }
+    }, config.calendarIds[0], leaveWithUser.eventId);*/
+  }
 
   return ok;
 }
@@ -109,6 +127,14 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
 
   // Send notificaton via mail
   if (notifyList.length) {
+    sendMail('new', notifyList, {
+      requester: requester.name,
+      startTime: format(new Date(startTime), 'HH:mm dd/MM/yyyy'),
+      endTime: format(new Date(endTime), 'HH:mm dd/MM/yyyy'),
+      reason: LeaveReason[reason],
+      description: description
+    });
+    /*
     console.log("Remaining email quota: " + MailApp.getRemainingDailyQuota());
     const htmlTemplate = HtmlService.createTemplate(template);
     htmlTemplate.requester = requester.name;
@@ -119,12 +145,12 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
     const htmlBody = htmlTemplate.evaluate().getContent();
     MailApp.sendEmail({
       to: notifyList.join(','),
-      subject: `${requester.name} đã gửi yêu cầu nghỉ`,
+      subject: `[hr][leave][new]${requester.name} đã gửi yêu cầu nghỉ`,
       htmlBody,
       noReply: true,
     })
+    */
   }
-
 
   return leave;
 }
