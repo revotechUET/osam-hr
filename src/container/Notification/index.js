@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import DataTable from 'react-data-table-component';
 import { DataTableFilter } from '../../components/DataTableFilter';
-//import DateRangePicker from '../../components/DateRangePicker';
+import DateRangePicker from '../../components/DateRangePicker';
 import Autocomplete from '../../components/Autocomplete';
 import apiService from '../../service/api.service';
 import './style.less';
@@ -45,7 +45,7 @@ const notifications = [{
 }, {
   id:2, title: "Thong b nghi", content: "Duoc <b><u>nghi</u></b> roi 1", type: "normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "sent", date: "2020-02-29T07:26:21.334Z", sendDate: ""
 }, {
-  id:4, title: "Bao nghi", content: "Duoc nghi roi 3", type:"normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "draft", date: "2020-02-29T07:26:21.334Z", sendDate: ""
+  id:4, title: "Bao nghi", content: "Duoc nghi roi 3", type:"normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "draft", date: "2020-03-20T07:26:21.334Z", sendDate: ""
 }]
 class NotifyPage extends React.Component {
   constructor(props) {
@@ -58,8 +58,10 @@ class NotifyPage extends React.Component {
       resetPagination: false,
       createdDayFilter: {
         start: new Date(2000,0,0),
-        end: new Date(2100,0,0)
-      }
+        end: new Date(2099,0,0)
+      },
+      active: false,
+      propName: 'date'
     }
   }
 
@@ -72,11 +74,21 @@ class NotifyPage extends React.Component {
     });
   }
 
+
   filter(data) {
-    return data.filter(d => d.title.toLowerCase().includes(this.state.filterText.toLowerCase()))
+    let newData = data.filter(d => d.title.toLowerCase().includes(this.state.filterText.toLowerCase()))
     .filter((d)=>{
       return this.state.statusFilter.length ? this.state.statusFilter.includes(d.status) : true
     });
+    if (this.state.active) {
+      let propName = this.state.propName;
+      return newData.filter((d)=>{
+        let date = new Date(d[propName]);
+        return (date < new Date(this.state.createdDayFilter.end)) && (date > new Date(this.state.createdDayFilter.start));
+      });
+    }
+      
+    return newData;
   }
 
   doGet() {
@@ -123,13 +135,20 @@ class NotifyPage extends React.Component {
           }}
           subHeaderComponent={
             <div style={{display: "flex"}}>
+              <DateRangePicker value = {this.state.createdDayFilter} active = {this.state.active} style={{marginRight: "20px"}} onChange={(e, active) => {
+                 this.setState({
+                    createdDayFilter: e,
+                    active: active
+                 });
+              }}/>
               <div style={{marginRight: "20px"}}>
-              <Autocomplete
+                <Autocomplete
                   multiple
                   filterSelectedOptions
                   options={statusOptions}
                   value={statusOptions.filter(d => this.state.statusFilter.includes(d.value))}
                   keyProp="value"
+                  label="Trạng thái"
                   labelProp="name"
                   onChange={(e, values) => {
                     this.setState({
@@ -138,13 +157,8 @@ class NotifyPage extends React.Component {
                   }}
                 />
               </div>
-               {/* <DateRangePicker value = {this.state.createdDayFilter} onChange={(e)=>{
-                 this.setState({
-                   createdDayFilter: e
-                 })
-               }}/> */}
-
-               <DataTableFilter
+               
+              <DataTableFilter
                 onFilter={this.doFilter}
                 onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
                 filterText={this.state.filterText}

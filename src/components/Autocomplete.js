@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
+import "./Autocomplete.less";
 
 export default function HrAutocomplete(props) {
   const { getOptions, options, keyProp = 'id', keyValue, labelProp = 'name', InputProps, ...elementProps } = props;
@@ -43,6 +44,7 @@ export default function HrAutocomplete(props) {
   }, [keyValue, options, _options]);
 
   return (
+    <div className="Autocomplete">
     <Autocomplete
       disableClearable
       onOpen={() => {
@@ -62,6 +64,7 @@ export default function HrAutocomplete(props) {
           {...params}
           fullWidth
           variant='outlined'
+          label={props.label}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -76,7 +79,7 @@ export default function HrAutocomplete(props) {
       )}
       value={getValue()}
       {...elementProps}
-    />
+    /></div>
   );
 }
 HrAutocomplete.propTypes = {
