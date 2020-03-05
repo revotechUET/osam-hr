@@ -8,6 +8,7 @@ import Autocomplete from "../../components/Autocomplete";
 import {withSnackbar} from 'notistack';
 
 import './style.less'
+import Loading from "../../components/Loading";
 
 class StaffCheckingNewPage extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class StaffCheckingNewPage extends React.Component {
       note: '',
       idRequester: null,
       loading: false,
-      error : {}
+      errors : {}
     }
 
     this.handleCancle = this.handleCancle.bind(this);
@@ -30,9 +31,11 @@ class StaffCheckingNewPage extends React.Component {
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
   }
 
   async handleSave() {
+    this.setState({loading : true});
     this.state.date.setHours(0, 0, 0, 0, 0, 0);
     let data = {
       date: this.state.date.toISOString(),
@@ -44,16 +47,40 @@ class StaffCheckingNewPage extends React.Component {
       idUser: this.state.idRequester,
       note: this.state.note
     }
-
-    let success = await apiService.checkingNew(data);
-    if (success) {
-      this.props.history.push('/checking');
-    }
-
-    else {
-      this.props.history.push('/checking');
+    try{
+      let success = await apiService.checkingNew(data);
+        if (success) {
+        this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
+        this.props.history.push('/checking');
+        }
+    }catch(e){
+      this.props.enqueueSnackbar(e.message, { variant: "error" });
+    }finally{
+      this.setState({loading: false});
     }
   }
+
+  handleValidation() {
+    let formIsValid = true;
+    let e = {};
+    // name
+    if (this.state.idRequester === null) {
+      formIsValid = false;
+      e["name"] = "Không thể để trống";
+    }
+    this.state.departments.forEach((val, index) => {
+      if (val.name === this.state.departmentName) {
+        formIsValid = false;
+        e["name"] = "Đã tồn tại";
+      }
+    });
+    
+    this.setState({
+      errors: e
+    });
+    return formIsValid;
+  }
+
   handleCheckInChange(val) {
     this.setState({ checkIn: val });
   }
@@ -87,6 +114,11 @@ class StaffCheckingNewPage extends React.Component {
     this.setState({ staffName: user });
   }
   render() {
+    if(this.state.loading){
+      return(
+        <Loading />
+      )
+    }
     return (
       <div className="StaffCheckingNew">
         <div className="title-vs-btn">
@@ -106,9 +138,9 @@ class StaffCheckingNewPage extends React.Component {
                 labelProp='name'
                 onChange={(event, value) => {
                   this.setState({ idRequester: value && value.id });
-                  console.log(this.state.idRequester);
                 }}
               />
+              <div className="error">{this.state.errors["name"]}</div>
             </div>
           </div>
           <div className="item-wrap" style={{ width: "100px" }}>

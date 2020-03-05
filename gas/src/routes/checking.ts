@@ -2,6 +2,7 @@ import {Checking} from '../@types/checking';
 import { User } from '../@types/user';
 import {db} from '../db';
 import { dateString , uuid, sendMail, userInfo } from '../utils';
+import {startOfDay} from 'date-fns';
 
 
 global.listCheck = listCheck;
@@ -9,6 +10,19 @@ global.checkingNew = checkingNew;
 global.checkingDetail = checkingDetail;
 global.checkingEdit = checkingEdit;
 global.checkingResponse = checkingResponse;
+
+function todayDateString() {
+  return startOfDay(new Date()).toISOString();
+}
+
+function checkingNew(data : Checking){
+     data.id = uuid();
+     const [checking] = db.from<Checking>('checking').query.select().where('date', todayDateString()).where('idUser', data.idUser).toJSON();
+     if(!checking){
+       return db.from<Checking>('checking').insert(data);
+      }
+      throw 'Đã tồn tại chấm công';
+}
 
 function listCheck({ idUser}){
     const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester').setType('inner');
@@ -18,19 +32,8 @@ function listCheck({ idUser}){
     return checkingQuery.toJSON();
 }
 
-function checkingNew(data : Checking){
-     data.id = uuid();
-    return db.from<Checking>('checking').insert(data);
-}
 
-// function verifyCheckingDate(date){
-//   let dateChecked = db.from<Checking>('checking').query.where('date', date).toJSON();
-//   if(dateChecked[0]['date'] == ""){
-//     return true;
-//   }else{
-//     return false;
-//   }
-// }
+
 
 function checkingDetail({idUser}){
   const checkingQuery = db.join<Checking, User>('checking', 'user','idUser','requester').setType('inner');
