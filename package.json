@@ -52,7 +52,7 @@
     "@material-ui/pickers": "^3.2.10",
     "babel-polyfill": "^6.26.0",
     "date-fns": "^2.10.0",
-    "gsheetdb": "https://tunghoang:H30-B4ch@github.com/revotechUET/gsheetdb#c869a51",
+    "gsheetdb": "https://tunghoang:H30-B4ch@github.com/revotechUET/gsheetdb#ad709b5",
     "lodash": "^4.17.15",
     "material-ui-pickers": "^2.2.4",
     "notistack": "^0.9.7",
