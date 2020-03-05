@@ -114,6 +114,7 @@ class StaffChecking extends React.Component {
               value={this.state.users.find(e => e.id == this.state.selectedUser)}
               keyProp="id"
               labelProp="name"
+              label="Nhân viên"
               onChange={(e, value) => {
                 //console.log('value: ', value);
                 this.setState({

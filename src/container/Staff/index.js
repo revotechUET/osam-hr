@@ -41,17 +41,17 @@ class StaffPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"},{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
+      data: [{"role":"admin","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Le Van Thinh","active":true,"id":"111162821854229823178","departments":[],"email":"user8@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"Boooo","active":true,"id":"108826265259234244326","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user2@rvtcompany.page"},{"role":"manager","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"NAM PRO hehe","active":true,"departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"id":"110714449735001419856","email":"user1@rvtcompany.page"},{"role":"user","contract":{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"},"idContract":"k71qrl3f","name":"dgdgdfdfd","active":true,"id":"112033124304597707450","departments":[{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"},{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"user10@rvtcompany.page"},{"role":"admin","contract":{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},"idContract":"k71qps8l","name":"NAM PHAN","active":true,"id":"111348398142083650098","departments":[{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"}],"email":"quangln@rvtcompany.page"}],
       loading: false,
       resetPagination: false,
       filterText: '',
-      //departments: [{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"},{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],
-      //contracts: [{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"}],
+      departments: [{"name":"Security","active":true,"idManager":"111162821854229823178","id":"k779j0s3","idApprovers":"[\"108826265259234244326\"]"},{"name":"HR","active":true,"idManager":"111348398142083650098","id":"k78xkb4v","idApprovers":"[\"111162821854229823178\"]"}],
+      contracts: [{"name":"Chính thức","leaveRequest":true,"lunch":true,"id":"k71qps8l","type":"fulltime"},{"name":"CTV","leaveRequest":false,"lunch":false,"id":"k71qrl3f","type":"parttime"}],
       departmentFilters: [],
       contractFilters: [],
-      data: [],
-      contracts: [],
-      departments: []
+      //data: [],
+      //contracts: [],
+      //departments: []
     }
   }
 
@@ -212,6 +212,7 @@ class StaffPage extends React.Component {
   // }
 
   render() {
+    //console.log(this.state.departments);
     const { data, loading, filterText } = this.state;
     if (loading) return <Loading />
     const filteredData = this.filterByContractAndDepartment(data.filter(d => (d.name.toLowerCase() + ";" +d.email.toLowerCase()).includes(filterText.toLowerCase())));
@@ -246,6 +247,7 @@ class StaffPage extends React.Component {
                   value={this.state.contracts.filter(c => this.state.contractFilters.includes(c.id))}
                   keyProp="id"
                   labelProp="name"
+                  label = "Hợp đồng"
                   onChange={(e, values) => {
                     this.setState(state => {
                       return {
@@ -263,6 +265,7 @@ class StaffPage extends React.Component {
                   value={this.state.departments.filter(d => this.state.departmentFilters.includes(d.id))}
                   keyProp="id"
                   labelProp="name"
+                  label = "Bộ phận"
                   onChange={(e, values) => {
                     this.setState(state => {
                       return {
