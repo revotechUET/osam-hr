@@ -268,6 +268,9 @@ class ApiService {
   checkMail() {
     return gscriptrun('checkMail', {});
   }
+  me() {
+    return gscriptrun('me', {});
+  }
 }
 
 export default new ApiService();

@@ -8,7 +8,7 @@ export default function DateRangePicker(props) {
         {
           props.active ? 
           (<>
-            <Button onClick={()=> props.onChange(props.value, false)}><span className="">&gt;</span></Button>
+            <Button onClick={()=> props.onChange(props.value, false)}><span className="ti-angle-right"></span></Button>
             <DateTimePicker
               autoOk clearable={1} fullWidth
               inputVariant='outlined'
@@ -30,7 +30,7 @@ export default function DateRangePicker(props) {
             />
           </>)
           :
-          <Button onClick={()=> props.onChange(props.value, true)}><span className="">&lt;</span></Button>
+          <Button onClick={()=> props.onChange(props.value, true)}><span className="ti-angle-left"></span></Button>
         }
       </div>
     );

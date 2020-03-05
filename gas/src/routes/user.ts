@@ -3,13 +3,14 @@ import { Department } from "../@types/department";
 import { User } from "../@types/user";
 import { User_Department } from "../@types/user_department";
 import { db } from "../db";
-import { uuid } from '../utils';
+import { uuid, userInfo } from '../utils';
 
 global.listUsersDomain = listUsersDomain;
 global.listUsers = listUsers;
 global.appendUser = appendUser;
 global.deleteUserById = deleteUserById;
 global.updateUserById = updateUserById;
+global.me = me;
 
 function listUsersDomain(maxResults) {
   var optionalArgs = {
@@ -92,8 +93,9 @@ function appendUser(data) {
   return db.from<User>('user').insert(data);
 }
 
-
-
+function me({}) {
+  return userInfo();
+}
 
 
 

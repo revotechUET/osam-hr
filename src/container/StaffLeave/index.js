@@ -56,8 +56,7 @@ const columns = [
 function StaffLeavePage({ history }) {
   const [state, setState] = useReducer((prevState, newState) => ({ ...prevState, ...newState }),
     {
-      list: [{"requester":{"role":"manager","idContract":"k71qps8l","name":"User 8","active":true,"id":"111162821854229823178","email":"user8@rvtcompany.page"},"reason":0,"description":"Corona","idApprover":"111348398142083650098","startTime":"2020-02-13T14:58:58.630Z","id":"lr-k76b146p","endTime":"2020-02-15T14:00:00.000Z","idRequester":"111162821854229823178","status":"deleted"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"111","startTime":"2020-03-02T17:56:23.424Z","idApprover":"111348398142083650098","id":"lr-k7c71r2e","endTime":"2020-03-03T17:56:27.150Z","idRequester":"111348398142083650098","status":"approved"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"EM muon","startTime":"2020-03-05T13:00:00.000Z","idApprover":"111348398142083650098","id":"lr-k7ddvw3l","endTime":"2020-03-07T13:00:00.000Z","idRequester":"111348398142083650098","status":"approved"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"Test","startTime":"2020-03-10T13:00:00.000Z","idApprover":"111348398142083650098","id":"lr-k7dexnf0","endTime":"2020-03-10T14:00:00.000Z","idRequester":"111348398142083650098","status":"deleted"}]
-      ,
+      list: [{"requester":{"role":"manager","idContract":"k71qps8l","name":"User 8","active":true,"id":"111162821854229823178","email":"user8@rvtcompany.page"},"reason":0,"description":"Corona","idApprover":"111348398142083650098","startTime":"2020-02-13T14:58:58.630Z","id":"lr-k76b146p","endTime":"2020-02-15T14:00:00.000Z","idRequester":"111162821854229823178","status":"deleted"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"111","startTime":"2020-03-02T17:56:23.424Z","idApprover":"111348398142083650098","id":"lr-k7c71r2e","endTime":"2020-03-03T17:56:27.150Z","idRequester":"111348398142083650098","status":"approved"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"EM muon","startTime":"2020-03-05T13:00:00.000Z","idApprover":"111348398142083650098","id":"lr-k7ddvw3l","endTime":"2020-03-07T13:00:00.000Z","idRequester":"111348398142083650098","status":"approved"},{"requester":{"role":"admin","idContract":"k71qps8l","name":"Quang","active":true,"id":"111348398142083650098","email":"quangln@rvtcompany.page"},"reason":0,"description":"Test","startTime":"2020-03-10T13:00:00.000Z","idApprover":"111348398142083650098","id":"lr-k7dexnf0","endTime":"2020-03-10T14:00:00.000Z","idRequester":"111348398142083650098","status":"deleted"}],
       loading: false,
       filterText: '',
       statusFilter: [],
@@ -70,7 +69,7 @@ function StaffLeavePage({ history }) {
 
   useEffect(() => {
     (async () => {
-      //setState({ loading: true })
+      setState({ loading: true })
       try {
         const list = await cancellable(apiService.listLeaves({}));
         const users = await cancellable(apiService.listUsers());
