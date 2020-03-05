@@ -107,8 +107,8 @@ class StaffChecking extends React.Component {
         onRowClicked={(row, event) => { this.props.history.push(`/checking/${row.id}`); console.log(row); }}
         subHeader
         subHeaderComponent={
-          <div>
-            <Autocomplete
+          <div style={{display: 'flex'}}>
+            <Autocomplete style={{marginRight:'20px'}}
               filterSelectedOptions
               options={this.state.users}
               value={this.state.users.find(e => e.id == this.state.selectedUser)}
@@ -121,7 +121,7 @@ class StaffChecking extends React.Component {
                 });
               }}
             />
-            <DataTableFilter
+            <DataTableFilter style={{marginRight: '20px'}}
               onFilter={this.onFilter}
               onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}
               filterText={this.state.filterText}

@@ -5,6 +5,7 @@ import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pi
 import DateFnsUtils from '@date-io/date-fns';
 import apiService from '../../service/api.service';
 import Autocomplete from "../../components/Autocomplete";
+import {withSnackbar} from 'notistack';
 
 import './style.less'
 
@@ -154,4 +155,4 @@ class StaffCheckingNewPage extends React.Component {
   }
 }
 
-export default withRouter(StaffCheckingNewPage);
+export default withSnackbar(withRouter(StaffCheckingNewPage));

@@ -34,7 +34,7 @@ class DepartmentDetailPage extends React.Component {
         this.state = {
             loading: true,
             departmentDetail: {},
-            manager: null,
+            manager: {},
             approvers: [],
             staff    : []
         }
@@ -129,7 +129,7 @@ class DepartmentDetailPage extends React.Component {
                 <div className="item-detail" style={{ width: "100%", marginBottom: "40px" }}>
                   <div className="infor-item-detail">
                     <span>Người quản lý</span>
-                    <div style={{fontWeight: "bold", fontSize: "150%", marginBottom: "20px"}}>{this.state.manager.name}</div>
+                    <div style={{fontWeight: "bold", fontSize: "150%", marginBottom: "20px"}}>{(this.state.manager||{}).name || "empty"}</div>
                     <div style={{display: "flex", flexDirection: "column"}}>
                       <div style={{display: "flex"}}>
                           <div style={{flexBasis: "150px", fontWeight: "bold"}}>Người duyệt y/c nghỉ</div>

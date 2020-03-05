@@ -5,6 +5,7 @@ import apiService from '../../service/api.service';
 import BorderBottomInput from "./../../components/BorderBottomInput";
 import BorderedContainer from "./../../components/BorderedContainer";
 import Loading from "../../components/Loading";
+import ConfirmDialog from '../../dialogs/ConfirmDialog';
 import './style.less';
 import { Checkbox } from "@material-ui/core";
 import { withSnackbar } from 'notistack';
@@ -26,9 +27,24 @@ class DepartmentEdit extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleDepartmentChange = this.handleDepartmentChange.bind(this);
     this.handleActiveStatus = this.handleActiveStatus.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
+  }
+
+  async componentDidMount() {
+    let department = this.props.history.location.state.department || {};
+    this.setState({
+      departmentName: department.name,
+      idManager: department.idManager,
+      idApprovers: department.idApprovers,
+      active: department.active,
+      loading: true
+    })
+    let users = await apiService.listUsers();
+    this.setState({ users, loading: false });
   }
 
   async handleSave() {
+    if (!this.handleValidation()) return;
     let id = this.props.match.params.id;
     let name = this.state.departmentName;
     let idManager = this.state.idManager;
@@ -60,6 +76,40 @@ class DepartmentEdit extends React.Component {
     
   }
 
+  handleValidation() {
+    let formIsValid = true;
+    let e = {};
+    // name
+    if (this.state.departmentName === '') {
+      formIsValid = false;
+      e["name"] = "Không thể để trống";
+    }
+    this.state.departments.forEach((val, index) => {
+      if (val.name === this.state.departmentName) {
+        formIsValid = false;
+        e["name"] = "Đã tồn tại";
+      }
+    });
+    if (!this.state.idManager || !this.state.idManager.id) {
+      formIsValid = false;
+      e['manager'] = "Không thể để trống";
+    }
+    this.setState({
+      errors: e
+    });
+    return formIsValid;
+  }
+
+  confirmEdit(message){
+    return new Promise((resolve, reject) => {
+      this._resolve = resolve;
+      this._reject = reject;
+      this.setState({
+        confirmMessage: message,
+        confirmActive: true
+      });
+    })
+  }
   handleCancel() {
     this.props.history.push('/departments');
   }
@@ -76,25 +126,14 @@ class DepartmentEdit extends React.Component {
     this.setState({ active: e.target.checked });
   }
 
-  async componentDidMount() {
-    let department = this.props.history.location.state.department || {};
-    this.setState({
-      departmentName: department.name,
-      idManager: department.idManager,
-      idApprovers: department.idApprovers,
-      active: department.active,
-      loading: true
-    })
-    let users = await apiService.listUsers();
-    this.setState({ users, loading: false });
-  }
   render() {
     const { users } = this.state;
     if (this.state.loading) return <Loading />
     return (
       <div className="DepartmentNew">
         <div className="title-vs-btn">
-          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
+          <div className="my-button active-btn ti ti-check" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}  onClick={() => {
+                this.confirmEdit("Bạn có đồng ý chỉnh sửa").then(res => this.handleSave()).catch((e) => {})}}></div>
           <div className="my-button ti ti-close" onClick={this.handleCancel} style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
           <div className="title">Bộ Phận / Edit</div>
         </div>
@@ -146,6 +185,11 @@ class DepartmentEdit extends React.Component {
             </div>
           </div>
         </BorderedContainer>
+        <ConfirmDialog active={this.state.confirmActive} message={this.state.confirmMessage} onClose={(res) => {
+                  this.setState({ confirmActive: false });
+                  if (res) this._resolve()
+                  else this._reject();
+        }}/>
       </div>
     );
   }

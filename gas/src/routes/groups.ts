@@ -7,19 +7,8 @@ global.listGroups = listGroups;
 global.deleteGroup = deleteGroup;
 
 export function deleteGroup(groupKey){
-  var service = getService();
-  if(service.hasAccess()){
-    var url = "https://www.googleapis.com/admin/directory/v1/groups/" + groupKey;
-    var response = UrlFetchApp.fetch(url, {
-      method : 'delete',
-      contentType : "application/json",
-      headers : {
-        Authorization: 'Bearer ' + service.getAccessToken()
-      }
-    });
-    return ;
-  }
-  return "Bug in delete group";
+  AdminDirectory.Groups.remove("01mrcu090oub2w0");
+  return true ;
 }
 
 function listGroups(email){

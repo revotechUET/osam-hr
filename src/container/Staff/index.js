@@ -239,38 +239,38 @@ class StaffPage extends React.Component {
           subHeaderComponent={
             <div style={{display: "flex"}}>
               <div style={{marginRight: "20px"}}>
-              <Autocomplete
-                multiple
-                filterSelectedOptions
-                options={this.state.contracts}
-                value={this.state.contracts.filter(c => this.state.contractFilters.includes(c.id))}
-                keyProp="id"
-                labelProp="name"
-                onChange={(e, values) => {
-                  this.setState(state => {
-                    return {
-                      contractFilters: values.map(v => v.id)
-                    }
-                  })
-                }}
-              />
+                <Autocomplete
+                  multiple
+                  filterSelectedOptions
+                  options={this.state.contracts}
+                  value={this.state.contracts.filter(c => this.state.contractFilters.includes(c.id))}
+                  keyProp="id"
+                  labelProp="name"
+                  onChange={(e, values) => {
+                    this.setState(state => {
+                      return {
+                        contractFilters: values.map(v => v.id)
+                      }
+                    })
+                  }}
+                />
               </div>
               <div style={{marginRight: "20px"}}>
-              <Autocomplete
-                multiple
-                filterSelectedOptions
-                options={this.state.departments}
-                value={this.state.departments.filter(d => this.state.departmentFilters.includes(d.id))}
-                keyProp="id"
-                labelProp="name"
-                onChange={(e, values) => {
-                  this.setState(state => {
-                    return {
-                      departmentFilters: values.map(v => v.id)
-                    }
-                  })
-                }}
-              />
+                <Autocomplete
+                  multiple
+                  filterSelectedOptions
+                  options={this.state.departments}
+                  value={this.state.departments.filter(d => this.state.departmentFilters.includes(d.id))}
+                  keyProp="id"
+                  labelProp="name"
+                  onChange={(e, values) => {
+                    this.setState(state => {
+                      return {
+                        departmentFilters: values.map(v => v.id)
+                      }
+                    })
+                  }}
+                />
 
               </div>
 

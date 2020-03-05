@@ -46,7 +46,6 @@ function departmentDetail({ id }) {
 }
 
 function deleteDepartment(id, groupKey) {
-  console.log(groupKey);
   deleteGroup(groupKey);
   const table = db.from<User_Department>('user_department');
   let user_department = table.query.where('idDepartment', id).toJSON();

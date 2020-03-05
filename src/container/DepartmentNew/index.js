@@ -24,7 +24,6 @@ class DepartmentNewPage extends React.Component {
       loading: false,
       departments: [],
       nameDepartmentExist: false,
-      idGroup: '',
       errors: {}
 
     };
@@ -45,7 +44,6 @@ class DepartmentNewPage extends React.Component {
       idManager: this.state.idManager.id,
       idApprovers: this.state.idApprovers || [this.state.idManager.id],
       active: this.state.active,
-      idGroup: this.state.idGroup
     };
     try {
       const newDepartment = await apiService.addNewDepartment(data);
@@ -68,7 +66,7 @@ class DepartmentNewPage extends React.Component {
     // name
     if (this.state.departmentName === '') {
       formIsValid = false;
-      e["name"] = "Cannot be empty";
+      e["name"] = "Không thể để trống";
     }
     this.state.departments.forEach((val, index) => {
       if (val.name === this.state.departmentName) {
@@ -78,7 +76,7 @@ class DepartmentNewPage extends React.Component {
     });
     if (!this.state.idManager || !this.state.idManager.id) {
       formIsValid = false;
-      e['manager'] = "Cannot be empty";
+      e['manager'] = "Không thể để trống";
     }
     this.setState({
       errors: e
