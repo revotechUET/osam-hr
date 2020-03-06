@@ -16,6 +16,8 @@ global.generateDepartmentId = generateDepartmentId;
 function addNewDepartment(data) {
   const dId = uuid();
   const table = db.from<Department>('department');
+  const existed = table.query.where('name', data.name).toJSON()[0];
+  if (existed) throw 'Tên bộ phận đã tồn tại';
   const ok = table.insert({ ...data, id: dId });
   if (!ok) return ok;
   // add manager to department

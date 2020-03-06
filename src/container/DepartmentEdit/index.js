@@ -20,7 +20,8 @@ class DepartmentEdit extends React.Component {
       name: '',
       users: null,
       idApprovers: null,
-      loading: false
+      loading: false,
+      errors: {},
     };
     this.handleManagerChange = this.handleManagerChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
@@ -53,7 +54,7 @@ class DepartmentEdit extends React.Component {
     this.setState({
       loading: true
     });
-    let key = this.props.enqueueSnackbar("Đang lưu");
+    let key = this.props.enqueueSnackbar("Đang lưu", { variant: 'info' });
     try {
       let edit = await apiService.editDepartment({ id, name, idManager, idApprovers, active });
       this.setState({
@@ -73,7 +74,7 @@ class DepartmentEdit extends React.Component {
       this.props.enqueueSnackbar(e.message, { variant: "error" });
       this.setState({loading: false});
     }
-    
+
   }
 
   handleValidation() {
@@ -84,19 +85,14 @@ class DepartmentEdit extends React.Component {
       formIsValid = false;
       e["name"] = "Không thể để trống";
     }
-    this.state.departments.forEach((val, index) => {
-      if (val.name === this.state.departmentName) {
-        formIsValid = false;
-        e["name"] = "Đã tồn tại";
-      }
-    });
-    if (!this.state.idManager || !this.state.idManager.id) {
+    if (!this.state.idManager) {
       formIsValid = false;
       e['manager'] = "Không thể để trống";
     }
     this.setState({
       errors: e
     });
+    console.log(e);
     return formIsValid;
   }
 
@@ -143,6 +139,7 @@ class DepartmentEdit extends React.Component {
             <div>
               <BorderBottomInput placeholder="Tên Bộ Phận" value={this.state.departmentName} onChange={this.handleDepartmentChange} />
             </div>
+            <div className="error">{this.state.errors["name"]}</div>
           </div>
           <div className="item-wrap">
             <span>Người quản lý</span>
@@ -159,6 +156,7 @@ class DepartmentEdit extends React.Component {
                 }}
               />
             </div>
+            <div className="error">{this.state.errors["manager"]}</div>
           </div>
           <div className="item-wrap">
             <span>Người phụ trách duyệt leave request</span>

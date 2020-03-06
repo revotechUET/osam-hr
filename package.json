@@ -66,5 +66,8 @@
     "uniqid": "^5.2.0",
     "xlsx": "^0.15.5"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "*.css",
+    "*.less"
+  ]
 }
