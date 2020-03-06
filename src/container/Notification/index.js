@@ -26,7 +26,10 @@ const columns = [
   },
   {
     name: 'Tổng số người nhận',
-    selector: notification => 1,
+    selector: notification => {
+      let receipient = JSON.parse(notification.receipient);
+      return receipient.selected.length + ' ' + receipient.type
+    },
     sortable: true
   },
   {
@@ -40,13 +43,7 @@ const columns = [
     sortable: true
   }
 ];
-const notifications = [{
-  id:1, title: "Bao ngi", content: "Duoc <b>nghi</b> roi", type: "popup", receipient: '{"type":"all", "selected":[]}', status:"draft", date: "2020-02-29T07:26:21.334Z", sendDate: ""
-}, {
-  id:2, title: "Thong b nghi", content: "Duoc <b><u>nghi</u></b> roi 1", type: "normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "sent", date: "2020-02-29T07:26:21.334Z", sendDate: ""
-}, {
-  id:4, title: "Bao nghi", content: "Duoc nghi roi 3", type:"normal", receipient: '{"type":"department","selected":["k779j0s3"]}', status: "draft", date: "2020-03-20T07:26:21.334Z", sendDate: ""
-}]
+const notifications = []
 class NotifyPage extends React.Component {
   constructor(props) {
     super(props);
@@ -87,7 +84,7 @@ class NotifyPage extends React.Component {
         return (date < new Date(this.state.createdDayFilter.end)) && (date > new Date(this.state.createdDayFilter.start));
       });
     }
-      
+
     return newData;
   }
 
@@ -157,7 +154,7 @@ class NotifyPage extends React.Component {
                   }}
                 />
               </div>
-               
+
               <DataTableFilter
                 onFilter={this.doFilter}
                 onClear={() => this.setState({ resetPagination: !this.state.resetPagination, filterText: '' })}

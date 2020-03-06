@@ -27,10 +27,10 @@ const notificationTypes = [{ value: "normal", name: "Thường" }, { value: "pop
 class NotificationNewPage extends React.Component {
   constructor(props) {
     super(props);
-    let notification = (this.props.history.location.state || {}).notification || { 
-      title: "default title", 
-      content: "Some content", 
-      status: "draft", 
+    let notification = (this.props.history.location.state || {}).notification || {
+      title: "default title",
+      content: "Some content",
+      status: "draft",
       type: "normal",
       receipient: {
         type: 'all',
@@ -80,7 +80,7 @@ class NotificationNewPage extends React.Component {
 
   deleteNotification(id) {
     this.confirmIt("Ban chắc chắn không?").then(() => {
-      let key = this.props.enqueueSnackbar("Đang xoá notification");
+      let key = this.props.enqueueSnackbar("Đang xoá notification", {variant: "info"});
       apiService.deleteNotification(id).then((res) => {
         console.log(res);
         this.props.closeSnackbar(key);
@@ -104,12 +104,12 @@ class NotificationNewPage extends React.Component {
     toSave.receipient = JSON.stringify(notification.receipient);
     console.log(toSave);
     this.setState({
-
-    })
+      loading: true
+    });
     fn(toSave).then(res => {
       console.log(res);
       if (notification.id) {
-        this.props.enqueueSnackbar('Thành công!');
+        this.props.enqueueSnackbar('Thành công!', {variant: 'success'});
       }
       else {
         this.props.history.goBack();
@@ -117,6 +117,10 @@ class NotificationNewPage extends React.Component {
     }).catch(e => {
       console.error(e);
       this.props.enqueueSnackbar("Error: " + e.message, { variant: "error" });
+    }).finally(() => {
+      this.setState({
+        loading: false
+      });
     });
   }
 
@@ -183,7 +187,7 @@ class NotificationNewPage extends React.Component {
     let { id, status, receipient } = this.state.notification;
     let state = this.state;
     //console.log(receipientLists, receipient.type);
-    if (this.state.loading) return <Loading />
+    // if (this.state.loading) return
     return (
       <div className="NotificationNew">
         <div className="title-vs-btn">
@@ -272,7 +276,7 @@ class NotificationNewPage extends React.Component {
             <h4>Send notification</h4>
             <div style={{ display: "flex", marginBottom: "20px" }}>
               <div style={{flex: 1, lineHeight: 2}}>
-                Hình thức gửi: 
+                Hình thức gửi:
               </div>
               <Select style={{flexBasis: "60%"}} value={this.state.sendNow} onChange={evt => {
                 console.log(evt.target.value);
@@ -311,6 +315,7 @@ class NotificationNewPage extends React.Component {
           </div>
         </CenteredModal>
         <ConfirmDialog onClose={(res) => this.confirmHandler(res)} active={this.state.confirmActive} message={this.state.confirmMessage} />
+        {this.state.loading && <Loading />}
       </div>
     );
   }

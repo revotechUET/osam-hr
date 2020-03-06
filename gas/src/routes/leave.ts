@@ -165,5 +165,18 @@ function leaveNew({ idRequester, startTime, endTime, reason, description, notify
 
 global.leaveEdit = leaveEdit;
 function leaveEdit({ id, startTime, endTime, reason, description, idRequester, idApprover }) {
-  return db.from<Leave>('leave').update(id, { startTime, endTime, reason, description, idRequester, idApprover });
+  //send mail
+  db.from<Leave>('leave').update(id, { startTime, endTime, reason, description, idRequester, idApprover });
+  let user = userInfo();
+  const leaveWithUser = db.join<Leave, User>('leave', 'user', 'idRequester', 'user').sWhere('id', id).toJSON()[0];
+  let requester = leaveWithUser.user;
+  sendMail('new', [requester.email], {
+    approver: user.name,
+    startTime: leaveWithUser.startTime,
+    endTime: leaveWithUser.endTime,
+    reason: LeaveReason[leaveWithUser.reason],
+    id: leaveWithUser.id,
+    description: leaveWithUser.description
+  });
+  return true;
 }

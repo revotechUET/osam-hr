@@ -4,9 +4,8 @@ import apiService from '../service/api.service';
 import BorderedContainer from '../components/BorderedContainer';
 import Loading from '../components/Loading';
 import CenteredModal from '../components/CenteredModal';
+import BorderBottomInput from '../components/BorderBottomInput';
 import { dateFormat } from '../utils/date'
-
-
 
 class CheckingDetailPage extends React.Component {
     constructor(props) {
@@ -36,7 +35,7 @@ class CheckingDetailPage extends React.Component {
 
     goBack() {
         this.props.history.goBack();
-    };
+    }
 
     async saveResponseContent() {
         this.setState({loading : true});
@@ -63,10 +62,9 @@ class CheckingDetailPage extends React.Component {
             <div className="StaffDetail">
                 <div className="title-vs-btn">
                     <div className="my-button active-btn ti ti-pencil" onClick={this.edit}></div>
-                    <div className="my-button active-btn ti ti-back-right" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={() => this.setState({modalActive : true})}></div>
+                    {this.state.checkDetail.reportContent && (<div className="my-button active-btn ti ti-back-right" style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }} onClick={() => this.setState({modalActive : true})}></div>)}
                     <div className="title">Chấm công / <span className="uppercase">{dateFormat(this.state.checkDetail.date, 'dd/MM/yyyy')}</span></div>
                 </div>
-
                 <BorderedContainer>
                     <div className="item-detail">
                         <div className="infor-item-detail">
@@ -97,14 +95,13 @@ class CheckingDetailPage extends React.Component {
                         </div>
                     </div>
                 </BorderedContainer>
-
                 <CenteredModal active={this.state.modalActive} onCancel={ this.goBack}>
                     <div className="contract-svg"></div>
                     <div className="content-modal">
                         <div style={{ display: "flex", marginBottom: "20px" }}>
                             <div style={{ flexBasis: "120px", fontWeight: "bold" }}>Phản hồi báo cáo</div>
                         </div>
-                        <input type="text" value = {this.state.responseContent} onChange = {this.response}></input>
+                        <BorderBottomInput value = {this.state.responseContent} onChange = {this.response}></BorderBottomInput>
                         <div className="footer">
                             <div className="my-button-cancel" onClick={this.goBack}>Hủy</div>
                             <div className="my-button-ok" onClick={this.saveResponseContent}>Lưu</div>

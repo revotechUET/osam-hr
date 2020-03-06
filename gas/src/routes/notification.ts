@@ -4,7 +4,7 @@ import { User_Department } from '../@types/user_department';
 
 import { Notification } from '../@types/notification';
 
-import { uuid } from '../utils';
+import { uuid, sendMail } from '../utils';
 
 import { db } from '../db';
 
@@ -80,6 +80,7 @@ function doSendNotification(notification) {
     users = _getUsersFromIds(selected)
   }
 
+  // sendMail('notification', users.map(u => u.email), { title: notification.title, content: notification.content });
   MailApp.sendEmail({
     to: users.map(u => u.email).join(','),
     subject: `[hr][notice]${notification.title}`,
@@ -96,7 +97,7 @@ function scheduleNotification(evt) {
 }
 function sendEmailNotif({ id, sendTime }) {
   //return {notification, sendTime};
-  let notification = db.from<Notification>('notification').query.where('id', id).toJSON();
+  let notification = db.from<Notification>('notification').query.where('id', id).toJSON()[0];
   if (!notification) return "error";
   if (!isNaN(Date.parse(sendTime))) {
     Logger.log("create trigger");

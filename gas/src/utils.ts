@@ -8,19 +8,21 @@ import approveTmpl from './email-templates/approve-leave-request.html';
 import rejectTmpl from './email-templates/reject-leave-request.html';
 import deleteTmpl from './email-templates/delete-leave-request.html';
 import responseTmpl from './email-templates/response-checking-request.html';
+import notificationTmpl from './email-templates/notification.html';
 
 const templates = {
-  new: newTemplate, approve: approveTmpl, 
+  new: newTemplate, approve: approveTmpl,
   delete: deleteTmpl, reject: rejectTmpl,
-  response: responseTmpl
+  response: responseTmpl, notification: notificationTmpl
 }
 
 const subjectTemplates = {
-  new: '[hr][leave-new] <?= requester ?> gửi yêu cầu nghỉ', 
-  approve: '[hr][leave-approved] <?= approver ?> chấp nhận yêu cầu nghỉ', 
-  delete: '[hr][leave-deleted] <?= approver ?> huỷ yêu cầu nghỉ', 
+  new: '[hr][leave-new] <?= requester ?> gửi yêu cầu nghỉ',
+  approve: '[hr][leave-approved] <?= approver ?> chấp nhận yêu cầu nghỉ',
+  delete: '[hr][leave-deleted] <?= approver ?> huỷ yêu cầu nghỉ',
   reject: '[hr][leave-rejected] <?= approver ?> từ chối yêu cầu nghỉ',
-  response: '[hr][checking-response] <?= approver ?> gửi phản hồi'
+  response: '[hr][checking-response] <?= approver ?> gửi phản hồi',
+  notification: '[hr][notification] <?= title ?>'
 }
 
 export function dateString(date: Date = new Date()) {
@@ -81,7 +83,7 @@ export function sendMail(templateKey, emailAddresses, params) {
   const subject = subjectTemplate.evaluate().getContent();
   MailApp.sendEmail({
     to: emailAddresses.join(','),
-    subject, htmlBody, 
+    subject, htmlBody,
     noReply: true,
   })
 }
