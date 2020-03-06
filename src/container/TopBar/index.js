@@ -45,7 +45,7 @@ class TopBar extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer); 
+    clearInterval(this.timer);
   }
 
   handleMessageClicked(e, idx) {
@@ -107,9 +107,9 @@ class TopBar extends React.Component {
               )}
             </div>
           </div>
-          <div>
-            <div className="user-profile-svg"></div>
-            <span style={{fontSize: "24px"}}>{(this.state.me || {}).name || "Admin"}</span>
+          <div className="user-button">
+              <span style={{}}>{(this.state.me || {}).name || "Admin"}</span>
+              <div className="user-profile-svg"></div>
           </div>
         </div>
         <NotificationDialog
