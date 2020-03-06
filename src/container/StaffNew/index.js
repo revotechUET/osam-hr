@@ -70,7 +70,7 @@ class StaffNewPage extends React.Component {
     let rs = [];
     try {
       rs = await apiService.listEmails();
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
     this.setState({
@@ -114,10 +114,10 @@ class StaffNewPage extends React.Component {
       try {
         await apiService.appendUser(data);
         this.props.closeSnackbar(key);
-        this.props.enqueueSnackbar("Lưu thành công", {variant: "success"});
+        this.props.enqueueSnackbar("Lưu thành công", { variant: "success" });
         this.props.history.push('/staffs');
       } catch (e) {
-        this.props.enqueueSnackbar(e.message, {variant: "error"});
+        this.props.enqueueSnackbar(e.message, { variant: "error" });
         this.setState({
           loading: false
         })
@@ -189,8 +189,8 @@ class StaffNewPage extends React.Component {
     return (
       <div className="StaffNew">
         <div className="title-vs-btn">
-          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
-          <div className="my-button ti ti-close" onClick={this.handleCancel} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+          <div className="my-button ti ti-arrow-left" onClick={this.handleCancel} style={{ background: "transparent", boxShadow: "none", color: "#888", fontSize: 20 }}></div>
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
           <div className="title">Nhân viên / Mới</div>
         </div>
         <BorderedContainer>
@@ -248,10 +248,10 @@ class StaffNewPage extends React.Component {
                 labelProp='name'
                 onChange={(event, values) => {
                   this.setState({ departmentList: values.map(v => v.id) });
-                }}/>
+                }} />
             </div>
           </div>
-          <div className="item-wrap" style={{width: "80px"}}>
+          <div className="item-wrap" style={{ width: "80px" }}>
             <span>Hoạt động</span>
             <div>
               <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
@@ -260,23 +260,23 @@ class StaffNewPage extends React.Component {
           <div className="item-wrap">
             <span>Vai trò</span>
             <div>
-            <Autocomplete
-              filterSelectedOptions
-              //loading={this.state.contracts === null}
-              style={{ flex: 1 }}
-              options={[
-                { value: "user", name: "Nhân viên" },
-                { value: "manager", name: "Back Office" },
-                { value: "admin", name: "Admin" }
-              ]}
-              keyProp='value'
-              labelProp='name'
-              onChange={(event, value) => {
-                //console.log(value);
-                this.setState({ role: value.value });
-              }}
-            />
-            <div className="error">{this.state.errors["role"]}</div>
+              <Autocomplete
+                filterSelectedOptions
+                //loading={this.state.contracts === null}
+                style={{ flex: 1 }}
+                options={[
+                  { value: "user", name: "Nhân viên" },
+                  { value: "manager", name: "Back Office" },
+                  { value: "admin", name: "Admin" }
+                ]}
+                keyProp='value'
+                labelProp='name'
+                onChange={(event, value) => {
+                  //console.log(value);
+                  this.setState({ role: value.value });
+                }}
+              />
+              <div className="error">{this.state.errors["role"]}</div>
             </div>
           </div>
         </BorderedContainer>

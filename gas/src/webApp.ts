@@ -7,12 +7,14 @@ function noPermission() {
 }
 
 function initAdmin({ id, email, name }) {
+  const contract = db.from('contract').getDataJSON()[0];
   const newUser = {
     id,
     email,
     active: true,
     name,
     role: UserRole.Admin,
+    idContract: contract.id,
   }
   db.from('user').insert(newUser);
   return newUser;

@@ -53,7 +53,7 @@ function SettingPage({ history }) {
     })()
   }, []);
   const save = async () => {
-    console.log(state);
+    enqueueSnackbar('Đang lưu cài đặt', { variant: 'info' });
     let { welcomeMessage, monthEnd, yearEnd, morningStart, morningEnd, afternoonStart, afternoonEnd, lunchStart, lunchEnd, workDays } = state;
     morningStart = new Date(morningStart);
     morningEnd = new Date(morningEnd);
