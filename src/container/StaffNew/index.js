@@ -9,6 +9,7 @@ import BorderedContainer from "./../../components/BorderedContainer";
 import Loading from '../../components/Loading';
 import { withSnackbar } from 'notistack';
 import './style.less';
+import { Checkbox } from "@material-ui/core";
 
 class StaffNewPage extends React.Component {
   constructor(props) {
@@ -97,6 +98,7 @@ class StaffNewPage extends React.Component {
   }
 
   async handleSave(e) {
+    e.preventDefault();
     this.setState({
       loading: true
     });
@@ -126,7 +128,6 @@ class StaffNewPage extends React.Component {
     else {
       console.log(this.state.errors);
     }
-    e.preventDefault();
   }
 
   handleValidation() {
@@ -254,7 +255,7 @@ class StaffNewPage extends React.Component {
           <div className="item-wrap" style={{ width: "80px" }}>
             <span>Hoạt động</span>
             <div>
-              <input className="input checkbox" type="checkbox" checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
+              <Checkbox checked={this.state.active} onChange={(e) => this.handleActiveStatus(e.target.checked)} />
             </div>
           </div>
           <div className="item-wrap">

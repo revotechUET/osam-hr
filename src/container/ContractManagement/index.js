@@ -24,13 +24,13 @@ const displays = [
     name: "Ăn trưa",
     selector: 'lunch',
     sortable: true,
-    cell: (row) => <Checkbox defaultChecked={row.lunch} />
+    cell: (row) => <Checkbox defaultChecked={row.lunch} disabled/>
   },
   {
     name: "Nghỉ phép",
     selector: 'leaveRequest',
     sortable: true,
-    cell: (row) => <Checkbox defaultChecked={row.leaveRequest} />
+    cell: (row) => <Checkbox defaultChecked={row.leaveRequest} disabled/>
   }
 ];
 

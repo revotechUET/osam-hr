@@ -8,6 +8,7 @@ import {startOfDay} from 'date-fns';
 global.listCheck = listCheck;
 global.checkingNew = checkingNew;
 global.checkingDetail = checkingDetail;
+global.checkingDetailById = checkingDetailById;
 global.checkingEdit = checkingEdit;
 global.checkingResponse = checkingResponse;
 
@@ -41,6 +42,9 @@ function checkingDetail({idUser}){
     checkingQuery.sWhere('idUser', idUser);
   }
   return checkingQuery.toJSON();
+}
+function checkingDetailById({ id }) {
+  return db.join<Checking, User>('checking', 'user', 'idUser', 'user').sWhere('id', id).toJSON()[0];
 }
 
 function checkingEdit({ id, date, checkinTime, checkoutTime, reportContent, responseContent, reportStatus, idUser, note}){

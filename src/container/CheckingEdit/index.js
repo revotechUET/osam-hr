@@ -1,6 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { withSnackbar } from 'notistack';
 import BorderedContainer from "./../../components/BorderedContainer";
+import BorderBottomInput from '../../components/BorderBottomInput';
 import { DatePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import apiService from '../../service/api.service';
@@ -34,11 +36,11 @@ class StaffCheckingEditPage extends React.Component {
       let id = this.props.match.params.id;
       this.state.date.setHours(0, 0, 0, 0, 0, 0);
       let date= this.state.date.toISOString();
-      let checkinTime= new Date(this.state.checkIn).toISOString();
-      let checkoutTime= new Date(this.state.checkOut).toISOString();
-      let idUser= this.state.idRequester;
+      let checkinTime= new Date(this.state.checking.checkinTime).toISOString();
+      let checkoutTime= new Date(this.state.checking.checkoutTime).toISOString();
+      // let idUser= this.state.idRequester;
       let note= this.state.note;
-      let success = await apiService.checkingEdit({id, date,checkinTime, checkoutTime, idUser, note});
+      let success = await apiService.checkingEdit({id, date,checkinTime, checkoutTime, note});
       if (success) {
         this.props.history.push('/checking');
       }
@@ -47,11 +49,23 @@ class StaffCheckingEditPage extends React.Component {
     }
   }
   handleCheckInChange(val) {
-    this.setState({ checkIn: val });
+    this.setState(state => {
+      if (state.checking) {
+        state.checking.checkinTime = new Date(val).toISOString();
+        return state;
+      }
+      return {}
+    });
   }
 
   handleCheckOutChange(val) {
-    this.setState({ checkOut: val });
+    this.setState(state => {
+      if (state.checking) {
+        state.checking.checkoutTime = new Date(val).toISOString();
+        return state;
+      }
+      return {}
+    });
   }
 
   handleCancle() {
@@ -63,30 +77,51 @@ class StaffCheckingEditPage extends React.Component {
   }
 
   handleDateChange(val) {
-    this.setState({ date: val });
+    this.setState(state => {
+      if (state.checking) {
+        state.checking.date = new Date(val).toISOString();
+        return state;
+      }
+      return {}
+    })
+    // this.setState({ date: val });
   }
 
   handleNoteChange(evt) {
-    this.setState({ note: evt.target.value });
+    let val = evt.target.value;
+    this.setState(state => {
+      if (state.checking) {
+        state.checking.note = val;
+        return state;
+      }
+      return {}
+    })
   }
 
   async componentDidMount() {
-    let user = await apiService.listUsers();
-    this.setState({ staffName: user });
+    let id = this.props.history.match.id;
+    apiService.checkingDetailById(id).then(checkingWithUser => {
+      this.setState({ checking: checkingWithUser });
+    }).catch(e => {
+      console.error(e);
+      this.props.enqueueSnackbar(e.message, {variant: 'error'});
+    }) ;
+    // let user = await apiService.listUsers();
   }
   render() {
     return (
-      <div className="StaffCheckingNew">
+      <div className="CheckingEdit">
         <div className="title-vs-btn">
-          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
-          <div className="my-button ti ti-close" onClick={this.handleCancle} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
-          <div className="title">Chấm công / Edit</div>
+          <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{ background: "linear-gradient(120deg, #67dc2c, #38c53e)" }}></div>
+          <div className="my-button ti ti-close" onClick={this.handleCancle} style={{ background: "#ddd", boxShadow: "none", color: "#888" }}></div>
+          <div className="title">Chấm công / {(this.state.checking || {}).id || "khong biet"}</div>
         </div>
         <BorderedContainer>
           <div className="item-wrap">
             <span>Tên nhân viên</span>
             <div>
-              <Autocomplete
+              <BorderBottomInput readonly value={((this.state.checking || {}).user || {}).name} disabled />
+              {/* <Autocomplete
                 loading={this.state.staffName === null}
                 style={{ flex: 1 }}
                 options={this.state.staffName}
@@ -94,53 +129,118 @@ class StaffCheckingEditPage extends React.Component {
                 labelProp='name'
                 onChange={(event, value) => {
                   this.setState({ idRequester: value && value.id });
-                  console.log(this.state.idRequester);
                 }}
+              /> */}
+            </div>
+          </div>
+          <div className="item-wrap" style={{ width: "100px" }}>
+            <span>Ngày</span>
+            <div>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker value={(this.state.checking || {}).date || new Date()} onChange={this.handleDateChange} />
+              </MuiPickersUtilsProvider>
+            </div>
+          </div>
+          <div className="item-wrap" style={{ width: "100px" }}>
+            <span>Check in</span>
+            <div>
+              <TimePicker
+                clearable
+                ampm={false}
+                label="24 hours"
+                value={(this.state.checking || {}).checkinTime || new Date() }
+                onChange={this.handleCheckInChange}
               />
             </div>
           </div>
-          <div className="item-wrap" style={{width: "100px"}}>
-            <span>Ngày</span>
-            <div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DatePicker value={this.state.date} onChange={this.handleDateChange} />
-            </MuiPickersUtilsProvider>
-            </div>
-          </div>
-          <div className="item-wrap" style={{width: "100px"}}>
-            <span>Check in</span>
-            <div>
-            <TimePicker
-              clearable
-              ampm={false}
-              label="24 hours"
-              value={this.state.checkIn}
-              onChange={this.handleCheckInChange}
-            />
-            </div>
-          </div>
-          <div className="item-wrap" style={{width: "100px"}}>
+          <div className="item-wrap" style={{ width: "100px" }}>
             <span>Check out</span>
             <div>
-            <TimePicker
-              clearable
-              ampm={false}
-              label="24 hours"
-              value={this.state.checkOut}
-              onChange={this.handleCheckOutChange}
-            />
+              <TimePicker
+                clearable
+                ampm={false}
+                label="24 hours"
+                value={(this.state.checking || {}).checkoutTime || new Date()}
+                onChange={this.handleCheckOutChange}
+              />
             </div>
           </div>
           <div className="item-wrap">
             <span>Ghi chú</span>
             <div>
-              <input className="input" value={this.state.note} onChange={this.handleNoteChange} />
+              <input className="input" value={(this.state.checking || {}).note || ""} onChange={this.handleNoteChange} />
             </div>
           </div>
         </BorderedContainer>
       </div>
     );
+
+    // return (
+    //   <div className="CheckingEdit">
+    //     <div className="title-vs-btn">
+    //       <div className="my-button active-btn ti ti-check" onClick={this.handleSave} style={{background: "linear-gradient(120deg, #67dc2c, #38c53e)"}}></div>
+    //       <div className="my-button ti ti-close" onClick={this.handleCancle} style={{background: "#ddd", boxShadow: "none", color: "#888"}}></div>
+    //       <div className="title">Chấm công / Edit</div>
+    //     </div>
+    //     <BorderedContainer>
+    //       <div className="item-wrap">
+    //         <span>Tên nhân viên</span>
+    //         <div>
+    //           <Autocomplete
+    //             loading={this.state.staffName === null}
+    //             style={{ flex: 1 }}
+    //             options={this.state.staffName}
+    //             keyProp='id'
+    //             labelProp='name'
+    //             onChange={(event, value) => {
+    //               this.setState({ idRequester: value && value.id });
+    //               console.log(this.state.idRequester);
+    //             }}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="item-wrap" style={{width: "100px"}}>
+    //         <span>Ngày</span>
+    //         <div>
+    //         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    //           <DatePicker value={this.state.date} onChange={this.handleDateChange} />
+    //         </MuiPickersUtilsProvider>
+    //         </div>
+    //       </div>
+    //       <div className="item-wrap" style={{width: "100px"}}>
+    //         <span>Check in</span>
+    //         <div>
+    //         <TimePicker
+    //           clearable
+    //           ampm={false}
+    //           label="24 hours"
+    //           value={this.state.checkIn}
+    //           onChange={this.handleCheckInChange}
+    //         />
+    //         </div>
+    //       </div>
+    //       <div className="item-wrap" style={{width: "100px"}}>
+    //         <span>Check out</span>
+    //         <div>
+    //         <TimePicker
+    //           clearable
+    //           ampm={false}
+    //           label="24 hours"
+    //           value={this.state.checkOut}
+    //           onChange={this.handleCheckOutChange}
+    //         />
+    //         </div>
+    //       </div>
+    //       <div className="item-wrap">
+    //         <span>Ghi chú</span>
+    //         <div>
+    //           <input className="input" value={this.state.note} onChange={this.handleNoteChange} />
+    //         </div>
+    //       </div>
+    //     </BorderedContainer>
+    //   </div>
+    // );
   }
 }
 
-export default withRouter(StaffCheckingEditPage);
+export default withSnackbar(withRouter(StaffCheckingEditPage));

@@ -37,7 +37,7 @@ class CheckingDetailPage extends React.Component {
     goBack() {
         this.props.history.goBack();
     };
-    
+
     async saveResponseContent() {
         this.setState({loading : true});
         let id = this.props.match.params.id;
@@ -48,7 +48,7 @@ class CheckingDetailPage extends React.Component {
 
     edit() {
         let id = this.props.match.params.id;
-        this.props.history.push(`checking/${id}/edit`);
+        this.props.history.push(`/checking/${id}/edit`);
     }
 
     response(evt){

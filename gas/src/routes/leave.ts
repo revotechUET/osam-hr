@@ -46,6 +46,13 @@ function leaveDelete({ id, status, deletedReason }) {
     id: leaveWithUser.id,
     description: deletedReason
   });
+  updateEvent({
+    calendarIdx: 0, eventId: leaveWithUser.eventId,
+    summary: `[deleted] - ${requester.name} - ${LeaveReason[leaveWithUser.reason]}`,
+    description: leaveWithUser.description,
+    start: leaveWithUser.startTime,
+    end: leaveWithUser.endTime
+  });
 
   //sendMail(`Huỷ yêu cầu nghỉ ${id}`, requester.email, "Yêu cầu nghỉ của bạn đã bị huỷ rồi đấy");
   return ok;

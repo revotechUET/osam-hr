@@ -192,6 +192,9 @@ class ApiService {
   checkingDetail(payload) {
     return gscriptrun('checkingDetail', payload);
   }
+  checkingDetailById(id) {
+    return gscriptrun('checkingDetailById', { id });
+  }
   checkingEdit(payload){
     return gscriptrun('checkingEdit', payload);
   }

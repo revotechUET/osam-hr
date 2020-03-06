@@ -32,25 +32,30 @@ function listGroups(email){
   return "Bug in list groups";
 }
 
+// export function createGroup(name) {
+//   const service = getService(config.serviceAccount.adminEmail);
+//   const email = Session.getActiveUser().getEmail();
+//   const groupEmail = removeAccent(name) + "@" + email.split('@')[1];
+//   const requestBody = JSON.stringify({ email: groupEmail, name: name });
+//   if (service.hasAccess()) {
+//     const url = 'https://www.googleapis.com/admin/directory/v1/groups';
+//     const response = UrlFetchApp.fetch(url, {
+//       method: 'post',
+//       contentType: "application/json",
+//       payload: requestBody,
+//       headers: {
+//         Authorization: 'Bearer ' + service.getAccessToken()
+//       }
+//     });
+//     return JSON.parse(response.getContentText());
+//   } else {
+//     throw service.getLastError();
+//   }
+// }
 export function createGroup(name) {
-  const service = getService(config.serviceAccount.adminEmail);
   const email = Session.getActiveUser().getEmail();
   const groupEmail = removeAccent(name) + "@" + email.split('@')[1];
-  const requestBody = JSON.stringify({ email: groupEmail, name: name });
-  if (service.hasAccess()) {
-    const url = 'https://www.googleapis.com/admin/directory/v1/groups';
-    const response = UrlFetchApp.fetch(url, {
-      method: 'post',
-      contentType: "application/json",
-      payload: requestBody,
-      headers: {
-        Authorization: 'Bearer ' + service.getAccessToken()
-      }
-    });
-    return JSON.parse(response.getContentText());
-  } else {
-    throw service.getLastError();
-  }
+  return AdminDirectory.Groups.insert({ email: groupEmail, name: name });
 }
 
 

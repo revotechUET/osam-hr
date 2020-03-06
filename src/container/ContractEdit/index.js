@@ -29,7 +29,7 @@ class ContractEditPage extends React.Component {
       newContractLunch: this.props.history.location.state.contract.lunch,
       newContractLeaveRequest: this.props.history.location.state.contract.leaveRequest,
       contracts: [],
-      loading: true
+      loading: false
     });
   }
 
